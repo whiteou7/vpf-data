@@ -1,10 +1,10 @@
-import postgres from "postgres";
-import { drizzle } from "drizzle-orm/postgres-js";
-import "dotenv/config";
+import postgres from "postgres"
+import { drizzle } from "drizzle-orm/postgres-js"
+import "dotenv/config"
 
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not defined");
+  throw new Error("DATABASE_URL environment variable is not defined")
 }
-const db = drizzle(postgres(process.env.DATABASE_URL));
+const db = drizzle(postgres(process.env.DATABASE_URL), { casing: "snake_case" })
 
-export { db };
+export { db }
