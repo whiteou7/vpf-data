@@ -22,7 +22,7 @@
           </template>
           
           <template #item.weight_class="{ item }">
-            {{ getWeightClassDisplay(item.weight_class, item.sex) }}
+            {{ getWeightClassDisplay(item.weight_class, item.sex as Sex) }}
           </template>
 
           <template #item.best_squat="{ item }">
@@ -72,12 +72,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from "vue"
+import type { LifterPB, Sex } from "~/types/lifter"
 
-const lifters = ref([])
+const lifters = ref<LifterPB[]>([])
 const loading = ref(true)
-const genderFilter = ref(null)
+const genderFilter = ref<Sex>(null)
 
 const genderOptions = [
   { title: "All", value: null },
@@ -86,7 +87,7 @@ const genderOptions = [
 ]
 
 // Computed property to filter lifters by gender
-const filteredLifters = computed(() => {
+const filteredLifters = computed<LifterPB[]>(() => {
   if (!genderFilter.value) {
     return lifters.value
   }
@@ -94,35 +95,24 @@ const filteredLifters = computed(() => {
 })
 
 // Helper function to display weight class while keeping original value for sorting
-const getWeightClassDisplay = (weightClass, sex) => {
+const getWeightClassDisplay = (weightClass: number, sex: Sex): string => {
   if (weightClass === 999) {
     return sex === "M" ? "120+kg" : "84+kg"
   }
   return `${weightClass}kg`
 }
 
-onMounted(async () => {
-  const { data: liftersData100 } = await useFetch("/api/all-lifter-ranked", {
-    method: "GET",
-    query: { limit: 100 }
-  })
+onMounted(async () => {  
+  const { data: liftersData } = await useFetch<LifterPB[]>("/api/all-lifter-ranked")
 
-  if (!liftersData100.value) { return }
-
-  lifters.value = liftersData100.value.map(lifter => ({
-    ...lifter,
-    sex: lifter.sex === "male" ? "M" : lifter.sex === "female" ? "F" : lifter.sex,
-  }))
-
-  loading.value = false
-  
-  const { data: liftersData } = await useFetch("/api/all-lifter-ranked")
+  if (!liftersData.value) return
 
   lifters.value = liftersData.value.map(lifter => ({
     ...lifter,
     sex: lifter.sex === "male" ? "M" : lifter.sex === "female" ? "F" : lifter.sex,
   }))
   
+  loading.value = false
 })
 
 const headers = [
@@ -133,7 +123,7 @@ const headers = [
     value: "weight_class", 
     sortable: true,
     // Custom sort function to handle the 999 value properly
-    sort: (a, b) => {
+    sort: (a: number, b: number): number => {
       // For males: 999 should sort after 120, for females: 999 should sort after 84
       if (a === 999 && b !== 999) return 1
       if (b === 999 && a !== 999) return -1
@@ -151,7 +141,7 @@ const headers = [
 
 const search = ref("")
 
-const rowProps = ({ index }) => ({
+const rowProps = ({ index }: { index: number }) => ({
   style: {
     backgroundColor: index % 2 === 0 ? "#2E2E2E" : "#3E3E3E"
   }

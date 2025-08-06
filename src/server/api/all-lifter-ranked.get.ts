@@ -1,47 +1,25 @@
 import { sql } from "drizzle-orm"
 import { db } from "../../db"
+import type { LifterPB } from "~/types/lifter"
 
-export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
-
-  if (query.limit) {
-    try {
-      const lifters = await db.execute(
-        sql.raw(`
-          SELECT 
-            ROW_NUMBER() OVER (ORDER BY dots DESC) AS "#",
-            sub.*
-          FROM (
-            SELECT DISTINCT ON (athlete_id) *
-            FROM meet_result_detailed
-            ORDER BY athlete_id, dots DESC
-          ) sub
-          ORDER BY dots DESC
-          LIMIT ${query.limit};
-        `)
-      )
-
-      if (!lifters.length) {
-        return null
-      }
-
-      return lifters
-
-    } catch (error) {
-      console.error("Error fetching lifters info:", error)
-      return null
-    }
-  }
-
+export default defineEventHandler(async () => {
   try {
-    const lifters = await db.execute(
+    const lifters = await db.execute<LifterPB>(
       sql.raw(`
         SELECT 
           ROW_NUMBER() OVER (ORDER BY dots DESC) AS "#",
           sub.*
         FROM (
-          SELECT DISTINCT ON (athlete_id) *
-          FROM meet_result_detailed
+          SELECT DISTINCT ON (athlete_id) 
+            full_name,
+            weight_class,
+            sex,
+            best_squat,
+            best_bench,
+            best_dead,
+            total,
+            dots
+          FROM athlete_best_result
           ORDER BY athlete_id, dots DESC
         ) sub
         ORDER BY dots DESC;
