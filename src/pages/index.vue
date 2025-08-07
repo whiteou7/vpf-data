@@ -2,108 +2,66 @@
 <template>
   <div class="min-h-screen py-10">
     <div class="max-w-[95%] mx-auto rounded-xl px-4 p-6">
-        <v-data-table
-          fixed-header
-          hide-default-footer
-          height="600"
-          :headers="headers"
-          :items="filteredLifters"
-          density="compact"
-          class="table-striped elevation-1 rankings-table rounded-lg"
-          items-per-page="-1"
-          :search="search"
-          :row-props="rowProps"
-          :loading="loading"
-          hover
-        >
-          <template #loading>
-            <v-skeleton-loader type="table-row@10"/>
-          </template>
-
-          <template #item.sex="{ item }">
-            {{ item.sex === 'male' ? 'M' : item.sex === 'female' ? 'F' : item.sex }}
-          </template>
-
-          <template #item.division="{ item }">
-            {{ item.division === "open" ? "Open" : item.division === "jr" ? "Junior" : item.division === "subjr" ? "Sub-Junior" : item.division === "mas1" ? "Master" : item.division}}
-          </template>
-          
-          <template #item.weight_class="{ item }">
-            {{ getWeightClassDisplay(item.weight_class, item.sex as Sex) }}
-          </template>
-
-          <template #item.best_squat="{ item }">
-            <span class="text-yellow-400 font-semibold">
-              {{ item.best_squat }}
-            </span>
-          </template>
-
-          <template #item.best_bench="{ item }">
-            <span class="text-cyan-400 font-semibold">
-              {{ item.best_bench }}
-            </span>
-          </template>
-
-          <template #item.best_dead="{ item }">
-            <span class="text-purple-400 font-semibold">
-              {{ item.best_dead }}
-            </span>
-          </template>
-
-          <template #top>
-            <div class="flex flex-row">
-              <div class="w-64 my-2 ml-4">
-                <v-text-field
-                  v-model="search"
-                  density="compact"
-                  label="Search lifters"
-                  clearable
-                  color="primary"
-                />
-              </div>
-
-              <div class="w-64 my-2 ml-4">
-                <v-select
-                  v-model="genderFilter"
-                  :items="genderOptions"
-                  label="Gender"
-                  density="compact"
-                  clearable
-                  color="primary"
-                />
-              </div>
-
-              <div class="w-64 my-2 ml-4">
-                <v-select
-                  v-model="divisionFilter"
-                  :items="divisionOptions"
-                  label="Division"
-                  density="compact"
-                  clearable
-                  color="primary"
-                />
-              </div>
-
-              <div class="w-64 my-2 ml-4">
-                <v-select
-                  v-model="weightClassFilter"
-                  :items="weightClassOptions"
-                  label="Weight Class"
-                  density="compact"
-                  clearable
-                  color="primary"
-                />
-              </div>
+      <LiftersPBTable
+        :filteredLifters="filteredLifters"
+        :headers="headers"
+        :loading="loading"
+        :search="search"
+      >
+        <template #top>
+          <div class="flex flex-row">
+            <div class="w-64 my-2 ml-4">
+              <v-text-field
+                v-model="search"
+                density="compact"
+                label="Search lifters"
+                clearable
+                color="primary"
+              />
             </div>
-          </template>
-        </v-data-table>
+
+            <div class="w-64 my-2 ml-4">
+              <v-select
+                v-model="genderFilter"
+                :items="genderOptions"
+                label="Gender"
+                density="compact"
+                clearable
+                color="primary"
+              />
+            </div>
+
+            <div class="w-64 my-2 ml-4">
+              <v-select
+                v-model="divisionFilter"
+                :items="divisionOptions"
+                label="Division"
+                density="compact"
+                clearable
+                color="primary"
+              />
+            </div>
+
+            <div class="w-64 my-2 ml-4">
+              <v-select
+                v-model="weightClassFilter"
+                :items="weightClassOptions"
+                label="Weight Class"
+                density="compact"
+                clearable
+                color="primary"
+              />
+            </div>
+          </div>
+        </template>
+      </LiftersPBTable>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue"
 import type { LifterPB, Sex, Division } from "~/types/lifter"
+import LiftersPBTable from "~/components/LiftersPBTable.vue"
 
 const lifters = ref<LifterPB[]>([])
 const loading = ref(true)
@@ -166,14 +124,6 @@ const filteredLifters = computed<LifterPB[]>(() => {
   })
 })
 
-// Helper function to display weight class while keeping original value for sorting
-const getWeightClassDisplay = (weightClass: number, sex: Sex): string => {
-  if (weightClass === 999) {
-    return sex === "male" ? "120+kg" : "84+kg"
-  }
-  return `${weightClass}kg`
-}
-
 // Fetch lifters
 onMounted(async () => {  
   const { data: liftersData } = await useFetch<LifterPB[]>("/api/all-lifter-ranked")
@@ -211,14 +161,6 @@ const headers = [
 ]
 
 const search = ref<string>("")
-
-// Stripe effect for rows
-const rowProps = ({ index }: { index: number }) => ({
-  style: {
-    backgroundColor: index % 2 === 0 ? "#2E2E2E" : "#3E3E3E"
-  }
-})
-
 </script>
 
 <style>
