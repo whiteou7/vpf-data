@@ -5,6 +5,7 @@ import "dotenv/config"
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL environment variable is not defined")
 }
-const db = drizzle(postgres(process.env.DATABASE_URL), { casing: "snake_case" })
+const client = postgres(process.env.DATABASE_URL, { prepare: false })
+const db = drizzle(client, { casing: "snake_case" })
 
 export { db }
