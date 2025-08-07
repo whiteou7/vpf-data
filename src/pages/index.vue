@@ -9,12 +9,12 @@
           :headers="headers"
           :items="filteredLifters"
           density="compact"
-          item-key="athlete_id"
           class="table-striped elevation-1 rankings-table rounded-lg"
           items-per-page="-1"
           :search="search"
           :row-props="rowProps"
           :loading="loading"
+          hover
         >
           <template #loading>
             <v-skeleton-loader type="table-row@10"/>

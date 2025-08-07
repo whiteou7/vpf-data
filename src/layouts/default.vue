@@ -45,7 +45,7 @@
       v-model="drawer"
       temporary
       location="right"
-      color="primary"
+      color="surface"
       dark
     >
       <v-list nav>
@@ -68,21 +68,6 @@
         <slot />
       </v-container>
     </v-main>
-
-    <!-- Footer -->
-    <v-footer
-      color="primary"
-      dark
-      padless
-    >
-      <v-container>
-        <v-row justify="center" no-gutters>
-          <v-col class="text-center secondary--text" cols="12">
-            <small>© 2024 Your Company. All rights reserved.</small>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-footer>
   </v-app>
 </template>
 
