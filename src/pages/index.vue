@@ -2,7 +2,6 @@
 <template>
   <div class="min-h-screen py-10">
     <div class="max-w-[95%] mx-auto rounded-xl px-4 p-6">
-      <h1 class="text-3xl font-bold py-4 text-primary">VPF Data</h1>
         <v-data-table
           fixed-header
           hide-default-footer
