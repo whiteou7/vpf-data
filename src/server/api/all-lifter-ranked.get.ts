@@ -14,6 +14,7 @@ export default defineEventHandler(async () => {
             full_name,
             weight_class,
             sex,
+            division,
             best_squat,
             best_bench,
             best_dead,
