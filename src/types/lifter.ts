@@ -2,8 +2,8 @@ export type LifterPB = {
   "#": number;
   full_name: string;
   weight_class: number;
-  sex: string;
-  division: string;
+  sex: Sex;
+  division: Division;
   best_squat: number;
   best_bench: number;
   best_dead: number;
