@@ -79,7 +79,7 @@ const drawer = ref(false)
 
 // Navigation items
 const navigationItems = [
-  { name: "Rankings", path: "/rankings" },
+  { name: "Rankings", path: "/" },
   { name: "Records", path: "/records" },
   { name: "Meets", path: "/meets" },
   { name: "Shop", path: "/shop" },
