@@ -13,4 +13,4 @@ export type LifterPB = {
 
 export type Sex = "male" | "female" | null
 
-export type Division = "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4" | null
+export type Division = "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4"
