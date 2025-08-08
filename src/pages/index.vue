@@ -66,7 +66,7 @@ import LiftersPBTable from "~/components/LiftersPBTable.vue"
 const lifters = ref<LifterPB[]>([])
 const loading = ref(true)
 const genderFilter = ref<Sex>(null)
-const divisionFilter = ref<Division>(null)
+const divisionFilter = ref<Division>()
 const weightClassFilter = ref<{ weight: number | null, sex: Sex }>({ weight: null, sex: null })
 
 const genderOptions = [

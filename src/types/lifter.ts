@@ -2,8 +2,8 @@ export type LifterPB = {
   "#": number;
   full_name: string;
   weight_class: number;
-  sex: string;
-  division: string;
+  sex: Sex;
+  division: Division;
   best_squat: number;
   best_bench: number;
   best_dead: number;
@@ -13,4 +13,4 @@ export type LifterPB = {
 
 export type Sex = "male" | "female" | null
 
-export type Division = "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4" | null
+export type Division = "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4"
