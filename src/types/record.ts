@@ -1,28 +1,25 @@
 import type { Division, Sex } from "./lifter"
 
-export type Record = {
+export type LiftRecord = {
   meet_name: string;
   full_name: string;
   weight_class: number;
   rank: 1 | 2 | 3;
   sex: Sex;
   division: Division;
+  result: number
 }
 
-export type SquatRecord = Record & { squat: number }
-export type BenchRecord = Record & { bench: number }
-export type DeadliftRecord = Record & { deadlift: number }
-export type TotalRecord = Record & { 
-  total: number,
+export type TotalRecord = LiftRecord & { 
   ipf: number,
   dots: number,
   gl: number
 }
 
 export type NestedRecord = {
-  squat: SquatRecord[],
-  bench: BenchRecord[],
-  deadlift: DeadliftRecord[],
+  squat: LiftRecord[],
+  bench: LiftRecord[],
+  deadlift: LiftRecord[],
   total: TotalRecord[]
 } | null
 
@@ -33,9 +30,15 @@ export type DivisionRecord = {
   mas: NestedRecord
 }
 
-export type Header = {
-  gold: string | null;
-  silver: string | null;
-  bronze: string | null;
+export type Result = {
+  name: string,
+  result: number
+}
+
+export type RecordTableRow = {
+  gold: Result | null;
+  silver: Result | null;
+  bronze: Result | null;
   weight_class: number;
+  sex: Sex
 }
