@@ -12,7 +12,7 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          squat,
+          squat AS result,
           rank
         FROM
           squat_records
@@ -27,7 +27,7 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          bench,
+          bench AS result,
           rank
         FROM
           bench_records
@@ -42,7 +42,7 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          deadlift,
+          deadlift AS result,
           rank
         FROM
           deadlift_records
@@ -57,7 +57,7 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          total,
+          total AS result,
           ipf,
           gl,
           dots,
