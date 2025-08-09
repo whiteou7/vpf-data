@@ -9,43 +9,47 @@
         :search="search"
       >
         <template #top>
-          <div class="flex flex-row">
-            <div class="w-64 my-2 ml-4">
+          <div class="flex flex-wrap gap-4 px-4 my-2">
+            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
               <v-text-field
                 v-model="search"
                 density="compact"
                 label="Search lifters"
                 color="primary"
+                variant="solo-inverted"
               />
             </div>
 
-            <div class="w-64 my-2 ml-4">
+            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
               <v-select
                 v-model="genderFilter"
                 :items="genderOptions"
                 label="Gender"
                 density="compact"
                 color="primary"
+                variant="solo-inverted"
               />
             </div>
 
-            <div class="w-64 my-2 ml-4">
+            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
               <v-select
                 v-model="divisionFilter"
                 :items="divisionOptions"
                 label="Division"
                 density="compact"
                 color="primary"
+                variant="solo-inverted"
               />
             </div>
 
-            <div class="w-64 my-2 ml-4 mr-4">
+            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
               <v-select
                 v-model="weightClassFilter"
                 :items="weightClassOptions"
                 label="Weight Class"
                 density="compact"
                 color="primary"
+                variant="solo-inverted"
               />
             </div>
           </div>
