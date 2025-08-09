@@ -5,9 +5,14 @@
     :headers="headers"
     hide-default-footer
     density="compact"
+    hover
+    :loading="loading"
   >
     <template #item.weight_class="{ item }">
       {{ getWeightClassDisplay(item.weight_class, item.sex) }}
+    </template>
+    <template #loading>
+      <v-skeleton-loader type="table-row@10"/>
     </template>
   </v-data-table>
 </template>
@@ -18,6 +23,7 @@ import type { RecordTableRow } from "~/types/record"
 const props = defineProps<{
   items: RecordTableRow[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  headers: any[]
+  headers: any[],
+  loading: boolean
 }>()
 </script>
