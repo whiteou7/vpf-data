@@ -67,4 +67,37 @@ const props = defineProps<{
 .records-table-component {
   border-collapse: collapse; 
 }
+
+@media (max-width: 768px) {
+  .records-table-component {
+    font-size: 0.75rem;
+  }
+  
+  .records-table-component th,
+  .records-table-component td {
+    padding: 4px 6px !important;
+    white-space: nowrap;
+  }
+  
+  .records-table-component th {
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+}
+
+/* Very small screens - even smaller */
+@media (max-width: 480px) {
+  .records-table-component {
+    font-size: 0.65rem;
+  }
+  
+  .records-table-component th,
+  .records-table-component td {
+    padding: 2px 4px !important;
+  }
+  
+  .records-table-component th {
+    font-size: 0.6rem;
+  }
+}
 </style>
