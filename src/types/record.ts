@@ -21,7 +21,7 @@ export type NestedRecord = {
   bench: LiftRecord[],
   deadlift: LiftRecord[],
   total: TotalRecord[]
-} | null
+}
 
 export type DivisionRecord = {
   subjr: NestedRecord,
@@ -35,10 +35,39 @@ export type Result = {
   result: number
 }
 
+// table-compatible type for rows
 export type RecordTableRow = {
   gold: Result | null;
   silver: Result | null;
   bronze: Result | null;
   weight_class: number;
   sex: Sex
+}
+
+// table-compatible type for the entire card
+export type RecordTableRowGroup = {
+  squat: {
+    subjr: RecordTableRow[],
+    jr: RecordTableRow[],
+    open: RecordTableRow[],
+    mas: RecordTableRow[]
+  },
+  bench: {
+    subjr: RecordTableRow[],
+    jr: RecordTableRow[],
+    open: RecordTableRow[],
+    mas: RecordTableRow[]
+  },
+  deadlift: {
+    subjr: RecordTableRow[],
+    jr: RecordTableRow[],
+    open: RecordTableRow[],
+    mas: RecordTableRow[]
+  },
+  total: {
+    subjr: RecordTableRow[],
+    jr: RecordTableRow[],
+    open: RecordTableRow[],
+    mas: RecordTableRow[]
+  }
 }
