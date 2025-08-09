@@ -209,17 +209,6 @@ onMounted(async () => {
 </script>
 
 <style>
-.v-data-table thead tr:nth-child(2) {
-  display: none;
-}
-.v-data-table th,
-.v-data-table td {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.v-data-table {
-  border-collapse: collapse; 
-}
 .records-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

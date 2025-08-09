@@ -1,6 +1,6 @@
-<!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-data-table
+    class="records-table-component"
     :items="items"
     :headers="headers"
     hide-default-footer
@@ -19,11 +19,24 @@
 
 <script setup lang="ts">
 import type { RecordTableRow } from "~/types/record"
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   items: RecordTableRow[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   headers: any[],
   loading: boolean
 }>()
 </script>
+
+<style>
+.records-table-component thead tr:nth-child(2) {
+  display: none;
+}
+
+.records-table-component th,
+.records-table-component td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.records-table-component {
+  border-collapse: collapse; 
+}
+</style>
