@@ -1,98 +1,102 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
-  <div class="min-h-screen py-10 px-4 md:px-12">
-    <h1 class="text-3xl font-bold mb-6 text-primary tracking-wide pb-2 pt-2 px-2">Male</h1>
-    <div class="records-grid pb-8">
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Squat</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.squat.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.squat.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="maleRow.squat.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="maleRow.squat.mas.value || []" :headers="headers" />
+  <div class="min-h-screen py-10">
+    <div class="max-w-[95%] mx-auto">
+      <h1 class="text-3xl font-bold mb-6 text-primary tracking-wide pb-2 pt-2 px-2">Male</h1>
+      <div class="records-grid pb-8">
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Squat</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.squat.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.squat.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="maleRow.squat.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="maleRow.squat.mas.value || []" :headers="headers" />
+        </div>
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Bench</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.bench.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.bench.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="maleRow.bench.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="maleRow.bench.mas.value || []" :headers="headers" />
+        </div>
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Deadlift</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.deadlift.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.deadlift.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="maleRow.deadlift.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="maleRow.deadlift.mas.value || []" :headers="headers" />
+        </div>
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Total</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.total.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="maleRow.total.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="maleRow.total.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="maleRow.total.mas.value || []" :headers="headers" />
+        </div>
       </div>
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Bench</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.bench.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.bench.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="maleRow.bench.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="maleRow.bench.mas.value || []" :headers="headers" />
-      </div>
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Deadlift</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.deadlift.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.deadlift.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="maleRow.deadlift.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="maleRow.deadlift.mas.value || []" :headers="headers" />
-      </div>
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Total</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.total.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="maleRow.total.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="maleRow.total.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="maleRow.total.mas.value || []" :headers="headers" />
-      </div>
-    </div>
-    <h1 class="text-3xl font-bold mb-6 text-primary tracking-wide pb-2 pt-2 px-2">Female</h1>
-    <div class="records-grid pb-8">
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Squat</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.squat.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.squat.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.squat.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.squat.mas.value || []" :headers="headers" />
-      </div>
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Bench</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.bench.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.bench.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.bench.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.bench.mas.value || []" :headers="headers" />
-      </div>
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Deadlift</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.deadlift.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.deadlift.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.deadlift.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.deadlift.mas.value || []" :headers="headers" />
-      </div>
-      <div class="p-3 md:p-5">
-        <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Total</h2>
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.total.subjr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.total.jr.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.total.open.value || []" :headers="headers" />
-        <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
-        <RecordsTable :loading="loading" :items="femaleRow.total.mas.value || []" :headers="headers" />
+
+      <h1 class="text-3xl font-bold mb-6 text-primary tracking-wide pb-2 pt-2 px-2">Female</h1>
+      
+      <div class="records-grid pb-8">
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Squat</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.squat.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.squat.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.squat.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.squat.mas.value || []" :headers="headers" />
+        </div>
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Bench</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.bench.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.bench.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.bench.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.bench.mas.value || []" :headers="headers" />
+        </div>
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Deadlift</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.deadlift.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.deadlift.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.deadlift.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.deadlift.mas.value || []" :headers="headers" />
+        </div>
+        <div class="p-3 md:p-5">
+          <h2 class="text-xl font-semibold mb-2 text-primary pb-1 pt-1 px-1">Total</h2>
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Sub Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.total.subjr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Junior</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.total.jr.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-1 text-primary pb-1 pt-1 px-1">Open</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.total.open.value || []" :headers="headers" />
+          <h4 class="text-base font-medium mb-2 text-primary pb-1 pt-1 px-1">Masters</h4>
+          <RecordsTable :loading="loading" :items="femaleRow.total.mas.value || []" :headers="headers" />
+        </div>
       </div>
     </div>
   </div>
@@ -221,6 +225,7 @@ onMounted(async () => {
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   margin-bottom: 3rem;
+  
 }
 .records-grid > div {
   background: rgba(255,255,255,0.03);

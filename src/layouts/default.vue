@@ -10,9 +10,9 @@
       <!-- Logo with Image -->
       <v-img
         src="/logo.jpg"
-        aspect-ratio="21/9"
         cover
         class="diagonal-blur-image"
+        height="100%"
       />
 
       <v-spacer/>
