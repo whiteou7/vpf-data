@@ -5,7 +5,6 @@
     :headers="headers"
     hide-default-footer
     density="compact"
-    hover
     :loading="loading"
   >
     <template #item.weight_class="{ item }">
@@ -19,9 +18,38 @@
 
 <script setup lang="ts">
 import type { RecordTableRow } from "~/types/record"
+
+// Header config for table
+const headers = ref([
+  { key: "weight_class", sortable: false },
+  { 
+    title: "Gold", 
+    children: [
+      { key: "gold.name", sortable: false },
+      { key: "gold.result", sortable: false, align: "end" as const }],
+    align: "center" as const,
+    sortable: false
+  },
+  { 
+    title: "Silver", 
+    children: [
+      { key: "silver.name", sortable: false },
+      { key: "silver.result", sortable: false, align: "end" as const }],
+    align: "center" as const,
+    sortable: false
+  },
+  { 
+    title: "Bronze", 
+    children: [
+      { key: "bronze.name", sortable: false },
+      { key: "bronze.result", sortable: false, align: "end" as const }],
+    align: "center" as const,
+    sortable: false
+  }
+])
+
 const props = defineProps<{
   items: RecordTableRow[]
-  headers: any[],
   loading: boolean
 }>()
 </script>
