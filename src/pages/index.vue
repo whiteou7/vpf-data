@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <div class="min-h-screen py-10">
-    <div class="max-w-[95%] mx-auto rounded-xl px-4 p-6">
+    <div class="max-w-[95%] mx-auto rounded-xl">
       <LiftersPBTable
         :filteredLifters="filteredLifters"
         :headers="headers"
@@ -15,7 +15,6 @@
                 v-model="search"
                 density="compact"
                 label="Search lifters"
-                clearable
                 color="primary"
               />
             </div>
@@ -26,7 +25,6 @@
                 :items="genderOptions"
                 label="Gender"
                 density="compact"
-                clearable
                 color="primary"
               />
             </div>
@@ -37,18 +35,16 @@
                 :items="divisionOptions"
                 label="Division"
                 density="compact"
-                clearable
                 color="primary"
               />
             </div>
 
-            <div class="w-64 my-2 ml-4">
+            <div class="w-64 my-2 ml-4 mr-4">
               <v-select
                 v-model="weightClassFilter"
                 :items="weightClassOptions"
                 label="Weight Class"
                 density="compact"
-                clearable
                 color="primary"
               />
             </div>
