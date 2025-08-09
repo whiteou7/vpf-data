@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap gap-8 records-grid">
-    <div class="flex-1">
+    <div class="flex-1 max-w-full">
       <h2 class="text-xl font-semibold text-primary">Squat</h2>
       <h4 class="text-base font-medium text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.squat.subjr || []"/>
@@ -11,7 +11,7 @@
       <h4 class="text-base font-medium text-primary">Masters</h4>
       <RecordsTable :loading="loading" :items="items.squat.mas || []"/>
     </div>
-    <div class="flex-1">
+    <div class="flex-1 max-w-full">
       <h2 class="text-xl font-semibold text-primary">Bench</h2>
       <h4 class="text-base font-medium text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.bench.subjr || []"/>
@@ -22,7 +22,7 @@
       <h4 class="text-base font-medium text-primary">Masters</h4>
       <RecordsTable :loading="loading" :items="items.bench.mas || []"/>
     </div>
-    <div class="flex-1">
+    <div class="flex-1 max-w-full">
       <h2 class="text-xl font-semibold text-primary">Deadlift</h2>
       <h4 class="text-base font-medium text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.deadlift.subjr || []"/>
@@ -33,7 +33,7 @@
       <h4 class="text-base font-medium text-primary">Masters</h4>
       <RecordsTable :loading="loading" :items="items.deadlift.mas || []"/>
     </div>
-    <div class="flex-1">
+    <div class="flex-1 max-w-full">
       <h2 class="text-xl font-semibold text-primary">Total</h2>
       <h4 class="text-base font-medium text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.total.subjr || []"/>
