@@ -1,10 +1,11 @@
 import { sql } from "drizzle-orm"
 import { db } from "../../db"
-import type { SquatRecord, BenchRecord, DeadliftRecord, TotalRecord } from "~/types/record"
+import type { LiftRecord, TotalRecord } from "~/types/record"
+import { destructureRecords } from "~/utils/utils"
 
 export default defineEventHandler(async () => {
   try {
-    const squat = await db.execute<SquatRecord>(
+    const squat = await db.execute<LiftRecord>(
       sql.raw(`
         SELECT 
           meet_name,
@@ -19,7 +20,7 @@ export default defineEventHandler(async () => {
       `)
     )
 
-    const bench = await db.execute<BenchRecord>(
+    const bench = await db.execute<LiftRecord>(
       sql.raw(`
         SELECT 
           meet_name,
@@ -34,7 +35,7 @@ export default defineEventHandler(async () => {
       `)
     )
 
-    const deadlift = await db.execute<DeadliftRecord>(
+    const deadlift = await db.execute<LiftRecord>(
       sql.raw(`
         SELECT 
           meet_name,
@@ -67,10 +68,7 @@ export default defineEventHandler(async () => {
       `)
     )
 
-    return {
-      squat, bench, deadlift, total
-    }
-
+    return destructureRecords({ squat, bench, deadlift, total })
   } catch (error) {
     console.error("Error fetching records info:", error)
     return null
