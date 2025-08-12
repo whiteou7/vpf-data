@@ -19,96 +19,76 @@
 
 <script setup lang="ts">
 import RecordsTableGroup from "~/components/RecordsTableGroup.vue"
-import type { NestedRecord, DivisionRecord, RecordTableRowGroup } from "~/types/record"
-import { mapRecordsToDivisions, transformRecordsToRows } from "~/utils/utils"
+import type { DestructuredRecord, RecordTableRowGroup } from "~/types/record"
+import { transformRecordsToRows } from "~/utils/utils"
 
 const loading = ref(true)
 
 // Objects to hold data for table group
 const maleRowGroup: RecordTableRowGroup = {
-  squat: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  },
-  bench: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  },
-  deadlift: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  },
-  total: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  }
+  squat: { subjr: [], jr: [], open: [], mas: [] },
+  bench: { subjr: [], jr: [], open: [], mas: [] },
+  deadlift: { subjr: [], jr: [], open: [], mas: [] },
+  total: { subjr: [], jr: [], open: [], mas: [] },
 }
 const femaleRowGroup: RecordTableRowGroup = {
-  squat: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  },
-  bench: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  },
-  deadlift: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  },
-  total: {
-    subjr: [],
-    jr: [],
-    open: [],
-    mas: []
-  }
+  squat: { subjr: [], jr: [], open: [], mas: [] },
+  bench: { subjr: [], jr: [], open: [], mas: [] },
+  deadlift: { subjr: [], jr: [], open: [], mas: [] },
+  total: { subjr: [], jr: [], open: [], mas: [] },
 }
 
 onMounted(async () => {  
   // Fetch
-  const { data: recordsData } = await useFetch<NestedRecord>("/api/records")
+  const { data: recordsData } = await useFetch<{ male: DestructuredRecord, female: DestructuredRecord }>("/api/records")
   if (!recordsData.value) return
   loading.value = false
 
-  // Destructure raw data to male and female
-  const { maleRecords, femaleRecords } = mapRecordsToDivisions(recordsData.value)
+  const { male, female } = recordsData.value
 
-  // Helper function to map raw data to objects for table group
-  function fillRowData(
-    target: RecordTableRowGroup,
-    source: DivisionRecord
-  ) {
-    const categories = ["squat", "bench", "deadlift", "total"] as const
-    const divisions = ["subjr", "jr", "open", "mas"] as const
+  // Map data to row object
+  if (male) {
+    maleRowGroup.squat.subjr = transformRecordsToRows(male.squat.subjr)
+    maleRowGroup.squat.jr = transformRecordsToRows(male.squat.jr)
+    maleRowGroup.squat.open = transformRecordsToRows(male.squat.open)
+    maleRowGroup.squat.mas = transformRecordsToRows(male.squat.mas)
 
-    for (const category of categories) {
-      for (const division of divisions) {
-        target[category][division] = transformRecordsToRows(
-          source?.[division]?.[category] ?? []
-        )
-      }
-    }
+    maleRowGroup.bench.subjr = transformRecordsToRows(male.bench.subjr)
+    maleRowGroup.bench.jr = transformRecordsToRows(male.bench.jr)
+    maleRowGroup.bench.open = transformRecordsToRows(male.bench.open)
+    maleRowGroup.bench.mas = transformRecordsToRows(male.bench.mas)
+
+    maleRowGroup.deadlift.subjr = transformRecordsToRows(male.deadlift.subjr)
+    maleRowGroup.deadlift.jr = transformRecordsToRows(male.deadlift.jr)
+    maleRowGroup.deadlift.open = transformRecordsToRows(male.deadlift.open)
+    maleRowGroup.deadlift.mas = transformRecordsToRows(male.deadlift.mas)
+
+    maleRowGroup.total.subjr = transformRecordsToRows(male.total.subjr)
+    maleRowGroup.total.jr = transformRecordsToRows(male.total.jr)
+    maleRowGroup.total.open = transformRecordsToRows(male.total.open)
+    maleRowGroup.total.mas = transformRecordsToRows(male.total.mas)
   }
 
-  if (maleRecords) {
-    fillRowData(maleRowGroup, maleRecords)
-  }
-  if (femaleRecords) {
-    fillRowData(femaleRowGroup, femaleRecords)
+  if (female) {
+    femaleRowGroup.squat.subjr = transformRecordsToRows(female.squat.subjr)
+    femaleRowGroup.squat.jr = transformRecordsToRows(female.squat.jr)
+    femaleRowGroup.squat.open = transformRecordsToRows(female.squat.open)
+    femaleRowGroup.squat.mas = transformRecordsToRows(female.squat.mas)
+
+    femaleRowGroup.bench.subjr = transformRecordsToRows(female.bench.subjr)
+    femaleRowGroup.bench.jr = transformRecordsToRows(female.bench.jr)
+    femaleRowGroup.bench.open = transformRecordsToRows(female.bench.open)
+    femaleRowGroup.bench.mas = transformRecordsToRows(female.bench.mas)
+
+    femaleRowGroup.deadlift.subjr = transformRecordsToRows(female.deadlift.subjr)
+    femaleRowGroup.deadlift.jr = transformRecordsToRows(female.deadlift.jr)
+    femaleRowGroup.deadlift.open = transformRecordsToRows(female.deadlift.open)
+    femaleRowGroup.deadlift.mas = transformRecordsToRows(female.deadlift.mas)
+
+    femaleRowGroup.total.subjr = transformRecordsToRows(female.total.subjr)
+    femaleRowGroup.total.jr = transformRecordsToRows(female.total.jr)
+    femaleRowGroup.total.open = transformRecordsToRows(female.total.open)
+    femaleRowGroup.total.mas = transformRecordsToRows(female.total.mas)
   }
 
 })

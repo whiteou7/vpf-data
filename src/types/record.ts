@@ -16,18 +16,31 @@ export type TotalRecord = LiftRecord & {
   gl: number
 }
 
-export type NestedRecord = {
-  squat: LiftRecord[],
-  bench: LiftRecord[],
-  deadlift: LiftRecord[],
-  total: TotalRecord[]
-}
-
-export type DivisionRecord = {
-  subjr: NestedRecord,
-  jr: NestedRecord,
-  open: NestedRecord,
-  mas: NestedRecord
+export type DestructuredRecord = {
+  squat: {
+    subjr: LiftRecord[],
+    jr: LiftRecord[],
+    open: LiftRecord[],
+    mas: LiftRecord[]
+  },
+  bench: {
+    subjr: LiftRecord[],
+    jr: LiftRecord[],
+    open: LiftRecord[],
+    mas: LiftRecord[]
+  },
+  deadlift: {
+    subjr: LiftRecord[],
+    jr: LiftRecord[],
+    open: LiftRecord[],
+    mas: LiftRecord[]
+  },
+  total: {
+    subjr: TotalRecord[],
+    jr: TotalRecord[],
+    open: TotalRecord[],
+    mas: TotalRecord[]
+  }
 }
 
 export type Result = {
