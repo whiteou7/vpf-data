@@ -81,7 +81,7 @@ const drawer = ref(false)
 const navigationItems = [
   { name: "Rankings", path: "/" },
   { name: "Records", path: "/records" },
-  { name: "Meets", path: "/meets" },
+  { name: "Meets", path: "/meet/all" },
   { name: "Shop", path: "/shop" },
   { name: "Contact", path: "/contact" }
 ]

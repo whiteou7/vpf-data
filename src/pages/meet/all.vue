@@ -1,0 +1,101 @@
+<template>
+  <div class="min-h-screen py-10">
+    <div class="max-w-[95%] mx-auto rounded-xl">
+      <v-data-table
+        :headers="headers"
+        :items="filteredMeets"
+        :loading="loading"
+        class="elevation-1"
+        item-key="id"
+        density="compact"
+        :items-per-page="-1"
+        hide-default-footer
+        striped="odd"
+      >
+        <template #top>
+          <div class="flex flex-wrap gap-4 px-4 my-2">
+            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+              <v-select
+                v-model="cityFilter"
+                :items="cityOptions"
+                label="City"
+                density="compact"
+                color="primary"
+                variant="solo-inverted"
+              />
+            </div>
+            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+              <v-select
+                v-model="yearFilter"
+                :items="yearOptions"
+                label="Year"
+                density="compact"
+                color="primary"
+                variant="solo-inverted"
+              />
+            </div>
+          </div>
+        </template>
+        <template #item.name="{ item }">
+          <NuxtLink :to="`/meet/${meet_to_path[item.id]}`" class="hover:underline text-primary">
+            {{ item.name }}
+          </NuxtLink>
+        </template>
+      </v-data-table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { Meet } from "~/types/meet"
+import { meet_to_path } from "~/utils/mappings"
+
+const meets = ref<Meet[]>([])
+const loading = ref(true)
+const cityFilter = ref<string | null>(null)
+const yearFilter = ref<number | null>(null)
+
+// Fetch all meet
+onMounted(async () => {
+  const { data: meetsData } = await useFetch<Meet[]>("/api/all-meet")
+
+  if (!meetsData.value) return
+
+  loading.value = false
+  meets.value = meetsData.value
+})
+
+// Auto generated items for filter buttons
+const cityOptions = computed<{ title: string, value: string | null }[]>(() => {
+  const cities = new Set<string | null>(meets.value.map(meet => meet.city))
+  const options: { title: string, value: string | null }[] = [{ title: "All", value: null }]
+  cities.forEach(city => options.push({ title: city ?? " ", value: city }))
+  return options
+})
+
+const yearOptions = computed<{ title: string, value: number | null }[]>(() => {
+  const years = new Set(meets.value.map(meet => new Date(meet.host_date).getFullYear()))
+  const options: { title: string, value: number | null }[] = [{ title: "All", value: null }]
+  years.forEach(year => options.push({ title: year.toString(), value: year }))
+  return options
+})
+
+const filteredMeets = computed(() => {
+  return meets.value.filter(meet => {
+    const matchesCity = cityFilter.value ? meet.city === cityFilter.value : true
+    const matchesYear = yearFilter.value ? new Date(meet.host_date).getFullYear() === yearFilter.value : true
+    return matchesCity && matchesYear
+  })
+})
+
+// Table header config
+const headers = [
+  { title: "Date", value: "host_date", sortable: false },
+  { title: "City", value: "city", sortable: false },
+  { title: "Name", value: "name", sortable: false },
+  { title: "Athletes", value: "count" }
+]
+</script>
+
+<style>
+</style>
