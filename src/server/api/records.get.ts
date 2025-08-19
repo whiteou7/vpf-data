@@ -73,7 +73,7 @@ export default defineEventHandler(async () => {
     console.error("Error fetching records info:", error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal Server Error'
+      statusMessage: "Internal Server Error"
     })
   }
 })
