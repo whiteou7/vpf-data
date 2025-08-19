@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen py-10">
-    <div class="max-w-[95%] mx-auto rounded-xl">
+    <div class="max-w-[95%] mx-auto rounded-lg">
       <LiftersPBTable
         :filteredLifters="filteredLifters"
         :headers="headers"
