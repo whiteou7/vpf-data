@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     console.error("Error fetching meet info:", error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal Server Error'
+      statusMessage: "Internal Server Error"
     })
   }
 })
