@@ -37,7 +37,7 @@
           </div>
         </template>
         <template #item.name="{ item }">
-          <NuxtLink :to="`/meet/${meet_to_path[item.id]}`" class="hover:underline text-primary">
+          <NuxtLink :to="`/meet/${meetToPath[item.id]}`" class="hover:underline text-primary">
             {{ item.name }}
           </NuxtLink>
         </template>
@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import type { Meet } from "~/types/meet"
-import { meet_to_path } from "~/utils/mappings"
+import { meetToPath } from "~/utils/mappings"
 
 const meets = ref<Meet[]>([])
 const loading = ref(true)

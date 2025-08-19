@@ -11,7 +11,7 @@ export type MeetResultDetailed = {
   meet_id: number;
   athlete_id: string;
   sex: Sex;
-  weight_class: string;
+  weight_class: number;
   division: Division;
   body_weight: number;
   squat1: number;
