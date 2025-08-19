@@ -1,4 +1,4 @@
-export const meet_to_path = {
+export const meetToPath: Record<string, string> = {
   "2": "national-2020",
   "3": "national-2022",
   "4": "amateur-1",
@@ -14,4 +14,11 @@ export const meet_to_path = {
   "14": "amateur-winter-is-coming",
   "15": "national-2024",
   "16": "amateur-spring-celebration"
+}
+
+export const divisionMap: Record<string, string> = {
+  open: "Open",
+  jr: "Junior",
+  subjr: "Sub-Junior",
+  mas1: "Master",
 }
