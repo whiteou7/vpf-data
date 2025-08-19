@@ -16,19 +16,19 @@
 </template>
 
 <script setup lang="ts">
-import type { LifterPB } from "~/types/lifter"
+import type { LifterResult } from "~/types/lifter"
 import LiftersPBTable from "~/components/LiftersPBTable.vue"
 import LifterFilters from "~/components/LiftersFilter.vue"
 import { useLiftersFilter } from "~/composables/useLiftersFilter"
 
-const lifters = ref<LifterPB[]>([])
+const lifters = ref<LifterResult[]>([])
 const loading = ref(true)
 
 const filters = useLiftersFilter()
 
 // Fetch
 onMounted(async () => {  
-  const { data: liftersData } = await useFetch<LifterPB[]>("/api/all-lifter-ranked")
+  const { data: liftersData } = await useFetch<LifterResult[]>("/api/all-lifter-ranked")
   if (!liftersData.value) return
   loading.value = false
   lifters.value = liftersData.value
