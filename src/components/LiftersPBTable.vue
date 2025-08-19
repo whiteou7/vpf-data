@@ -42,6 +42,7 @@
 </template>
 <script setup lang="ts">
 import type { LifterPB, Sex } from "~/types/lifter"
+import { divisionMap } from "~/utils/mappings"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   filteredLifters: LifterPB[]
@@ -50,12 +51,7 @@ const props = defineProps<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   headers: any[]
 }>()
-const divisionMap: Record<string, string> = {
-  open: "Open",
-  jr: "Junior",
-  subjr: "Sub-Junior",
-  mas1: "Master",
-}
+
 const rowProps = ({ index }: { index: number }) => ({
   style: {
     backgroundColor: index % 2 === 0 ? "#2E2E2E" : "#3E3E3E",
