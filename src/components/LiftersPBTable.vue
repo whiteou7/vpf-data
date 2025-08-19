@@ -7,7 +7,6 @@
     :headers="headers"
     :items="filteredLifters"
     density="compact"
-    class="table-striped elevation-1 rankings-table rounded-lg"
     items-per-page="-1"
     :search="search"
     :row-props="rowProps"
