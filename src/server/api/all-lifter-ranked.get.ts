@@ -20,7 +20,7 @@ export default defineEventHandler(async () => {
             best_dead,
             total,
             dots
-          FROM athlete_best_result
+          FROM meet_result_detailed
           ORDER BY athlete_id, dots DESC
         ) sub
         ORDER BY dots DESC;
