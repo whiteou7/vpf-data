@@ -36,11 +36,17 @@ export default defineEventHandler(async (event) => {
           flight,
           full_name,
           total,
-          gl
+          gl,
+          placement
         FROM
           meet_result_detailed
         WHERE
           meet_id = ${meetId}
+        ORDER BY
+          flight,
+          weight_class,
+          division,
+          placement;
         `)
     )
     
