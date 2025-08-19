@@ -40,11 +40,11 @@
   </v-data-table>
 </template>
 <script setup lang="ts">
-import type { LifterPB, Sex } from "~/types/lifter"
+import type { LifterResult, Sex } from "~/types/lifter"
 import { divisionMap } from "~/utils/mappings"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
-  filteredLifters: LifterPB[]
+  filteredLifters: LifterResult[]
   search: string
   loading: boolean
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
