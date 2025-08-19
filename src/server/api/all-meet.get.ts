@@ -27,14 +27,13 @@ export default defineEventHandler(async () => {
           host_date ASC
         `)
     )
-    
-    if (!meets.length) {
-      return null
-    }
 
     return meets
   } catch (error) {
     console.error("Error fetching meets info:", error)
-    return null
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Internal Server Error'
+    })
   }
 })

@@ -1,10 +1,10 @@
 import { sql } from "drizzle-orm"
 import { db } from "../../db"
-import type { LifterPB } from "~/types/lifter"
+import type { LifterResult } from "~/types/lifter"
 
 export default defineEventHandler(async () => {
   try {
-    const lifters = await db.execute<LifterPB>(
+    const lifters = await db.execute<LifterResult>(
       sql.raw(`
         SELECT 
           ROW_NUMBER() OVER (ORDER BY dots DESC) AS "#",
@@ -27,14 +27,12 @@ export default defineEventHandler(async () => {
 
       `)
     )
-
-    if (!lifters.length) {
-      return null
-    }
-
     return lifters
   } catch (error) {
     console.error("Error fetching lifters info:", error)
-    return null
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Internal Server Error'
+    })
   }
 })

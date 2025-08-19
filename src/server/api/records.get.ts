@@ -71,6 +71,9 @@ export default defineEventHandler(async () => {
     return destructureRecords({ squat, bench, deadlift, total })
   } catch (error) {
     console.error("Error fetching records info:", error)
-    return null
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Internal Server Error'
+    })
   }
 })
