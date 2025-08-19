@@ -1,51 +1,73 @@
 <template>
   <div class="min-h-screen py-10">
     <div class="max-w-[95%] mx-auto rounded-xl">
-      <v-data-table
-        :headers="headers"
-        :items="filteredResults"
-        :loading="loading"
-        class="elevation-1"
-        item-key="athlete_id"
-        density="compact"
-        :items-per-page="-1"
-        hide-default-footer
-      >
-        <template #top>
-          <div class="flex flex-wrap gap-4 px-4 my-2">
-            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
-              <v-select
-                v-model="sexFilter"
-                :items="sexOptions"
-                label="Sex"
-                density="compact"
-                color="primary"
-                variant="solo-inverted"
-              />
-            </div>
-            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
-              <v-select
-                v-model="divisionFilter"
-                :items="divisionOptions"
-                label="Division"
-                density="compact"
-                color="primary"
-                variant="solo-inverted"
-              />
-            </div>
-            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
-              <v-select
-                v-model="weightClassFilter"
-                :items="weightClassOptions"
-                label="Weight Class"
-                density="compact"
-                color="primary"
-                variant="solo-inverted"
-              />
-            </div>
+      <div class="flex flex-wrap gap-4 px-4 my-2">
+        <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+          <v-select
+            v-model="sexFilter"
+            :items="sexOptions"
+            label="Sex"
+            density="compact"
+            color="primary"
+            variant="solo-inverted"
+          />
+        </div>
+        <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+          <v-select
+            v-model="divisionFilter"
+            :items="divisionOptions"
+            label="Division"
+            density="compact"
+            color="primary"
+            variant="solo-inverted"
+          />
+        </div>
+        <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+          <v-select
+            v-model="weightClassFilter"
+            :items="weightClassOptions"
+            label="Weight Class"
+            density="compact"
+            color="primary"
+            variant="solo-inverted"
+          />
+        </div>
+      </div>
+
+      <div v-if="loading" class="text-center pa-4">
+        <v-progress-circular indeterminate color="primary" />
+      </div>
+      <div v-else>
+        <div v-for="(group, session) in groupedResults" :key="session" class="mb-8">
+          <div class="bg-surface">
+            <h2 class="text-2xl font-bold pa-4">
+              {{ session }}
+            </h2>
           </div>
-        </template>
-      </v-data-table>
+          <v-data-table
+            :headers="headers"
+            :items="group"
+            class="elevation-1"
+            item-key="athlete_id"
+            density="compact"
+            :items-per-page="-1"
+            hide-default-footer
+          >
+            <template #loading>
+              <v-skeleton-loader type="table-row@10"/>
+            </template>
+            <template #item.sex="{ item }">
+              {{ item.sex === 'male' ? 'M' : item.sex === 'female' ? 'F' : item.sex }}
+            </template>
+            <template #item.weight_class="{ item }">
+              {{ getWeightClassDisplay(item.weight_class, item.sex as Sex) }}
+            </template>
+            <template #item.division="{ item }">
+              {{ divisionMap[item.division] ?? item.division }}
+            </template>
+          </v-data-table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -53,8 +75,9 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue"
 import { useRoute } from "vue-router"
+import type { Sex } from "~/types/lifter"
 import type { MeetResultDetailed } from "~/types/meet"
-import { meet_to_path } from "~/utils/mappings"
+import { meetToPath, divisionMap } from "~/utils/mappings"
 
 const route = useRoute()
 const path = route.params.path as string
@@ -65,8 +88,8 @@ const sexFilter = ref<string | null>(null)
 const divisionFilter = ref<string | null>(null)
 const weightClassFilter = ref<string | null>(null)
 
-const path_to_meet = Object.fromEntries(Object.entries(meet_to_path).map(([key, value]) => [value, key]))
-const meetId = path_to_meet[path]
+const pathToMeet = Object.fromEntries(Object.entries(meetToPath).map(([key, value]) => [value, key]))
+const meetId = pathToMeet[path]
 
 onMounted(async () => {
   if (meetId) {
@@ -121,13 +144,24 @@ const filteredResults = computed(() => {
   })
 })
 
+const groupedResults = computed(() => {
+  return filteredResults.value.reduce((groups, item) => {
+    const session = item.session || "Uncategorized"
+    if (!groups[session]) {
+      groups[session] = []
+    }
+    groups[session].push(item)
+    return groups
+  }, {} as Record<string, MeetResultDetailed[]>)
+})
+
 const headers = [
-  { title: "Meet ID", value: "meet_id" },
-  { title: "Athlete ID", value: "athlete_id" },
+  { title: "Full Name", value: "full_name" },
   { title: "Sex", value: "sex" },
   { title: "Weight Class", value: "weight_class" },
   { title: "Division", value: "division" },
   { title: "Body Weight", value: "body_weight" },
+  { title: "Flight", value: "flight" },
   { title: "Squat 1", value: "squat1" },
   { title: "Squat 2", value: "squat2" },
   { title: "Squat 3", value: "squat3" },
@@ -137,11 +171,9 @@ const headers = [
   { title: "Deadlift 1", value: "dead1" },
   { title: "Deadlift 2", value: "dead2" },
   { title: "Deadlift 3", value: "dead3" },
-  { title: "Session", value: "session" },
-  { title: "Flight", value: "flight" },
-  { title: "Full Name", value: "full_name" },
   { title: "Total", value: "total" },
   { title: "GL Points", value: "gl" },
+  { title: "#", value: "placement" }
 ]
 </script>
 
