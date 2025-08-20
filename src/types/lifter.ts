@@ -1,7 +1,9 @@
 export type LifterResult = {
   "#"?: number;
+  athlete_id: string;
   full_name?: string;
   weight_class: number;
+  body_weight?: number;
   sex?: Sex;
   division: Division;
   best_squat: number;
@@ -9,6 +11,7 @@ export type LifterResult = {
   best_dead: number;
   total: number;
   dots: number;
+  placement?: number;
 };
 
 export type Sex = "male" | "female" | null
