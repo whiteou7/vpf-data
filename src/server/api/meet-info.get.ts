@@ -49,11 +49,7 @@ export default defineEventHandler(async (event) => {
           placement;
         `)
     )
-    
-    if (!results.length) {
-      return null
-    }
-
+  
     return results
   } catch (error) {
     console.error("Error fetching meet info:", error)
