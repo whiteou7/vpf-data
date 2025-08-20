@@ -9,7 +9,7 @@
     density="compact"
     items-per-page="-1"
     :search="search"
-    :row-props="rowProps"
+    striped="odd"
     :loading="loading"
     hover
   >
@@ -18,6 +18,11 @@
     </template>
     <template #loading>
       <v-skeleton-loader type="table-row@10"/>
+    </template>
+    <template #item.full_name="{ item }">
+      <NuxtLink :to="`/lifter/${item.athlete_id}`" class="hover:underline">
+        {{ item.full_name }}
+      </NuxtLink>
     </template>
     <template #item.sex="{ item }">
       {{ item.sex === 'male' ? 'M' : item.sex === 'female' ? 'F' : item.sex }}
@@ -50,10 +55,4 @@ const props = defineProps<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   headers: any[]
 }>()
-
-const rowProps = ({ index }: { index: number }) => ({
-  style: {
-    backgroundColor: index % 2 === 0 ? "#2E2E2E" : "#3E3E3E",
-  },
-})
 </script>
