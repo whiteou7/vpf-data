@@ -23,10 +23,13 @@ export default defineEventHandler(async (event) => {
           best_bench,
           best_dead,
           total,
-          dots
+          dots,
+          body_weight,
+          placement,
+          meet_name
         FROM meet_result_detailed
         WHERE athlete_id = '${athleteId}'
-        ORDER BY meet_id;
+        ORDER BY meet_id DESC;
       `)
     )
 
