@@ -11,6 +11,7 @@ export default defineEventHandler(async () => {
           sub.*
         FROM (
           SELECT DISTINCT ON (athlete_id) 
+            athlete_id,
             full_name,
             weight_class,
             sex,

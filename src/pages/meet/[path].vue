@@ -29,6 +29,11 @@
           <template #item.division="{ item }">
             {{ divisionMap[item.division] ?? item.division }}
           </template>
+          <template #item.full_name="{ item }">
+            <NuxtLink :to="`/lifter/${item.athlete_id}`" class="hover:underline">
+              {{ item.full_name }}
+            </NuxtLink>
+          </template>
         </v-data-table>
       </div>
     </div>
