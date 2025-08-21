@@ -17,6 +17,8 @@ export default defineEventHandler(async (event) => {
     const results = await db.execute<LifterResult>(
       sql.raw(`
         SELECT
+          full_name,
+          sex,
           weight_class,
           division,
           best_squat,
@@ -26,7 +28,8 @@ export default defineEventHandler(async (event) => {
           dots,
           body_weight,
           placement,
-          meet_name
+          meet_name,
+          meet_id
         FROM meet_result_detailed
         WHERE athlete_id = '${athleteId}'
         ORDER BY meet_id DESC;
