@@ -68,6 +68,6 @@ const headers = [
   { title: "Bench", value: "best_bench", sortable: true },
   { title: "Deadlift", value: "best_dead", sortable: true },
   { title: "Total", value: "total", sortable: true },
-  { title: "DOTS", value: "dots", sortable: true },
+  { title: "GL", value: "gl", sortable: true },
 ]
 </script>

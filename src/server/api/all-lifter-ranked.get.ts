@@ -7,7 +7,7 @@ export default defineEventHandler(async () => {
     const lifters = await db.execute<LifterResult>(
       sql.raw(`
         SELECT 
-          ROW_NUMBER() OVER (ORDER BY dots DESC) AS "#",
+          ROW_NUMBER() OVER (ORDER BY gl DESC) AS "#",
           athlete_id,
           full_name,
           weight_class,
@@ -17,7 +17,7 @@ export default defineEventHandler(async () => {
           CASE WHEN best_bench = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_bench::text)) END as best_bench,
           CASE WHEN best_dead = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_dead::text)) END as best_dead,
           CASE WHEN total = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM total::text)) END as total,
-          dots
+          gl
         FROM (
           SELECT DISTINCT ON (athlete_id) 
             athlete_id,
@@ -29,11 +29,11 @@ export default defineEventHandler(async () => {
             best_bench,
             best_dead,
             total,
-            dots
+            gl
           FROM meet_result_detailed
-          ORDER BY athlete_id, dots DESC
+          ORDER BY athlete_id, gl DESC
         ) sub
-        ORDER BY dots DESC;
+        ORDER BY gl DESC;
 
       `)
     )
