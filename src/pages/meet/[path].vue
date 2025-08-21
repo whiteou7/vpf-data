@@ -3,7 +3,7 @@
     <div class="max-w-[95%] mx-auto">
       <LiftersFilter/>
 
-      <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface mb-8">
+      <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface my-8">
         <h2 class="text-2xl font-bold text-primary">
           Session {{ session }}
         </h2>
@@ -11,6 +11,8 @@
         <BaseTable
           :headers="headers"
           :items="group"
+          :search="filters.search.value"
+          :loading="loading"
         />
       </div>
     </div>
