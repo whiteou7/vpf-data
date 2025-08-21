@@ -74,4 +74,39 @@ const props = defineProps<{
   white-space: nowrap;
   padding: 3px 10px !important; 
 }
+
+/* Gold column styling */
+.records-table-component th:nth-child(2),
+.records-table-component td:nth-child(2),
+.records-table-component th:nth-child(3),
+.records-table-component td:nth-child(3) {
+  color: #D8C276 !important;
+}
+
+.records-table-component th:nth-child(2),
+.records-table-component th:nth-child(3) {
+  font-weight: bold !important;
+}
+
+/* Silver column styling */
+.records-table-component th:nth-child(3),
+.records-table-component td:nth-child(4),
+.records-table-component th:nth-child(5),
+.records-table-component td:nth-child(5) {
+  color: #C0C0C0 !important;
+}
+
+.records-table-component th:nth-child(4),
+.records-table-component th:nth-child(5) {
+  font-weight: bold !important;
+}
+
+/* Bronze column styling */
+.records-table-component th:nth-child(4),
+.records-table-component td:nth-child(6),
+.records-table-component th:nth-child(7),
+.records-table-component td:nth-child(7) {
+  color: #AE8C73 !important;
+}
+
 </style>
