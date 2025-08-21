@@ -47,33 +47,33 @@
     </template>
 
     <template #item.squat1="{ item }">
-      <span :class="item.squat1 < 0 ? 'text-error' : 'text-success'">{{ item.squat1 }}</span>
+      <span :class="item.squat1 <= 0 ? 'text-error' : 'text-success'">{{ item.squat1 }}</span>
     </template>
     <template #item.squat2="{ item }">
-      <span :class="item.squat2 < 0 ? 'text-error' : 'text-success'">{{ item.squat2 }}</span>
+      <span :class="item.squat2 <= 0 ? 'text-error' : 'text-success'">{{ item.squat2 }}</span>
     </template>
     <template #item.squat3="{ item }">
-      <span :class="item.squat3 < 0 ? 'text-error' : 'text-success'">{{ item.squat3 }}</span>
+      <span :class="item.squat3 <= 0 ? 'text-error' : 'text-success'">{{ item.squat3 }}</span>
     </template>
 
     <template #item.bench1="{ item }">
-      <span :class="item.bench1 < 0 ? 'text-error' : 'text-success'">{{ item.bench1 }}</span>
+      <span :class="item.bench1 <= 0 ? 'text-error' : 'text-success'">{{ item.bench1 }}</span>
     </template>
     <template #item.bench2="{ item }">
-      <span :class="item.bench2 < 0 ? 'text-error' : 'text-success'">{{ item.bench2 }}</span>
+      <span :class="item.bench2 <= 0 ? 'text-error' : 'text-success'">{{ item.bench2 }}</span>
     </template>
     <template #item.bench3="{ item }">
-      <span :class="item.bench3 < 0 ? 'text-error' : 'text-success'">{{ item.bench3 }}</span>
+      <span :class="item.bench3 <= 0 ? 'text-error' : 'text-success'">{{ item.bench3 }}</span>
     </template>
 
     <template #item.dead1="{ item }">
-      <span :class="item.dead1 < 0 ? 'text-error' : 'text-success'">{{ item.dead1 }}</span>
+      <span :class="item.dead1 <= 0 ? 'text-error' : 'text-success'">{{ item.dead1 }}</span>
     </template>
     <template #item.dead2="{ item }">
-      <span :class="item.dead2 < 0 ? 'text-error' : 'text-success'">{{ item.dead2 }}</span>
+      <span :class="item.dead2 <= 0 ? 'text-error' : 'text-success'">{{ item.dead2 }}</span>
     </template>
     <template #item.dead3="{ item }">
-      <span :class="item.dead3 < 0 ? 'text-error' : 'text-success'">{{ item.dead3 }}</span>
+      <span :class="item.dead3 <= 0 ? 'text-error' : 'text-success'">{{ item.dead3 }}</span>
     </template>
   </v-data-table>
 </template>
