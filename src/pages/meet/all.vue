@@ -1,16 +1,10 @@
 <template>
   <div class="min-h-screen py-10">
     <div class="max-w-[95%] mx-auto rounded-lg">
-      <v-data-table
-        :headers="headers"
+      <BaseTable
         :items="filteredMeets"
+        :headers="headers"
         :loading="loading"
-        class="elevation-1"
-        item-key="id"
-        density="compact"
-        :items-per-page="-1"
-        hide-default-footer
-        striped="odd"
       >
         <template #top>
           <div class="flex flex-wrap gap-4 px-4 my-2">
@@ -36,19 +30,14 @@
             </div>
           </div>
         </template>
-        <template #item.name="{ item }">
-          <NuxtLink :to="`/meet/${meetToPath[item.id]}`" class="hover:underline text-primary">
-            {{ item.name }}
-          </NuxtLink>
-        </template>
-      </v-data-table>
+      </BaseTable>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import BaseTable from "~/components/BaseTable.vue"
 import type { Meet } from "~/types/meet"
-import { meetToPath } from "~/utils/mappings"
 
 const meets = ref<Meet[]>([])
 const loading = ref(true)
@@ -92,7 +81,7 @@ const filteredMeets = computed(() => {
 const headers = [
   { title: "Date", value: "host_date", sortable: false },
   { title: "City", value: "city", sortable: false },
-  { title: "Name", value: "name", sortable: false },
+  { title: "Name", value: "name", key: "meet_name", sortable: false },
   { title: "Athletes", value: "count" }
 ]
 </script>

@@ -1,10 +1,10 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-data-table
+    items-per-page="-1"
     fixed-header
     hide-default-footer
     density="compact"
-    items-per-page="-1"
     striped="odd"
     hover
     class="rounded-lg bold-header"
@@ -21,6 +21,12 @@
       </NuxtLink>
     </template>
 
+    <template #item.meet_name="{ item }">
+      <NuxtLink :to="`/meet/${meetToPath[item.id || item.meet_id]}`" class="hover:underline text-primary">
+        {{ item.name || item.meet_name }}
+      </NuxtLink>
+    </template>
+
     <template #item.sex="{ item }">
       {{ item.sex === 'male' ? 'M' : item.sex === 'female' ? 'F' : item.sex }}
     </template>
@@ -31,13 +37,13 @@
       {{ getWeightClassDisplay(item.weight_class, item.sex as Sex) }}
     </template>
     <template #item.best_squat="{ item }">
-      <span class="text-yellow-400 font-semibold">{{ item.best_squat }}</span>
+      <span class="text-yellow-400 font-semibold">{{ item.best_squat || item.squat_pb }}</span>
     </template>
     <template #item.best_bench="{ item }">
-      <span class="text-cyan-400 font-semibold">{{ item.best_bench }}</span>
+      <span class="text-cyan-400 font-semibold">{{ item.best_bench || item.bench_pb }}</span>
     </template>
     <template #item.best_dead="{ item }">
-      <span class="text-purple-400 font-semibold">{{ item.best_dead }}</span>
+      <span class="text-purple-400 font-semibold">{{ item.best_dead || item.deadlift_pb }}</span>
     </template>
 
     <template #item.squat1="{ item }">
