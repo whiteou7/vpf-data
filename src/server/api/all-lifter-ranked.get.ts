@@ -8,7 +8,16 @@ export default defineEventHandler(async () => {
       sql.raw(`
         SELECT 
           ROW_NUMBER() OVER (ORDER BY dots DESC) AS "#",
-          sub.*
+          athlete_id,
+          full_name,
+          weight_class,
+          sex,
+          division,
+          CASE WHEN best_squat = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_squat::text)) END as best_squat,
+          CASE WHEN best_bench = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_bench::text)) END as best_bench,
+          CASE WHEN best_dead = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_dead::text)) END as best_dead,
+          CASE WHEN total = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM total::text)) END as total,
+          dots
         FROM (
           SELECT DISTINCT ON (athlete_id) 
             athlete_id,
