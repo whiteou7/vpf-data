@@ -7,7 +7,7 @@
     density="compact"
     striped="odd"
     hover
-    class="rounded-lg bold-header"
+    class="rounded-lg bold-header-no-wrap"
   >
     <template #top>
       <slot name="top" />
@@ -83,7 +83,10 @@ import { divisionMap } from "~/utils/mappings"
 
 </script>
 <style>
-.bold-header .v-data-table__th {
+.bold-header-no-wrap .v-data-table__th {
   font-weight: bold !important;
+}
+.bold-header-no-wrap .v-data-table__td {
+  white-space: nowrap;
 }
 </style>
