@@ -6,7 +6,6 @@ import BaseTable from "./BaseTable.vue"
 <template>
   <BaseTable
     height="600"
-    items-per-page="-1"
   >
     <template #top>
       <slot name="top" />
