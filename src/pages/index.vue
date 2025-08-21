@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen py-10">
-    <div class="max-w-[95%] mx-auto rounded-lg">
+    <div class="max-w-[95%] mx-auto">
       <LiftersPBTable
-        :filteredLifters="filteredLifters"
+        :items="filteredLifters"
         :headers="headers"
         :loading="loading"
         :search="filters.search.value"

@@ -1,40 +1,17 @@
 <template>
   <div class="min-h-screen py-10">
-    <div class="max-w-[95%] mx-auto rounded-xl">
+    <div class="max-w-[95%] mx-auto">
       <LiftersFilter/>
 
-      <div v-for="(group, session) in groupedResults" :key="session" class="card mb-8">
+      <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface mb-8">
         <h2 class="text-2xl font-bold text-primary">
           Session {{ session }}
         </h2>
-        <v-data-table
+
+        <BaseTable
           :headers="headers"
           :items="group"
-          class="elevation-1"
-          item-key="athlete_id"
-          density="compact"
-          :items-per-page="-1"
-          hide-default-footer
-          :search="filters.search.value"
-        >
-          <template #loading>
-            <v-skeleton-loader type="table-row@10"/>
-          </template>
-          <template #item.sex="{ item }">
-            {{ item.sex === 'male' ? 'M' : item.sex === 'female' ? 'F' : item.sex }}
-          </template>
-          <template #item.weight_class="{ item }">
-            {{ getWeightClassDisplay(item.weight_class, item.sex as Sex) }}
-          </template>
-          <template #item.division="{ item }">
-            {{ divisionMap[item.division] ?? item.division }}
-          </template>
-          <template #item.full_name="{ item }">
-            <NuxtLink :to="`/lifter/${item.athlete_id}`" class="hover:underline">
-              {{ item.full_name }}
-            </NuxtLink>
-          </template>
-        </v-data-table>
+        />
       </div>
     </div>
   </div>
@@ -43,9 +20,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue"
 import { useRoute } from "vue-router"
-import type { Sex } from "~/types/lifter"
 import type { MeetResultDetailed } from "~/types/meet"
-import { meetToPath, divisionMap } from "~/utils/mappings"
+import { meetToPath } from "~/utils/mappings"
 import { useLiftersFilter } from "~/composables/useLiftersFilter"
 import LiftersFilter from "~/components/LiftersFilter.vue"
 
@@ -115,11 +91,11 @@ const headers = [
 
 <style scoped>
 .card {
-  background: rgba(255,255,255,0.03);
   border-radius: 0.5rem;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
   padding: 1rem;
 }
+
 .card h2 {
   margin-top: 0;
   margin-bottom: 0.5rem;

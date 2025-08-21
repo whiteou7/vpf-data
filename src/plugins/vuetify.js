@@ -16,6 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             primary: "#EF4444", // Tailwind red-500
             secondary: "#F87171", // Tailwind red-400
             error: "#DC2626", // Tailwind red-600
+            success: "4CAF50", // green-500
             onBackground: "#FFFFFF",
             onSurface: "#E5E5E5",
           }
