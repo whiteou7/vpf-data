@@ -49,6 +49,11 @@ watch(weightClassFilter, (newVal) => {
 })
 
 export function useLiftersFilter() {
+  search.value = ""
+  sexFilter.value = null
+  divisionFilter.value = undefined
+  weightClassFilter.value = { weight: null, sex: null }
+
   return {
     search,
     sexFilter,
