@@ -37,13 +37,13 @@
       {{ getWeightClassDisplay(item.weight_class, item.sex as Sex) }}
     </template>
     <template #item.best_squat="{ item }">
-      <span class="text-yellow-400 font-semibold">{{ item.best_squat || item.squat_pb }}</span>
+      <span class="text-yellow-400 font-semibold">{{ item.best_squat !== null && item.best_squat !== undefined ? item.best_squat : item.squat_pb }}</span>
     </template>
     <template #item.best_bench="{ item }">
-      <span class="text-cyan-400 font-semibold">{{ item.best_bench || item.bench_pb }}</span>
+      <span class="text-cyan-400 font-semibold">{{ item.best_bench !== null && item.best_bench !== undefined ? item.best_bench : item.bench_pb }}</span>
     </template>
     <template #item.best_dead="{ item }">
-      <span class="text-purple-400 font-semibold">{{ item.best_dead || item.deadlift_pb }}</span>
+      <span class="text-purple-400 font-semibold">{{ item.best_dead !== null && item.best_dead !== undefined ? item.best_dead : item.deadlift_pb }}</span>
     </template>
 
     <template #item.squat1="{ item }">
