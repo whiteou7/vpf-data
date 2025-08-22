@@ -13,7 +13,7 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          CASE WHEN squat = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM squat::text)) END AS result,
+          squat::float AS result,
           rank
         FROM
           squat_records
@@ -28,7 +28,7 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          CASE WHEN bench = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM bench::text)) END AS result,
+          bench::float AS result,
           rank
         FROM
           bench_records
@@ -43,7 +43,7 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          CASE WHEN deadlift = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM deadlift::text)) END AS result,
+          deadlift::float AS result,
           rank
         FROM
           deadlift_records
@@ -58,10 +58,10 @@ export default defineEventHandler(async () => {
           sex,
           division,
           weight_class,
-          CASE WHEN total = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM total::text)) END AS result,
-          CASE WHEN ipf = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM ipf::text)) END AS ipf,
-          CASE WHEN gl = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM gl::text)) END AS gl,
-          CASE WHEN dots = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM dots::text)) END AS dots,
+          total::float AS result,
+          ipf::float AS ipf,
+          gl::float AS gl,
+          dots::float AS dots,
           rank
         FROM
           total_records
