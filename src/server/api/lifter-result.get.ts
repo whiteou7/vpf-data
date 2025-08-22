@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
           best_bench::float as best_bench,
           best_dead::float as best_dead,
           total::float as total,
-          dots::float as dots,
+          gl::float as gl,
           body_weight::float as body_weight,
           placement,
           meet_name,
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
         MAX(best_bench)::float as bench_pb,
         MAX(best_dead)::float as deadlift_pb,
         MAX(total)::float as total_pb,
-        MAX(dots)::float as dots_pb
+        MAX(gl)::float as gl_pb
       FROM meet_result_detailed
       WHERE athlete_id = '${athleteId}'
     `),

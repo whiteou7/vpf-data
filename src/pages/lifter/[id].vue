@@ -16,7 +16,7 @@ const pb_headers = [
   { title: "Bench PB", value: "bench_pb", key: "best_bench" },
   { title: "Deadlift PB", value: "deadlift_pb", key: "best_dead" },
   { title: "Total PB", value: "total_pb" },
-  { title: "Dots PB", value: "dots_pb" },
+  { title: "GL PB", value: "gl_pb" },
 ]
 
 const results_headers = [
@@ -27,7 +27,7 @@ const results_headers = [
   { title: "Best Bench", value: "best_bench" },
   { title: "Best Deadlift", value: "best_dead" },
   { title: "Total", value: "total" },
-  { title: "Dots", value: "dots" },
+  { title: "GL", value: "gl" },
   { title: "Body Weight", value: "body_weight" },
   { title: "#", value: "placement" }
 ]
