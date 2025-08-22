@@ -21,12 +21,12 @@ export default defineEventHandler(async (event) => {
           sex,
           weight_class,
           division,
-          CASE WHEN best_squat = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_squat::text)) END as best_squat,
-          CASE WHEN best_bench = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_bench::text)) END as best_bench,
-          CASE WHEN best_dead = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM best_dead::text)) END as best_dead,
-          CASE WHEN total = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM total::text)) END as total,
-          CASE WHEN dots = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM dots::text)) END as dots,
-          CASE WHEN body_weight = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM body_weight::text)) END as body_weight,
+          best_squat::float as best_squat,
+          best_bench::float as best_bench,
+          best_dead::float as best_dead,
+          total::float as total,
+          dots::float as dots,
+          body_weight::float as body_weight,
           placement,
           meet_name,
           meet_id
@@ -39,11 +39,11 @@ export default defineEventHandler(async (event) => {
     const pb = await db.execute<LifterPB>(
       sql.raw(`
       SELECT
-        CASE WHEN MAX(best_squat) = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM MAX(best_squat)::text)) END as squat_pb,
-        CASE WHEN MAX(best_bench) = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM MAX(best_bench)::text)) END as bench_pb,
-        CASE WHEN MAX(best_dead) = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM MAX(best_dead)::text)) END as deadlift_pb,
-        CASE WHEN MAX(total) = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM MAX(total)::text)) END as total_pb,
-        CASE WHEN MAX(dots) = 0 THEN '0' ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM MAX(dots)::text)) END as dots_pb
+        MAX(best_squat)::float as squat_pb,
+        MAX(best_bench)::float as bench_pb,
+        MAX(best_dead)::float as deadlift_pb,
+        MAX(total)::float as total_pb,
+        MAX(dots)::float as dots_pb
       FROM meet_result_detailed
       WHERE athlete_id = '${athleteId}'
     `),
