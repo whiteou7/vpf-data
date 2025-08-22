@@ -10,8 +10,8 @@ AS WITH ranked_benches AS (
             meet_result_detailed.sex,
             meet_result_detailed.division,
             meet_result_detailed.weight_class,
-            GREATEST(meet_result_detailed.bench1, meet_result_detailed.bench2, meet_result_detailed.bench3) AS best_bench,
-            rank() OVER (PARTITION BY meet_result_detailed.sex, meet_result_detailed.division, meet_result_detailed.weight_class ORDER BY (GREATEST(meet_result_detailed.bench1, meet_result_detailed.bench2, meet_result_detailed.bench3)) DESC) AS rnk
+            best_bench,
+            rank() OVER (PARTITION BY meet_result_detailed.sex, meet_result_detailed.division, meet_result_detailed.weight_class ORDER BY best_bench DESC) AS rnk
            FROM meet_result_detailed
           WHERE meet_result_detailed.type = 'national'::meet_type AND meet_result_detailed.sex IS NOT NULL AND meet_result_detailed.division IS NOT NULL AND meet_result_detailed.weight_class IS NOT NULL AND GREATEST(meet_result_detailed.bench1, meet_result_detailed.bench2, meet_result_detailed.bench3) > 0::numeric
         )
@@ -41,8 +41,8 @@ AS WITH ranked_deadlifts AS (
             meet_result_detailed.sex,
             meet_result_detailed.division,
             meet_result_detailed.weight_class,
-            GREATEST(meet_result_detailed.dead1, meet_result_detailed.dead2, meet_result_detailed.dead3) AS best_deadlift,
-            rank() OVER (PARTITION BY meet_result_detailed.sex, meet_result_detailed.division, meet_result_detailed.weight_class ORDER BY (GREATEST(meet_result_detailed.dead1, meet_result_detailed.dead2, meet_result_detailed.dead3)) DESC) AS rnk
+            best_dead,
+            rank() OVER (PARTITION BY meet_result_detailed.sex, meet_result_detailed.division, meet_result_detailed.weight_class ORDER BY best_dead DESC) AS rnk
            FROM meet_result_detailed
           WHERE meet_result_detailed.type = 'national'::meet_type AND meet_result_detailed.sex IS NOT NULL AND meet_result_detailed.division IS NOT NULL AND meet_result_detailed.weight_class IS NOT NULL AND GREATEST(meet_result_detailed.dead1, meet_result_detailed.dead2, meet_result_detailed.dead3) > 0::numeric
         )
@@ -54,7 +54,7 @@ AS WITH ranked_deadlifts AS (
     division,
     weight_class,
     rnk AS rank,
-    best_deadlift AS deadlift
+    best_dead AS deadlift
    FROM ranked_deadlifts
   WHERE rnk <= 3
   ORDER BY sex, division, weight_class
@@ -72,8 +72,8 @@ AS WITH ranked_squats AS (
             meet_result_detailed.sex,
             meet_result_detailed.division,
             meet_result_detailed.weight_class,
-            GREATEST(meet_result_detailed.squat1, meet_result_detailed.squat2, meet_result_detailed.squat3) AS best_squat,
-            rank() OVER (PARTITION BY meet_result_detailed.sex, meet_result_detailed.division, meet_result_detailed.weight_class ORDER BY (GREATEST(meet_result_detailed.squat1, meet_result_detailed.squat2, meet_result_detailed.squat3)) DESC) AS rnk
+            best_squat,
+            rank() OVER (PARTITION BY meet_result_detailed.sex, meet_result_detailed.division, meet_result_detailed.weight_class ORDER BY best_squat DESC) AS rnk
            FROM meet_result_detailed
           WHERE meet_result_detailed.type = 'national'::meet_type AND meet_result_detailed.sex IS NOT NULL AND meet_result_detailed.division IS NOT NULL AND meet_result_detailed.weight_class IS NOT NULL AND GREATEST(meet_result_detailed.squat1, meet_result_detailed.squat2, meet_result_detailed.squat3) > 0::numeric
         )
