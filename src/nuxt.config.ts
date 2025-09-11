@@ -2,6 +2,11 @@
 import tailwindcss from "@tailwindcss/vite"
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      SHOP_URL: process.env.SHOP_URL
+    }
+  },
   app: {
     head: {
       meta: [
