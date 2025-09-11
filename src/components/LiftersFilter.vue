@@ -2,11 +2,12 @@
   <div class="flex flex-wrap gap-4 px-4 my-2">
     <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
       <v-text-field
-        v-model="filters.search.value"
+        v-model="searchText"
         density="compact"
         label="Search lifters"
         color="primary"
         variant="solo-inverted"
+        @input="onInput"
       />
     </div>
 
@@ -47,7 +48,13 @@
 
 <script setup lang="ts">
 import { useLiftersFilter } from "~/composables/useLiftersFilter"
+import debounce from "lodash.debounce"
 
 const filters = useLiftersFilter()
+const searchText = ref<string>("")
+
+const onInput = debounce(() => {
+  filters.search.value = searchText.value
+}, 500)
 
 </script>
