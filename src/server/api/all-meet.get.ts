@@ -11,6 +11,7 @@ export default defineEventHandler(async () => {
           name,
           city,
           host_date,
+          media_link,
           COUNT(athlete_id) as count
         FROM
           meet_info mi

@@ -82,7 +82,8 @@ const headers = [
   { title: "Date", value: "host_date", sortable: false },
   { title: "City", value: "city", sortable: false },
   { title: "Name", value: "name", key: "meet_name", sortable: false },
-  { title: "Athletes", value: "count" }
+  { title: "Athletes", value: "count" },
+  { title: "Media", value: "media_link", sortable: false }
 ]
 </script>
 
