@@ -16,7 +16,7 @@
       <v-skeleton-loader type="table-row@10"/>
     </template>
     <template #item.full_name="{ item }">
-      <NuxtLink :to="`/lifter/${item.athlete_id}`" class="hover:text-red-500">
+      <NuxtLink :to="`/lifter/${item.athlete_id}`" class="hover:text-red-500 active:text-red-500">
         {{ item.full_name }}
       </NuxtLink>
     </template>
