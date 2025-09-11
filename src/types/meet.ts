@@ -5,6 +5,8 @@ export type Meet = {
   name: string;
   city: string;
   host_date: string;
+  media_link: string;
+  count: number;
 }
 
 export type MeetResultDetailed = {

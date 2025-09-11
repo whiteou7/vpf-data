@@ -27,6 +27,16 @@
       </NuxtLink>
     </template>
 
+    <template #item.media_link="{ item }">
+      <a v-if="item.media_link" :href="item.media_link" target="_blank">
+        <v-icon icon="mdi-folder-outline"/>
+      </a>
+      <a v-else class="cursor-not-allowed">
+        <v-icon icon="mdi-folder-off-outline" color="grey"/>
+      </a>
+
+    </template>
+
     <template #item.sex="{ item }">
       {{ item.sex === 'male' ? 'M' : item.sex === 'female' ? 'F' : item.sex }}
     </template>
