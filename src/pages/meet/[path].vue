@@ -2,6 +2,9 @@
   <div class="min-h-screen py-10">
     <div class="max-w-[95%] mx-auto">
       <LiftersFilter/>
+      <div v-if="loading" class="flex justify-center items-center py-10">
+        <v-progress-circular color="primary" indeterminate :size="81"/>
+      </div>
 
       <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface my-8">
         <h2 class="text-2xl font-bold text-primary">
@@ -12,7 +15,6 @@
           :headers="headers"
           :items="group"
           :search="filters.search.value"
-          :loading="loading"
         />
       </div>
     </div>
