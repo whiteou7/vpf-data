@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/eslint": "^1.4.1",
     "@tailwindcss/vite": "^4.1.10",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
     "eslint": "^9.29.0",
