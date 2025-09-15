@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm"
 import { db } from "../../db"
 import type { Meet } from "~/types/meet"
+import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async () => {
   try {
@@ -29,12 +30,15 @@ export default defineEventHandler(async () => {
         `)
     )
 
-    return meets
+    return {
+      success: true,
+      data: meets,
+    } as APIBody<Meet[]>
   } catch (error) {
     console.error("Error fetching meets info:", error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Internal Server Error"
-    })
+    return {
+      success: false,
+      error: "Internal Server Error",
+    } as APIBody<null>
   }
 })
