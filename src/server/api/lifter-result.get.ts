@@ -1,16 +1,17 @@
 import { sql } from "drizzle-orm"
 import { db } from "../../db"
 import type { LifterPB, LifterResult } from "~/types/lifter"
+import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
+  const query: { athlete_id: string } = getQuery(event)
   const athleteId = query.athlete_id
 
   if (!athleteId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "athlete_id is required",
-    })
+    return {
+      success: false,
+      error: "athlete_id is required",
+    } as APIBody<null>
   }
 
   try {
@@ -49,12 +50,15 @@ export default defineEventHandler(async (event) => {
     `),
     )
 
-    return { results, pb: pb[0] } 
+    return {
+      success: true,
+      data: { results, pb: pb[0] },
+    } as APIBody<{ results: LifterResult[], pb: LifterPB }>
   } catch (error) {
     console.error("Error fetching info:", error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to fetch athlete info",
-    })
+    return {
+      success: false,
+      error: "Failed to fetch athlete info",
+    } as APIBody<null>
   }
 })

@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm"
 import { db } from "../../db"
 import type { LifterResult } from "~/types/lifter"
+import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async () => {
   try {
@@ -37,12 +38,15 @@ export default defineEventHandler(async () => {
 
       `)
     )
-    return lifters
+    return {
+      success: true,
+      data: lifters,
+    } as APIBody<LifterResult[]>
   } catch (error) {
     console.error("Error fetching lifters info:", error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Internal Server Error"
-    })
+    return {
+      success: false,
+      error: "Internal Server Error",
+    } as APIBody<null>
   }
 })
