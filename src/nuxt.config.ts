@@ -2,6 +2,13 @@
 import tailwindcss from "@tailwindcss/vite"
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 export default defineNuxtConfig({
+  routeRules: {
+    "/": {
+      headers: {
+        "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      },
+    },
+  },
   runtimeConfig: {
     public: {
       SHOP_URL: process.env.SHOP_URL
