@@ -6,8 +6,8 @@
     hide-default-footer
     density="compact"
     striped="odd"
-    hover
     class="rounded-lg bold-header-no-wrap"
+    @click:row="rowClick"
   >
     <template #top>
       <slot name="top" />
@@ -91,6 +91,28 @@
 import type { Sex } from "~/types/lifter"
 import { divisionMap } from "~/utils/mappings"
 
+let currentRow = null
+
+// Change the bg of clicked row
+const rowClick = (row) => { 
+  const tr = row.target.closest("tr")
+
+  // Remove the effect if clicking on the same row
+  if (currentRow === tr) {
+    tr.bgColor = null
+    currentRow = null
+    return
+  }
+  
+  // Clear previous row if it exists
+  if (currentRow) {
+    currentRow.bgColor = null
+  }
+
+  // Set new row
+  currentRow = tr
+  tr.bgColor = "#303030"
+}
 </script>
 <style>
 .bold-header-no-wrap .v-data-table__th {
