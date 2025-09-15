@@ -3,7 +3,7 @@ import { db } from "../../db"
 import type { LifterPB, LifterResult } from "~/types/lifter"
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
+  const query: { athlete_id: string } = getQuery(event)
   const athleteId = query.athlete_id
 
   if (!athleteId) {

@@ -4,9 +4,9 @@ import bcrypt from "bcryptjs"
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody(event)
-    const email = body.email as string
-    const password = body.password as string
+    const body: { email: string, password: string } = await readBody(event)
+    const email = body.email as string | ""
+    const password = body.password as string |""
 
     // Check if email already exists
     const [existingUser] = await db.execute(
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
       `)
     )
 
-    return { success: true }
+    return { success: true, message: "Account created successfully" }
   } catch (error) {
     console.error("Error registering:", error)
     throw createError({

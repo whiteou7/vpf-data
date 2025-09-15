@@ -3,7 +3,7 @@ import { db } from "../../db"
 import type { MeetResultDetailed } from "~/types/meet"
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
+  const query: { meet_id: number } = getQuery(event)
   const meetId = query.meet_id
 
   if (!meetId) {
