@@ -2,14 +2,15 @@
 import { useRoute } from "vue-router"
 import BaseTable from "~/components/BaseTable.vue"
 import type { LifterPB, LifterResult } from "~/types/lifter"
+import type { APIBody } from "~/types/api"
 
 const route = useRoute()
 const athleteId = route.params.id
 
-const { data } = await useFetch<{
+const { data } = await useFetch<APIBody<{
   results: LifterResult[]
   pb: LifterPB
-}>(`/api/lifter-result?athlete_id=${athleteId}`)
+}>>(`/api/lifter-result?athlete_id=${athleteId}`)
 
 const pb_headers = [
   { title: "Squat PB", value: "squat_pb", key: "best_squat" },
@@ -37,14 +38,14 @@ const results_headers = [
   <div class="min-h-screen py-10">
     <div class="max-w-[95%] mx-auto">
       <h1 class="text-3xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
-        {{ data?.results[0].full_name + " (" + (data?.results[0].sex === 'male' ? 'M' : 'F') + ")" }}
+        {{ data?.data.results[0].full_name + " (" + (data?.data.results[0].sex === 'male' ? 'M' : 'F') + ")" }}
       </h1>
       <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
         Lifter PBs
       </h2>
       <BaseTable
         :headers="pb_headers"
-        :items="[data?.pb]"
+        :items="[data?.data.pb]"
       />
 
       <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
@@ -52,7 +53,7 @@ const results_headers = [
       </h2>
       <BaseTable
         :headers="results_headers"
-        :items="data?.results"
+        :items="data?.data.results"
       />
     </div>
   </div>

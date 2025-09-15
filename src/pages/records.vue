@@ -21,6 +21,7 @@
 import RecordsTableGroup from "~/components/RecordsTableGroup.vue"
 import type { DestructuredRecord, RecordTableRowGroup } from "~/types/record"
 import { transformRecordsToRows } from "~/utils/utils"
+import type { APIBody } from "~/types/api"
 
 const loading = ref(true)
 
@@ -40,11 +41,14 @@ const femaleRowGroup: RecordTableRowGroup = {
 
 onMounted(async () => {  
   // Fetch
-  const { data: recordsData } = await useFetch<{ male: DestructuredRecord, female: DestructuredRecord }>("/api/records")
-  if (!recordsData.value) return
+  const response = await $fetch<APIBody<{ male: DestructuredRecord, female: DestructuredRecord }>>("/api/records")
+  if (!response.success) {
+    // TODO: Handle error
+    return
+  }
   loading.value = false
 
-  const { male, female } = recordsData.value
+  const { male, female } = response.data
 
   // Map data to row object
   if (male) {

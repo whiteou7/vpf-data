@@ -29,6 +29,8 @@ import { meetToPath } from "~/utils/mappings"
 import { useLiftersFilter } from "~/composables/useLiftersFilter"
 import LiftersFilter from "~/components/LiftersFilter.vue"
 
+import type { APIBody } from "~/types/api"
+
 const route = useRoute()
 const path = route.params.path as string
 const filters = useLiftersFilter()
@@ -41,9 +43,9 @@ const meetId = pathToMeet[path]
 
 onMounted(async () => {
   if (meetId) {
-    const { data: meetData } = await useFetch<MeetResultDetailed[]>(`/api/meet-info?meet_id=${meetId}`)
-    if (meetData.value) {
-      results.value = meetData.value
+    const response = await $fetch<APIBody<MeetResultDetailed[]>>(`/api/meet-info?meet_id=${meetId}`)
+    if (response.success) {
+      results.value = response.data
     }
   }
   loading.value = false
