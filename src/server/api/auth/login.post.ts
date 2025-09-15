@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm"
 import { db } from "~/db"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
+import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -25,19 +26,19 @@ export default defineEventHandler(async (event) => {
 
     // Throw error if password not exists in db
     if (!hashedPassword) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: "Invalid email or password"
-      })
+      return {
+        success: false,
+        error: "Invalid email or password",
+      } as APIBody<null>
     }
 
     // Compare password using bcrypt
     const isMatch = await bcrypt.compare(password, hashedPassword)
     if (!isMatch) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: "Invalid email or password"
-      })
+      return {
+        success: false,
+        error: "Invalid email or password",
+      } as APIBody<null>
     }
 
     // Create session if match
@@ -51,12 +52,15 @@ export default defineEventHandler(async (event) => {
       `)
     )
 
-    return session_id
+    return {
+      success: true,
+      data: session_id,
+    } as APIBody<string>
   } catch (error) {
     console.error("Error logging in:", error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Internal Server Error"
-    })
+    return {
+      success: false,
+      error: error.message,
+    } as APIBody<null>
   }
 })

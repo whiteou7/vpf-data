@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm"
 import { db } from "~/db"
 import bcrypt from "bcryptjs"
+import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -26,10 +27,10 @@ export default defineEventHandler(async (event) => {
 
     // Throw error if both member id and password exist
     if (existingUser.vpf_member_id && existingUser.password) {
-      throw createError({
-        statusCode: 409,
-        statusMessage: "Email already registered"
-      })
+      return {
+        success: false,
+        error: "Email already registered",
+      } as APIBody<null>
     }
 
     // Set password if not exists (for legacy members)
@@ -39,7 +40,10 @@ export default defineEventHandler(async (event) => {
           UPDATE members SET password = '${hashedPassword}' WHERE vpf_member_id = '${existingUser.vpf_member_id}';
         `)
       )
-      return { success: true, message: "Password set successfully" }
+      return {
+        success: true,
+        message: "Password set successfully",
+      } as APIBody<null>
     }
 
     // Insert new user for new account
@@ -49,12 +53,15 @@ export default defineEventHandler(async (event) => {
       `)
     )
 
-    return { success: true, message: "Account created successfully" }
+    return {
+      success: true,
+      message: "Account created successfully",
+    } as APIBody<null>
   } catch (error) {
     console.error("Error registering:", error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Internal Server Error"
-    })
+    return {
+      success: false,
+      error: error.message,
+    } as APIBody<null>
   }
 })
