@@ -39,19 +39,24 @@
 import BaseTable from "~/components/BaseTable.vue"
 import type { Meet } from "~/types/meet"
 
+// Fetch all meet
+import type { APIBody } from "~/types/api"
+
 const meets = ref<Meet[]>([])
 const loading = ref(true)
 const cityFilter = ref<string | null>(null)
 const yearFilter = ref<number | null>(null)
 
-// Fetch all meet
 onMounted(async () => {
-  const { data: meetsData } = await useFetch<Meet[]>("/api/all-meet")
+  const response = await $fetch<APIBody<Meet[]>>("/api/all-meet")
 
-  if (!meetsData.value) return
+  if (!response.success) {
+    // TODO: Handle error
+    return
+  }
 
   loading.value = false
-  meets.value = meetsData.value
+  meets.value = response.data
 })
 
 // Auto generated items for filter buttons

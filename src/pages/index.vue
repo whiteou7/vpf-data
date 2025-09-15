@@ -21,17 +21,22 @@ import LiftersPBTable from "~/components/LiftersPBTable.vue"
 import LifterFilters from "~/components/LiftersFilter.vue"
 import { useLiftersFilter } from "~/composables/useLiftersFilter"
 
+// Fetch
+import type { APIBody } from "~/types/api"
+
 const lifters = ref<LifterResult[]>([])
 const loading = ref(true)
 
 const filters = useLiftersFilter()
 
-// Fetch
 onMounted(async () => {  
-  const { data: liftersData } = await useFetch<LifterResult[]>("/api/all-lifter-ranked")
-  if (!liftersData.value) return
+  const response = await $fetch<APIBody<LifterResult[]>>("/api/all-lifter-ranked")
+  if (!response.success) {
+    // TODO: Handle error
+    return
+  }
   loading.value = false
-  lifters.value = liftersData.value
+  lifters.value = response.data
 })
 
 // Computed filtering logic
