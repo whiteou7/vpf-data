@@ -2,7 +2,7 @@ import { db } from "../../db"
 import type { LifterResult } from "~/types/lifter"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (): Promise<APIBody<LifterResult[]>> => {
+export default defineEventHandler(async (): Promise<APIBody<{ lifters: LifterResult[] }>> => {
   try {
     const lifters = await db<LifterResult[]>`
       SELECT 
@@ -36,7 +36,7 @@ export default defineEventHandler(async (): Promise<APIBody<LifterResult[]>> => 
     `
     return {
       success: true,
-      data: lifters,
+      data: { lifters },
     }
   } catch (error) {
     console.error("Error fetching lifters info:", error)
