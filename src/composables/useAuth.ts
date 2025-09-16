@@ -1,47 +1,68 @@
 import { ref } from "vue"
+import type { APIBody } from "~/types/api"
 
 export const useAuth = () => {
   const session = useCookie("session_id")
-  const user = ref(null) // You might want to fetch user data based on the session
+  const user = ref<{ vpf_id: string } | null>(null)
 
   const login = async (email: string, password: string) => {
     try {
-      const sessionId = await $fetch("/api/auth/login", {
-        params: { email, password }
+      const response = await $fetch<APIBody<{ session_id: string }>>("/api/auth/login", {
+        method: "POST",
+        body: { email, password }
       })
-      if (sessionId) {
-        session.value = sessionId
-        // You might want to fetch user details here and set the user ref
-        return { success: true }
+
+      if (response.success) {
+        session.value = response.data?.session_id
+        await validate()
+        return response
       }
-      return { success: false, message: "Cannot generate session" }
+      
+      return response
     } catch (error) {
-      console.error("Login error:", error)
-      return { success: false, message: error.data?.statusMessage || "An error occurred" }
+      return { success: false, error: (error as Error).message || "An error occurred" }
     }
   }
 
   const register = async (email: string, password: string) => {
     try {
-      const result = await $fetch("/api/auth/register", {
+      const response = await $fetch<APIBody<null>>("/api/auth/register", {
         method: "POST",
         body: { email, password }
       })
-      return result
+
+      return response
     } catch (error) {
-      console.error("Registration error:", error)
-      return { success: false, message: error.data?.statusMessage || "An error occurred" }
+      return { success: false, error: (error as Error).message || "An error occurred" }
     }
   }
 
+  // TODO: invalidate session after logging out
   const logout = () => {
     session.value = null
     user.value = null
   }
 
-  // Check session on initial load
-  if (session.value) {
-    // You could add logic here to verify the session and fetch user data
+  const validate = async () => {
+    if (!session.value) {
+      user.value = null
+      return { success: false, error: "No session" }
+    }
+
+    try {
+      const response = await $fetch<APIBody<{ vpf_id: string }>>(`/api/auth/validate?session_id=${session.value}`)
+
+      if (response.success) {
+        user.value = { vpf_id: response.data?.vpf_id ?? "" }
+      } else {
+        logout()
+      }
+
+      return response
+    } catch (error) {
+      logout()
+      return { success: false, error: (error as Error).message || "An error occurred" }
+    }
   }
 
   return {
@@ -49,6 +70,6 @@ export const useAuth = () => {
     login,
     register,
     logout,
-    isLoggedIn: computed(() => !!session.value)
+    validate
   }
 }
