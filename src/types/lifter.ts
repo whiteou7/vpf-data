@@ -1,6 +1,6 @@
 export type LifterResult = {
   "#"?: number;
-  athlete_id: string;
+  vpf_id: string;
   full_name?: string;
   weight_class: number;
   body_weight?: number;

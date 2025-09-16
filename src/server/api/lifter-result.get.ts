@@ -3,13 +3,13 @@ import type { LifterPB, LifterResult } from "~/types/lifter"
 import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ results: LifterResult[], pb: LifterPB }>> => {
-  const query: { athlete_id: string } = getQuery(event)
-  const athleteId = query.athlete_id
+  const query: { vpf_id: string } = getQuery(event)
+  const vpfId = query.vpf_id
 
-  if (!athleteId) {
+  if (!vpfId) {
     return {
       success: false,
-      error: "athlete_id is required",
+      error: "vpf_id is required",
     }
   }
 
@@ -28,9 +28,10 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Lift
         body_weight::float as body_weight,
         placement,
         meet_name,
-        meet_id
+        meet_id,
+        vpf_id
       FROM meet_result_detailed
-      WHERE athlete_id = ${athleteId}
+      WHERE vpf_id = ${vpfId}
       ORDER BY meet_id DESC;
     `
     const pbArr = await db<LifterPB[]>`
@@ -41,7 +42,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Lift
         MAX(total)::float as total_pb,
         MAX(gl)::float as gl_pb
       FROM meet_result_detailed
-      WHERE athlete_id = ${athleteId}
+      WHERE vpf_id = ${vpfId}
     `
     return {
       success: true,

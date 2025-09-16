@@ -107,7 +107,7 @@ def generate_sql_file(csv_file: str, output_file: str):
                             continue
                         
                         # Extract and validate data
-                        athlete_id = row['VPF ID'].strip()
+                        vpf_id = row['VPF ID'].strip()
                         sex = map_gender(row['Gender'])
                         weight_class = parse_weight_class(row['Weight Class'])
                         division = map_division(row['Age Class'])
@@ -136,7 +136,7 @@ def generate_sql_file(csv_file: str, output_file: str):
                         
                         # Build INSERT statement
                         sql_file.write("INSERT INTO public.meet_result (\n")
-                        sql_file.write("    meet_id, athlete_id, sex, weight_class, division,\n")
+                        sql_file.write("    meet_id, vpf_id, sex, weight_class, division,\n")
                         sql_file.write("    body_weight, squat1, squat2, squat3,\n")
                         sql_file.write("    bench1, bench2, bench3,\n")
                         sql_file.write("    dead1, dead2, dead3,\n")
@@ -145,7 +145,7 @@ def generate_sql_file(csv_file: str, output_file: str):
                         
                         # Meet ID lookup
                         sql_file.write(f"    (SELECT id FROM public.meet_info WHERE name = '{meet_name}'),\n")
-                        sql_file.write(f"    '{athlete_id}',\n")
+                        sql_file.write(f"    '{vpf_id}',\n")
                         sql_file.write(f"    '{sex}',\n")
                         sql_file.write(f"    {weight_class},\n")
                         sql_file.write(f"    '{division}',\n")

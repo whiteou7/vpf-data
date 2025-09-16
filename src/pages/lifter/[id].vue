@@ -5,12 +5,12 @@ import type { LifterPB, LifterResult } from "~/types/lifter"
 import type { APIBody } from "~/types/api"
 
 const route = useRoute()
-const athleteId = route.params.id
+const vpfId = route.params.id
 
 const { data } = await useFetch<APIBody<{
   results: LifterResult[]
   pb: LifterPB
-}>>(`/api/lifter-result?athlete_id=${athleteId}`)
+}>>(`/api/lifter-result?vpf_id=${vpfId}`)
 
 const pb_headers = [
   { title: "Squat PB", value: "squat_pb", key: "best_squat" },
