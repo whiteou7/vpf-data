@@ -4,7 +4,7 @@ import type { LiftRecord, TotalRecord } from "~/types/record"
 import { destructureRecords } from "~/utils/utils"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (): Promise<APIBody<ReturnType<typeof destructureRecords>>> => {
   try {
     const squat = await db.execute<LiftRecord>(
       sql.raw(`
@@ -72,12 +72,12 @@ export default defineEventHandler(async () => {
     return {
       success: true,
       data: destructureRecords({ squat, bench, deadlift, total }),
-    } as APIBody<ReturnType<typeof destructureRecords>>
+    }
   } catch (error) {
     console.error("Error fetching records info:", error)
     return {
       success: false,
       error: "Internal Server Error",
-    } as APIBody<null>
+    }
   }
 })
