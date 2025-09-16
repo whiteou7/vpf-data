@@ -45,7 +45,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Lift
     `
     return {
       success: true,
-      data: { results, pb: pbArr[0] },
+      data: { results, pb: pb[0] },
     }
   } catch (error) {
     console.error("Error fetching info:", error)
