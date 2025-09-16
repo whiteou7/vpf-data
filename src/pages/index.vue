@@ -30,13 +30,13 @@ const loading = ref(true)
 const filters = useLiftersFilter()
 
 onMounted(async () => {  
-  const response = await $fetch<APIBody<LifterResult[]>>("/api/all-lifter-ranked")
+  const response = await $fetch<APIBody<{ lifters: LifterResult[] }>>("/api/all-lifter-ranked")
   if (!response.success) {
     // TODO: Handle error
     return
   }
   loading.value = false
-  lifters.value = response.data ?? []
+  lifters.value = response.data.lifters ?? []
 })
 
 // Computed filtering logic

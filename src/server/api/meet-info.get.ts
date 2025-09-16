@@ -2,7 +2,7 @@ import { db } from "../../db"
 import type { MeetResultDetailed } from "~/types/meet"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event): Promise<APIBody<MeetResultDetailed[]>> => {
+export default defineEventHandler(async (event): Promise<APIBody<{ results: MeetResultDetailed[] }>> => {
   const query: { meet_id: number } = getQuery(event)
   const meetId = query.meet_id
 
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event): Promise<APIBody<MeetResultDetai
     `
     return {
       success: true,
-      data: results,
+      data: { results },
     }
   } catch (error) {
     console.error("Error fetching meet info:", error)
