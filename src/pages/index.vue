@@ -36,7 +36,7 @@ onMounted(async () => {
     return
   }
   loading.value = false
-  lifters.value = response.data
+  lifters.value = response.data ?? []
 })
 
 // Computed filtering logic

@@ -56,7 +56,7 @@ onMounted(async () => {
   }
 
   loading.value = false
-  meets.value = response.data
+  meets.value = response.data ?? []
 })
 
 // Auto generated items for filter buttons
