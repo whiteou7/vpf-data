@@ -7,7 +7,7 @@ export default defineEventHandler(async (): Promise<APIBody<LifterResult[]>> => 
     const lifters = await db<LifterResult[]>`
       SELECT 
         ROW_NUMBER() OVER (ORDER BY gl DESC) AS "#",
-        athlete_id,
+        vpf_id,
         full_name,
         weight_class,
         sex,
@@ -18,8 +18,8 @@ export default defineEventHandler(async (): Promise<APIBody<LifterResult[]>> => 
         total::float as total,
         gl
       FROM (
-        SELECT DISTINCT ON (athlete_id) 
-          athlete_id,
+        SELECT DISTINCT ON (vpf_id) 
+          vpf_id,
           full_name,
           weight_class,
           sex,
@@ -30,7 +30,7 @@ export default defineEventHandler(async (): Promise<APIBody<LifterResult[]>> => 
           total,
           gl
         FROM meet_result_detailed
-        ORDER BY athlete_id, gl DESC
+        ORDER BY vpf_id, gl DESC
       ) sub
       ORDER BY gl DESC;
     `

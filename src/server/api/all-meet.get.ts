@@ -6,20 +6,20 @@ export default defineEventHandler(async (): Promise<APIBody<Meet[]>> => {
   try {
     const meets = await db<Meet[]>`
       SELECT 
-        id,
+        mi.meet_id,
         name,
         city,
         host_date,
         media_link,
-        COUNT(athlete_id) as count
+        COUNT(vpf_id) as count
       FROM
         meet_info mi
       JOIN 
         meet_result mr
       ON 
-        mi.id = mr.meet_id
+        mi.meet_id = mr.meet_id
       GROUP BY
-        id,
+        mi.meet_id,
         name,
         city,
         host_date

@@ -24,7 +24,7 @@ def generate_deletes(filename):
         keep_id = ids_sorted[0]   # highest value to keep
         delete_ids = ids_sorted[1:]  # lower ones to delete
         for old_id in delete_ids:
-            print(f"DELETE FROM users WHERE vpf_member_id = '{old_id}';")
+            print(f"DELETE FROM users WHERE vpf_id = '{old_id}';")
 
 if __name__ == "__main__":
     generate_deletes('input.txt')
