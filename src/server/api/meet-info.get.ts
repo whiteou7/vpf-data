@@ -17,7 +17,7 @@ export default defineEventHandler(async (event): Promise<APIBody<MeetResultDetai
     const results = await db<MeetResultDetailed[]>`
       SELECT 
         meet_id,
-        athlete_id,
+        vpf_id,
         sex,
         weight_class,
         division,
