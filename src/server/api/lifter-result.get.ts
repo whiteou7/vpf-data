@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm"
 import { db } from "../../db"
 import type { LifterPB, LifterResult } from "~/types/lifter"
 import type { APIBody } from "~/types/api"
@@ -15,30 +14,26 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Lift
   }
 
   try {
-    const results = await db.execute<LifterResult>(
-      sql.raw(`
-        SELECT
-          full_name,
-          sex,
-          weight_class,
-          division,
-          best_squat::float as best_squat,
-          best_bench::float as best_bench,
-          best_dead::float as best_dead,
-          total::float as total,
-          gl::float as gl,
-          body_weight::float as body_weight,
-          placement,
-          meet_name,
-          meet_id
-        FROM meet_result_detailed
-        WHERE athlete_id = '${athleteId}'
-        ORDER BY meet_id DESC;
-      `)
-    )
-
-    const pb = await db.execute<LifterPB>(
-      sql.raw(`
+    const results = await db<LifterResult[]>`
+      SELECT
+        full_name,
+        sex,
+        weight_class,
+        division,
+        best_squat::float as best_squat,
+        best_bench::float as best_bench,
+        best_dead::float as best_dead,
+        total::float as total,
+        gl::float as gl,
+        body_weight::float as body_weight,
+        placement,
+        meet_name,
+        meet_id
+      FROM meet_result_detailed
+      WHERE athlete_id = ${athleteId}
+      ORDER BY meet_id DESC;
+    `
+    const pbArr = await db<LifterPB[]>`
       SELECT
         MAX(best_squat)::float as squat_pb,
         MAX(best_bench)::float as bench_pb,
@@ -46,13 +41,11 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Lift
         MAX(total)::float as total_pb,
         MAX(gl)::float as gl_pb
       FROM meet_result_detailed
-      WHERE athlete_id = '${athleteId}'
-    `),
-    )
-
+      WHERE athlete_id = ${athleteId}
+    `
     return {
       success: true,
-      data: { results, pb: pb[0] },
+      data: { results, pb: pbArr[0] },
     }
   } catch (error) {
     console.error("Error fetching info:", error)

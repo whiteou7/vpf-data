@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm"
 import { db } from "~/db"
 import bcrypt from "bcryptjs"
 import type { APIBody } from "~/types/api"
@@ -10,17 +9,16 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     const password = body.password as string |""
 
     // Check if email already exists
-    const [existingUser] = await db.execute(
-      sql.raw(`
-        SELECT 
-          m.vpf_member_id,
-          m.password
-        FROM 
-          members m 
-        WHERE 
-          m.email = '${email}';
-      `)
-    )
+    const existingArr = await db<{ vpf_member_id?: string, password?: string }[]>`
+      SELECT 
+        m.vpf_member_id,
+        m.password
+      FROM 
+        members m 
+      WHERE 
+        m.email = ${email};
+    `
+    const existingUser = existingArr[0] ?? {}
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -35,11 +33,9 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
 
     // Set password if not exists (for legacy members)
     if (existingUser.vpf_member_id && !existingUser.password) {
-      await db.execute(
-        sql.raw(`
-          UPDATE members SET password = '${hashedPassword}' WHERE vpf_member_id = '${existingUser.vpf_member_id}';
-        `)
-      )
+      await db`
+        UPDATE members SET password = ${hashedPassword} WHERE vpf_member_id = ${existingUser.vpf_member_id};
+      `
       return {
         success: true,
         message: "Password set successfully",
@@ -47,11 +43,9 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     }
 
     // Insert new user for new account
-    await db.execute(
-      sql.raw(`
-        INSERT INTO members (email, password) VALUES ('${email}', '${hashedPassword}');
-      `)
-    )
+    await db`
+      INSERT INTO members (email, password) VALUES (${email}, ${hashedPassword});
+    `
 
     return {
       success: true,
