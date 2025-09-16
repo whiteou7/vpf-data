@@ -1,5 +1,4 @@
 import { db } from "~/db"
-import { sql } from "drizzle-orm"
 import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: string }>> => {
@@ -14,17 +13,16 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
       }
     }
 
-    const [result] = await db.execute(
-      sql.raw(`
-        SELECT 
-          vpf_id, 
-          expires_at
-        FROM 
-          authentication.sessions
-        WHERE 
-          session_id = '${sessionId}'
-    `)
-    )
+    const resultArr = await db<{ vpf_id: string, expires_at: string }[]>`
+      SELECT 
+        vpf_id, 
+        expires_at
+      FROM 
+        authentication.sessions
+      WHERE 
+        session_id = ${sessionId}
+    `
+    const result = resultArr[0]
 
     if (!result) {
       return {
@@ -33,7 +31,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
       } 
     }
       
-    if (new Date(result.expires_at as string | number | Date).getTime() < Date.now()) {
+    if (new Date(result.expires_at).getTime() < Date.now()) {
       return {
         success: false,
         error: "Session expired"
@@ -44,7 +42,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
       success: true,
       message: "Session validated",
       data: {
-        vpf_id: result.vpf_id as string
+        vpf_id: result.vpf_id
       }
     }
   } catch (error) {
