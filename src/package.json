@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "vpf-data",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,7 +14,6 @@
     "@tailwindcss/vite": "^4.1.10",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
-    "drizzle-orm": "^0.44.5",
     "eslint": "^9.29.0",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^3.17.5",
@@ -28,7 +27,6 @@
     "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
     "@types/lodash.debounce": "^4.0.9",
     "@types/pg": "^8.15.4",
-    "drizzle-kit": "^0.31.4",
     "tsx": "^4.20.3",
     "vite-plugin-vuetify": "^2.1.1",
     "vuetify": "^3.9.5"
