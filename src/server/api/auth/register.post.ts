@@ -3,7 +3,7 @@ import { db } from "~/db"
 import bcrypt from "bcryptjs"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<APIBody<null>> => {
   try {
     const body: { email: string, password: string } = await readBody(event)
     const email = body.email as string | ""
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
       return {
         success: false,
         error: "Email already registered",
-      } as APIBody<null>
+      }
     }
 
     // Set password if not exists (for legacy members)
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       return {
         success: true,
         message: "Password set successfully",
-      } as APIBody<null>
+      }
     }
 
     // Insert new user for new account
@@ -56,12 +56,12 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       message: "Account created successfully",
-    } as APIBody<null>
+    }
   } catch (error) {
     console.error("Error registering:", error)
     return {
       success: false,
-      error: error.message,
-    } as APIBody<null>
+      error: (error as Error).message,
+    }
   }
 })

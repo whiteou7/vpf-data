@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"
 import crypto from "crypto"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<APIBody<{ session_id: string }>> => {
   try {
     const body: { email: string, password: string } = await readBody(event)
     const email = body.email as string | ""
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
       return {
         success: false,
         error: "Invalid email or password",
-      } as APIBody<null>
+      }
     }
 
     // Compare password using bcrypt
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
       return {
         success: false,
         error: "Invalid email or password",
-      } as APIBody<null>
+      }
     }
 
     // Create session if match
@@ -54,13 +54,13 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      data: session_id,
-    } as APIBody<string>
+      data: { session_id }
+    }
   } catch (error) {
-    console.error("Error logging in:", error)
+    console.error("Error logging in", error)
     return {
       success: false,
-      error: error.message,
-    } as APIBody<null>
+      error: (error as Error).message,
+    }
   }
 })

@@ -3,7 +3,7 @@ import { db } from "../../db"
 import type { LifterResult } from "~/types/lifter"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (): Promise<APIBody<LifterResult[]>> => {
   try {
     const lifters = await db.execute<LifterResult>(
       sql.raw(`
@@ -41,12 +41,12 @@ export default defineEventHandler(async () => {
     return {
       success: true,
       data: lifters,
-    } as APIBody<LifterResult[]>
+    }
   } catch (error) {
     console.error("Error fetching lifters info:", error)
     return {
       success: false,
       error: "Internal Server Error",
-    } as APIBody<null>
+    }
   }
 })
