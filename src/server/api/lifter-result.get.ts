@@ -3,7 +3,7 @@ import { db } from "../../db"
 import type { LifterPB, LifterResult } from "~/types/lifter"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<APIBody<{ results: LifterResult[], pb: LifterPB }>> => {
   const query: { athlete_id: string } = getQuery(event)
   const athleteId = query.athlete_id
 
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       error: "athlete_id is required",
-    } as APIBody<null>
+    }
   }
 
   try {
@@ -53,12 +53,12 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       data: { results, pb: pb[0] },
-    } as APIBody<{ results: LifterResult[], pb: LifterPB }>
+    }
   } catch (error) {
     console.error("Error fetching info:", error)
     return {
       success: false,
       error: "Failed to fetch athlete info",
-    } as APIBody<null>
+    }
   }
 })

@@ -3,7 +3,7 @@ import { db } from "../../db"
 import type { MeetResultDetailed } from "~/types/meet"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<APIBody<MeetResultDetailed[]>> => {
   const query: { meet_id: number } = getQuery(event)
   const meetId = query.meet_id
 
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       error: "meet_id is required",
-    } as APIBody<null>
+    }
   }
 
   try {
@@ -54,12 +54,12 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       data: results,
-    } as APIBody<MeetResultDetailed[]>
+    }
   } catch (error) {
     console.error("Error fetching meet info:", error)
     return {
       success: false,
       error: "Internal Server Error",
-    } as APIBody<null>
+    }
   }
 })

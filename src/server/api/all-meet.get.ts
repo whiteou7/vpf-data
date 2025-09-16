@@ -3,7 +3,7 @@ import { db } from "../../db"
 import type { Meet } from "~/types/meet"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (): Promise<APIBody<Meet[]>> => {
   try {
     const meets = await db.execute<Meet>(
       sql.raw(`
@@ -33,12 +33,12 @@ export default defineEventHandler(async () => {
     return {
       success: true,
       data: meets,
-    } as APIBody<Meet[]>
+    }
   } catch (error) {
     console.error("Error fetching meets info:", error)
     return {
       success: false,
       error: "Internal Server Error",
-    } as APIBody<null>
+    }
   }
 })
