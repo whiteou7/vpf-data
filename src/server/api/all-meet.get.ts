@@ -1,34 +1,31 @@
-import { sql } from "drizzle-orm"
 import { db } from "../../db"
 import type { Meet } from "~/types/meet"
 import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (): Promise<APIBody<Meet[]>> => {
   try {
-    const meets = await db.execute<Meet>(
-      sql.raw(`
-        SELECT 
-          id,
-          name,
-          city,
-          host_date,
-          media_link,
-          COUNT(athlete_id) as count
-        FROM
-          meet_info mi
-        JOIN 
-          meet_result mr
-        ON 
-          mi.id = mr.meet_id
-        GROUP BY
-          id,
-          name,
-          city,
-          host_date
-        ORDER BY
-          host_date ASC
-        `)
-    )
+    const meets = await db<Meet[]>`
+      SELECT 
+        id,
+        name,
+        city,
+        host_date,
+        media_link,
+        COUNT(athlete_id) as count
+      FROM
+        meet_info mi
+      JOIN 
+        meet_result mr
+      ON 
+        mi.id = mr.meet_id
+      GROUP BY
+        id,
+        name,
+        city,
+        host_date
+      ORDER BY
+        host_date ASC
+      `
 
     return {
       success: true,
