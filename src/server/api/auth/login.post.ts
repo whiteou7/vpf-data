@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm"
 import { db } from "~/db"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
@@ -11,21 +10,20 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
     const password = body.password as string | ""
 
     // Fetch user by email
-    const [user] = await db.execute(
-      sql.raw(`
-        SELECT
-          m.vpf_member_id,
-          m.password
-        FROM
-          members m
-        WHERE
-          m.email = '${email}';
-      `)
-    )
-    const hashedPassword = user?.password as string | undefined
+    const userArr = await db<{ vpf_member_id?: string, password?: string }[]>`
+      SELECT
+        m.vpf_member_id,
+        m.password
+      FROM
+        members m
+      WHERE
+        m.email = ${email};
+    `
+    const user = userArr[0] ?? {}
+    const hashedPassword = user.password as string | undefined
 
-    // Throw error if password not exists in db
-    if (!hashedPassword) {
+    // Check if user or password exists
+    if (!hashedPassword || !user.vpf_member_id) {
       return {
         success: false,
         error: "Invalid email or password",
@@ -43,14 +41,12 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
 
     // Create session if match
     const session_id: string = crypto.randomUUID()
-    await db.execute(
-      sql.raw(`
-        INSERT INTO
-          authenication.sessions (session_id, vpf_id)
-        VALUES
-          ('${session_id}', '${user.vpf_member_id}')
-      `)
-    )
+    await db`
+      INSERT INTO
+        authentication.sessions (session_id, vpf_id)
+      VALUES
+        (${session_id}, ${user.vpf_member_id})
+    `
 
     return {
       success: true,
