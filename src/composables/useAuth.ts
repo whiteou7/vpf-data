@@ -1,20 +1,21 @@
-import { ref } from "vue"
 import type { APIBody } from "~/types/api"
 
-export const useAuth = () => {
-  const session = useCookie("session_id")
-  const user = ref<{ vpf_id: string } | null>(null)
+const user = ref<{ vpf_id: string }>({ vpf_id: "" })
 
+const setUserState = (vpf_id: string) => {
+  user.value.vpf_id = vpf_id
+}
+
+export const useAuth = () => {
   const login = async (email: string, password: string) => {
     try {
-      const response = await $fetch<APIBody<{ session_id: string }>>("/api/auth/login", {
+      const response = await $fetch<APIBody<{ session_id: string, vpf_id: string }>>("/api/auth/login", {
         method: "POST",
         body: { email, password }
       })
 
       if (response.success) {
-        session.value = response.data?.session_id
-        await validate()
+        setUserState(response.data?.vpf_id ?? "")
         return response
       }
       
@@ -39,21 +40,15 @@ export const useAuth = () => {
 
   // TODO: invalidate session after logging out
   const logout = () => {
-    session.value = null
-    user.value = null
+    setUserState("")
   }
 
   const validate = async () => {
-    if (!session.value) {
-      user.value = null
-      return { success: false, error: "No session" }
-    }
-
     try {
-      const response = await $fetch<APIBody<{ vpf_id: string }>>(`/api/auth/validate?session_id=${session.value}`)
+      const response = await $fetch<APIBody<{ vpf_id: string }>>("/api/auth/validate")
 
       if (response.success) {
-        user.value = { vpf_id: response.data?.vpf_id ?? "" }
+        setUserState(response.data?.vpf_id ?? "")
       } else {
         logout()
       }
