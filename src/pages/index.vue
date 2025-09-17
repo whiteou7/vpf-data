@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-10">
+  <div class="min-h-screen py-5 md:py-10">
     <div class="max-w-[95%] mx-auto">
       <LiftersPBTable
         :items="filteredLifters"
@@ -36,7 +36,7 @@ onMounted(async () => {
     return
   }
   loading.value = false
-  lifters.value = response.data.lifters ?? []
+  lifters.value = response.data?.lifters ?? []
 })
 
 // Computed filtering logic
