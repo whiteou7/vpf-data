@@ -45,6 +45,14 @@
             {{ item.name }}
           </v-btn>
         </template>
+        <ClientOnly>
+          <v-btn v-if="!user" to="/login" text color="secondary" class="mx-1">
+            Login
+          </v-btn>
+          <v-btn v-else text color="secondary" class="mx-1" @click="handleLogout">
+            Logout
+          </v-btn>
+        </ClientOnly>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -89,6 +97,14 @@
             </v-list-item-title>
           </v-list-item>
         </template>
+        <ClientOnly>
+          <v-list-item v-if="!user" to="/login" @click="drawer = false">
+            <v-list-item-title class="text-secondary">Login</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-else @click="handleLogout">
+            <v-list-item-title class="text-secondary">Logout</v-list-item-title>
+          </v-list-item>
+        </ClientOnly>
       </v-list>
     </v-navigation-drawer>
 
@@ -102,7 +118,20 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { ref, watch, onMounted } from "vue"
+import { useAuth } from "~/composables/useAuth"
+
+const { user, logout, validate } = useAuth()
+const router = useRouter()
+
+onMounted(async () => {
+  await validate()
+})
+
+const handleLogout = () => {
+  logout()
+  router.push("/login")
+}
 
 // Mobile drawer state
 const drawer = ref(false)
