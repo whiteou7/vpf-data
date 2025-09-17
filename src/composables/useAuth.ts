@@ -38,9 +38,16 @@ export const useAuth = () => {
     }
   }
 
-  // TODO: invalidate session after logging out
-  const logout = () => {
-    setUserState("")
+  const logout = async () => {
+    try {
+      await $fetch("/api/auth/logout", {
+        method: "POST",
+      })
+    } catch (error) {
+      console.error("Error logging out", error)
+    } finally {
+      setUserState("")
+    }
   }
 
   const validate = async () => {
