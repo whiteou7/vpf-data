@@ -9,9 +9,9 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     const password = body.password as string |""
 
     // Check if email already exists
-    const existingArr = await db<{ vpf_member_id?: string, password?: string }[]>`
+    const existingArr = await db<{ vpf_id?: string, password?: string }[]>`
       SELECT 
-        m.vpf_member_id,
+        m.vpf_id,
         m.password
       FROM 
         members m 
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     // Throw error if both member id and password exist
-    if (existingUser.vpf_member_id && existingUser.password) {
+    if (existingUser.vpf_id && existingUser.password) {
       return {
         success: false,
         error: "Email already registered",
@@ -32,9 +32,10 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     }
 
     // Set password if not exists (for legacy members)
-    if (existingUser.vpf_member_id && !existingUser.password) {
+    if (existingUser.vpf_id && !existingUser.password) {
+      console.log(hashedPassword)
       await db`
-        UPDATE members SET password = ${hashedPassword} WHERE vpf_member_id = ${existingUser.vpf_member_id};
+        UPDATE members SET password = ${hashedPassword} WHERE vpf_id = ${existingUser.vpf_id};
       `
       return {
         success: true,
