@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-10">
+  <div class="min-h-screen py-5 md:py-10">
     <div class="max-w-[95%] mx-auto rounded-lg">
       <BaseTable
         :items="filteredMeets"
@@ -56,7 +56,7 @@ onMounted(async () => {
   }
 
   loading.value = false
-  meets.value = response.data.meets ?? []
+  meets.value = response.data?.meets ?? []
 })
 
 // Auto generated items for filter buttons
