@@ -3,8 +3,8 @@ import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: string }>> => {
   try {
-    const query: { session_id: string } = getQuery(event)
-    const sessionId = query.session_id
+    // Get session id from cookie
+    const sessionId = getCookie(event, "session_id")
 
     if (!sessionId) {
       return { 
@@ -13,6 +13,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
       }
     }
 
+    // Get session info from database
     const resultArr = await db<{ vpf_id: string, expires_at: string }[]>`
       SELECT 
         vpf_id, 
@@ -24,6 +25,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
     `
     const result = resultArr[0]
 
+    // Check if session exists
     if (!result) {
       return {
         success: false,
@@ -31,6 +33,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
       } 
     }
       
+    // Check if session expired
     if (new Date(result.expires_at).getTime() < Date.now()) {
       return {
         success: false,

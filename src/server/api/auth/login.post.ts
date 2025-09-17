@@ -3,16 +3,16 @@ import bcrypt from "bcryptjs"
 import crypto from "crypto"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event): Promise<APIBody<{ session_id: string }>> => {
+export default defineEventHandler(async (event): Promise<APIBody<{ session_id: string, vpf_id: string }>> => {
   try {
     const body: { email: string, password: string } = await readBody(event)
     const email = body.email as string | ""
     const password = body.password as string | ""
 
     // Fetch user by email
-    const userArr = await db<{ vpf_member_id?: string, password?: string }[]>`
+    const userArr = await db<{ vpf_id?: string, password?: string }[]>`
       SELECT
-        m.vpf_member_id,
+        m.vpf_id,
         m.password
       FROM
         members m
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
     const hashedPassword = user.password as string | undefined
 
     // Check if user or password exists
-    if (!hashedPassword || !user.vpf_member_id) {
+    if (!hashedPassword || !user.vpf_id) {
       return {
         success: false,
         error: "Invalid email or password",
@@ -45,12 +45,18 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
       INSERT INTO
         authentication.sessions (session_id, vpf_id)
       VALUES
-        (${session_id}, ${user.vpf_member_id})
+        (${session_id}, ${user.vpf_id})
     `
+
+    setCookie(event, "session_id", session_id, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict"
+    })
 
     return {
       success: true,
-      data: { session_id }
+      data: { session_id, vpf_id: user.vpf_id }
     }
   } catch (error) {
     console.error("Error logging in", error)
