@@ -46,7 +46,7 @@
           </v-btn>
         </template>
         <ClientOnly>
-          <v-btn v-if="!user" to="/login" text color="secondary" class="mx-1">
+          <v-btn v-if="!user.vpf_id" to="/login" text color="secondary" class="mx-1">
             Login
           </v-btn>
           <v-btn v-else text color="secondary" class="mx-1" @click="handleLogout">
@@ -98,7 +98,7 @@
           </v-list-item>
         </template>
         <ClientOnly>
-          <v-list-item v-if="!user" to="/login" @click="drawer = false">
+          <v-list-item v-if="!user.vpf_id" to="/login" @click="drawer = false">
             <v-list-item-title class="text-secondary">Login</v-list-item-title>
           </v-list-item>
           <v-list-item v-else @click="handleLogout">

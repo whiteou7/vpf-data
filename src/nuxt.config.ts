@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from "@tailwindcss/vite"
+
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 export default defineNuxtConfig({
   routeRules: {
@@ -39,9 +39,6 @@ export default defineNuxtConfig({
     "@nuxt/eslint"
   ],
   vite: {
-    plugins: [
-      tailwindcss(),
-    ],
     vue: {
       template: {
         transformAssetUrls,
