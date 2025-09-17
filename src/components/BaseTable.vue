@@ -16,7 +16,7 @@
       <v-skeleton-loader type="table-row@10"/>
     </template>
     <template #item.full_name="{ item }">
-      <NuxtLink :to="`/lifter/${item.vpf_id}`" class="hover:text-red-500 active:text-red-500">
+      <NuxtLink :to="`/athlete/${item.vpf_id}`" class="hover:text-red-500 active:text-red-500">
         {{ item.full_name }}
       </NuxtLink>
     </template>
@@ -88,7 +88,7 @@
   </v-data-table>
 </template>
 <script setup lang="ts">
-import type { Sex } from "~/types/lifter"
+import type { Sex } from "~/types/athlete"
 import { divisionMap } from "~/utils/mappings"
 
 let currentRow = null

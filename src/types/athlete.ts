@@ -1,4 +1,4 @@
-export type LifterResult = {
+export type AthleteCompInfo = {
   "#"?: number;
   vpf_id: string;
   full_name?: string;
@@ -18,7 +18,7 @@ export type Sex = "male" | "female" | null
 
 export type Division = "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4"
 
-export type LifterPB = {
+export type AthletePB = {
   squat_pb: number;
   bench_pb: number;
   deadlift_pb: number;
