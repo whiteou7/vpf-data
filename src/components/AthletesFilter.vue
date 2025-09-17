@@ -4,7 +4,7 @@
       <v-text-field
         v-model="searchText"
         density="compact"
-        label="Search lifters"
+        label="Search athlete"
         color="primary"
         variant="solo-inverted"
         @input="onInput"
