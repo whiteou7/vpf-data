@@ -1,5 +1,5 @@
 import { ref, watch } from "vue"
-import type { Sex, Division } from "~/types/lifter"
+import type { Sex, Division } from "~/types/athlete"
 
 const search = ref<string>("")
 const sexFilter = ref<Sex>(null)
@@ -48,7 +48,7 @@ watch(weightClassFilter, (newVal) => {
   }
 })
 
-export function useLiftersFilter() {
+export function useAthletesFilter() {
   search.value = ""
   sexFilter.value = null
   divisionFilter.value = undefined

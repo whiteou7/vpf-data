@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen py-10">
     <div class="max-w-[95%] mx-auto">
-      <LiftersFilter/>
+      <AthletesFilter/>
       <div v-if="loading" class="flex justify-center items-center py-10">
         <v-progress-circular color="primary" indeterminate :size="81"/>
       </div>
@@ -26,14 +26,14 @@ import { ref, onMounted, computed } from "vue"
 import { useRoute } from "vue-router"
 import type { MeetResultDetailed } from "~/types/meet"
 import { meetToPath } from "~/utils/mappings"
-import { useLiftersFilter } from "~/composables/useLiftersFilter"
-import LiftersFilter from "~/components/LiftersFilter.vue"
+import { useAthletesFilter } from "~/composables/useAthletesFilter"
+import AthletesFilter from "~/components/AthletesFilter.vue"
 
 import type { APIBody } from "~/types/api"
 
 const route = useRoute()
 const path = route.params.path as string
-const filters = useLiftersFilter()
+const filters = useAthletesFilter()
 
 const results = ref<MeetResultDetailed[]>([])
 const loading = ref(true)

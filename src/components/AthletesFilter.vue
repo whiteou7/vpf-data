@@ -47,10 +47,10 @@
 </template>
 
 <script setup lang="ts">
-import { useLiftersFilter } from "~/composables/useLiftersFilter"
+import { useAthletesFilter } from "~/composables/useAthletesFilter"
 import debounce from "lodash.debounce"
 
-const filters = useLiftersFilter()
+const filters = useAthletesFilter()
 const searchText = ref<string>("")
 
 const onInput = debounce(() => {

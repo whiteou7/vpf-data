@@ -1,8 +1,8 @@
 import { db } from "../../db"
-import type { LifterPB, LifterResult } from "~/types/lifter"
+import type { AthletePB, AthleteCompInfo } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event): Promise<APIBody<{ results: LifterResult[], pb: LifterPB }>> => {
+export default defineEventHandler(async (event): Promise<APIBody<{ results: AthleteCompInfo[], pb: AthletePB }>> => {
   const query: { vpf_id: string } = getQuery(event)
   const vpfId = query.vpf_id
 
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Lift
   }
 
   try {
-    const results = await db<LifterResult[]>`
+    const results = await db<AthleteCompInfo[]>`
       SELECT
         full_name,
         sex,
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Lift
       WHERE vpf_id = ${vpfId}
       ORDER BY meet_id DESC;
     `
-    const pbArr = await db<LifterPB[]>`
+    const pbArr = await db<AthletePB[]>`
       SELECT
         MAX(best_squat)::float as squat_pb,
         MAX(best_bench)::float as bench_pb,

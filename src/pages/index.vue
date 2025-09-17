@@ -1,51 +1,51 @@
 <template>
   <div class="min-h-screen py-5 md:py-10">
     <div class="max-w-[95%] mx-auto">
-      <LiftersPBTable
-        :items="filteredLifters"
+      <AthletesCompTable
+        :items="filteredAthletes"
         :headers="headers"
         :loading="loading"
         :search="filters.search.value"
       >
         <template #top>
-          <LifterFilters />
+          <AthletesFilter />
         </template>
-      </LiftersPBTable>
+      </AthletesCompTable>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { LifterResult } from "~/types/lifter"
-import LiftersPBTable from "~/components/LiftersPBTable.vue"
-import LifterFilters from "~/components/LiftersFilter.vue"
-import { useLiftersFilter } from "~/composables/useLiftersFilter"
+import type { AthleteCompInfo } from "~/types/athlete"
+import AthletesCompTable from "~/components/AthletesCompTable.vue"
+import AthletesFilter from "~/components/AthletesFilter.vue"
+import { useAthletesFilter } from "~/composables/useAthletesFilter"
 
 // Fetch
 import type { APIBody } from "~/types/api"
 
-const lifters = ref<LifterResult[]>([])
+const athletes = ref<AthleteCompInfo[]>([])
 const loading = ref(true)
 
-const filters = useLiftersFilter()
+const filters = useAthletesFilter()
 
 onMounted(async () => {  
-  const response = await $fetch<APIBody<{ lifters: LifterResult[] }>>("/api/all-lifter-ranked")
+  const response = await $fetch<APIBody<{ athletes: AthleteCompInfo[] }>>("/api/all-athletes-ranked")
   if (!response.success) {
     // TODO: Handle error
     return
   }
   loading.value = false
-  lifters.value = response.data?.lifters ?? []
+  athletes.value = response.data?.athletes ?? []
 })
 
 // Computed filtering logic
-const filteredLifters = computed(() => {
-  return lifters.value.filter(lifter => {
-    const matchesSex = filters.sexFilter.value ? lifter.sex === filters.sexFilter.value : true
-    const matchesDivision = filters.divisionFilter.value ? lifter.division === filters.divisionFilter.value : true
+const filteredAthletes = computed(() => {
+  return athletes.value.filter(athlete => {
+    const matchesSex = filters.sexFilter.value ? athlete.sex === filters.sexFilter.value : true
+    const matchesDivision = filters.divisionFilter.value ? athlete.division === filters.divisionFilter.value : true
     const matchesWeightClass = filters.weightClassFilter.value.weight
-      ? lifter.weight_class === filters.weightClassFilter.value.weight && lifter.sex === filters.weightClassFilter.value.sex
+      ? athlete.weight_class === filters.weightClassFilter.value.weight && athlete.sex === filters.weightClassFilter.value.sex
       : true
     return matchesSex && matchesDivision && matchesWeightClass
   })

@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router"
 import BaseTable from "~/components/BaseTable.vue"
-import type { LifterPB, LifterResult } from "~/types/lifter"
+import type { AthletePB, AthleteCompInfo } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 
 const route = useRoute()
 const vpfId = route.params.id
 
-const athleteResult = ref<LifterResult[]>()
-const athletePB = ref<LifterPB>()
+const athleteResult = ref<AthleteCompInfo[]>()
+const athletePB = ref<AthletePB>()
 
 onMounted(async () => {
   const response = await $fetch<APIBody<{
-    results: LifterResult[]
-    pb: LifterPB
-  }>>(`/api/lifter-result?vpf_id=${vpfId}`)
+    results: AthleteCompInfo[]
+    pb: AthletePB
+  }>>(`/api/athlete-result?vpf_id=${vpfId}`)
 
   if (response.success) {
     athleteResult.value = response.data?.results
@@ -54,7 +54,7 @@ const results_headers = [
         {{ athleteResult[0].full_name + " (" + (athleteResult[0].sex === 'male' ? 'M' : 'F') + ")" }}
       </h1>
       <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
-        Lifter PBs
+        Athlete PBs
       </h2>
       <BaseTable
         :headers="pb_headers"

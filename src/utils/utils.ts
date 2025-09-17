@@ -1,5 +1,5 @@
 import type { RecordTableRow, Result, LiftRecord, DestructuredRecord, TotalRecord } from "~/types/record"
-import type { Sex } from "~/types/lifter"
+import type { Sex } from "~/types/athlete"
 
 // Destructure raw record data
 export function destructureRecords(

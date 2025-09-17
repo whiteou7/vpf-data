@@ -1,5 +1,5 @@
 <template>
-  <NuxtLoadingIndicator color="#ffffff" :throttle="0"/>
+  <NuxtLoadingIndicator color="#ffffff"/>
   <NuxtLayout>
     <v-app>
       <NuxtPage />

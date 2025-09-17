@@ -1,4 +1,4 @@
-import type { Division, Sex } from "./lifter"
+import type { Division, Sex } from "./athlete"
 
 export type Meet = {
   id: number;

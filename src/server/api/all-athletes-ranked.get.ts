@@ -1,10 +1,10 @@
 import { db } from "../../db"
-import type { LifterResult } from "~/types/lifter"
+import type { AthleteCompInfo } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (): Promise<APIBody<{ lifters: LifterResult[] }>> => {
+export default defineEventHandler(async (): Promise<APIBody<{ athletes: AthleteCompInfo[] }>> => {
   try {
-    const lifters = await db<LifterResult[]>`
+    const athletes = await db<AthleteCompInfo[]>`
       SELECT 
         ROW_NUMBER() OVER (ORDER BY gl DESC) AS "#",
         vpf_id,
@@ -34,12 +34,13 @@ export default defineEventHandler(async (): Promise<APIBody<{ lifters: LifterRes
       ) sub
       ORDER BY gl DESC;
     `
+
     return {
       success: true,
-      data: { lifters },
+      data: { athletes: athletes },
     }
   } catch (error) {
-    console.error("Error fetching lifters info:", error)
+    console.error("Error fetching athletes info:", error)
     return {
       success: false,
       error: "Internal Server Error",
