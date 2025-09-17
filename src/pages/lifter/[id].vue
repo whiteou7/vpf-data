@@ -7,10 +7,20 @@ import type { APIBody } from "~/types/api"
 const route = useRoute()
 const vpfId = route.params.id
 
-const { data } = await useFetch<APIBody<{
-  results: LifterResult[]
-  pb: LifterPB
-}>>(`/api/lifter-result?vpf_id=${vpfId}`)
+const athleteResult = ref<LifterResult[]>()
+const athletePB = ref<LifterPB>()
+
+onMounted(async () => {
+  const response = await $fetch<APIBody<{
+    results: LifterResult[]
+    pb: LifterPB
+  }>>(`/api/lifter-result?vpf_id=${vpfId}`)
+
+  if (response.success) {
+    athleteResult.value = response.data?.results
+    athletePB.value = response.data?.pb
+  }
+})
 
 const pb_headers = [
   { title: "Squat PB", value: "squat_pb", key: "best_squat" },
@@ -36,16 +46,19 @@ const results_headers = [
 
 <template>
   <div class="min-h-screen py-10">
-    <div class="max-w-[95%] mx-auto">
+    <div
+      v-if="athleteResult && athletePB"
+      class="max-w-[95%] mx-auto"
+    >
       <h1 class="text-3xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
-        {{ data?.data.results[0].full_name + " (" + (data?.data.results[0].sex === 'male' ? 'M' : 'F') + ")" }}
+        {{ athleteResult[0].full_name + " (" + (athleteResult[0].sex === 'male' ? 'M' : 'F') + ")" }}
       </h1>
       <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
         Lifter PBs
       </h2>
       <BaseTable
         :headers="pb_headers"
-        :items="[data?.data.pb]"
+        :items="[athletePB]"
       />
 
       <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
@@ -53,7 +66,7 @@ const results_headers = [
       </h2>
       <BaseTable
         :headers="results_headers"
-        :items="data?.data.results"
+        :items="athleteResult"
       />
     </div>
   </div>
