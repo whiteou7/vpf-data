@@ -1,46 +1,81 @@
 <template>
-  <v-container>
-    <v-card max-width="500" class="mx-auto">
-      <v-card-title>Login</v-card-title>
+  <div class="min-h-screen py-5 md:py-10">
+    <v-card max-width="500" class="mx-4 mx-md-auto">
       <v-card-text>
         <v-form @submit.prevent="handleLogin">
+          <!-- Email field -->
           <v-text-field
             v-model="email"
+            variant="outlined"
+            density="compact"
             label="Email"
             type="email"
             required
+            prepend-inner-icon="mdi-email-outline"
           />
+
+          <!-- Password field with toggle -->
           <v-text-field
             v-model="password"
+            variant="outlined"
+            density="compact"
+            :type="showPassword ? 'text' : 'password'"
             label="Password"
-            type="password"
             required
+            prepend-inner-icon="mdi-lock-outline"
+            :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append-inner="togglePassword"
           />
-          <v-btn type="submit" color="primary">Login</v-btn>
+
+          <!-- Login button -->
+          <v-btn type="submit" color="primary" variant="tonal" block>
+            Log in
+          </v-btn>
         </v-form>
-        <p v-if="error" class="text-red">{{ error }}</p>
       </v-card-text>
     </v-card>
-  </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      :color="snackbarColor"
+      timeout="3000"
+      :location="snackbarLocation"
+      variant="tonal"
+    >
+      {{ snackbarText }}
+    </v-snackbar>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { useAuth } from "~/composables/useAuth"
+import { useRouter } from "vue-router"
+import { useDisplay } from "vuetify"
 
 const email = ref("")
 const password = ref("")
-const error = ref<string | null>(null)
+const showPassword = ref(false)
+const snackbar = ref(false)
+const snackbarText = ref("")
+const snackbarColor = ref("error")
 
 const { login } = useAuth()
 const router = useRouter()
+const { smAndDown } = useDisplay()
+
+const snackbarLocation = computed(() => smAndDown.value ? "bottom" : "top")
+
+const togglePassword = () => {
+  showPassword.value = !showPassword.value
+}
 
 const handleLogin = async () => {
   const response = await login(email.value, password.value)
   if (response.success) {
     router.push("/")
   } else {
-    error.value = response.error || "An unknown error occurred."
+    snackbarText.value = response.error || "An unknown error occurred."
+    snackbar.value = true
   }
 }
 </script>
