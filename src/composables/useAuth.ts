@@ -54,7 +54,7 @@ export const useAuth = () => {
 
   const validate = async () => {
     try {
-      const response = await $fetch<APIBody<{ vpf_id: string }>>("/api/auth/validate")
+      const response = await $fetch<APIBody<{ vpf_id: string }>>("/api/auth/validate-session")
 
       // Insane if clauses
       // Dont log out if session doesnt exist in the first place
