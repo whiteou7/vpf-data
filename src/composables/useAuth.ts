@@ -25,11 +25,11 @@ export const useAuth = () => {
     }
   }
 
-  const register = async (email: string, password: string) => {
+  const register = async (fullName: string, email: string, password: string) => {
     try {
       const response = await $fetch<APIBody<null>>("/api/auth/register", {
         method: "POST",
-        body: { email, password }
+        body: { full_name: fullName, email, password }
       })
 
       return response
