@@ -9,6 +9,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
     if (!sessionId) {
       return { 
         success: false,
+        error: "SESSION_NOT_INCLUDED",
         message: "Session ID not included"
       }
     }
