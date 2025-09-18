@@ -26,10 +26,10 @@ export default defineEventHandler(async (): Promise<APIBody<{ meets: Meet[] }>> 
       ORDER BY
         host_date ASC
       `
-
+    // Format date
     return {
       success: true,
-      data: { meets },
+      data: { meets: meets.map(meet => ({ ...meet, host_date: new Date(meet.host_date).toLocaleDateString("en-GB") })) },
     }
   } catch (error) {
     console.error("Error fetching meets info:", error)
