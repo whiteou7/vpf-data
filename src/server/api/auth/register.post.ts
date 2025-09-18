@@ -4,9 +4,10 @@ import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event): Promise<APIBody<null>> => {
   try {
-    const body: { email: string, password: string } = await readBody(event)
+    const body: { email: string, full_name: string, password: string } = await readBody(event)
     const email = body.email
     const password = body.password
+    const fullName = body.full_name
 
     // Check if password and email were included
     if (!email || !password) {
@@ -39,7 +40,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
 
     // Insert new user for new account
     await db`
-      INSERT INTO members (email, password) VALUES (${email}, ${hashedPassword});
+      INSERT INTO members (email, full_name, password) VALUES (${email}, ${fullName}, ${hashedPassword});
     `
 
     return {
