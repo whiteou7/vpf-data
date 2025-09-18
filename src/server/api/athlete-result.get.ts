@@ -9,7 +9,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Athl
   if (!vpfId) {
     return {
       success: false,
-      error: "vpf_id is required",
+      message: "vpf_id is required",
     }
   }
 
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Athl
     console.error("Error fetching info:", error)
     return {
       success: false,
-      error: "Failed to fetch athlete info",
+      message: "Failed to fetch athlete info",
     }
   }
 })

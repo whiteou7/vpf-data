@@ -35,7 +35,7 @@ export default defineEventHandler(async (): Promise<APIBody<{ meets: Meet[] }>> 
     console.error("Error fetching meets info:", error)
     return {
       success: false,
-      error: "Internal Server Error",
+      message: "Internal Server Error",
     }
   }
 })

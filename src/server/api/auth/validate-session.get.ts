@@ -9,7 +9,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
     if (!sessionId) {
       return { 
         success: false,
-        error: "Session ID not included"
+        message: "Session ID not included"
       }
     }
 
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
     if (!result) {
       return {
         success: false,
-        error: "Invalid session"
+        message: "Invalid session"
       } 
     }
       
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
     if (new Date(result.expires_at).getTime() < Date.now()) {
       return {
         success: false,
-        error: "Session expired"
+        message: "Session expired"
       } 
     }
     
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpf_id: strin
     console.error("Failed to validate session", error)
     return { 
       success: false,
-      error: (error as Error).message
+      message: (error as Error).message
     } 
   }
 })

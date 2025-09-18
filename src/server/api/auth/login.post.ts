@@ -13,7 +13,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
     if (!isValidEmail(email)) {
       return {
         success: false,
-        error: "Invalid email format",
+        message: "Invalid email format",
       }
     }
 
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
     if (!hashedPassword || !user.vpf_id) {
       return {
         success: false,
-        error: "Invalid email or password",
+        message: "Invalid email or password",
       }
     }
 
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
     if (!isMatch) {
       return {
         success: false,
-        error: "Invalid email or password",
+        message: "Invalid email or password",
       }
     }
 
@@ -70,7 +70,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ session_id: s
     console.error("Error logging in", error)
     return {
       success: false,
-      error: (error as Error).message,
+      message: (error as Error).message,
     }
   }
 })
