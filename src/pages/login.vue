@@ -32,6 +32,11 @@
             Log in
           </v-btn>
         </v-form>
+        <div class="text-center mt-4">
+          <NuxtLink to="/register" class="text-sm">
+            Don't have an account? Register
+          </NuxtLink>
+        </div>
       </v-card-text>
     </v-card>
     <v-snackbar
