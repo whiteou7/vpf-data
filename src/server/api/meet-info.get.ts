@@ -9,7 +9,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
   if (!meetId) {
     return {
       success: false,
-      error: "meet_id is required",
+      message: "meet_id is required",
     }
   }
 
@@ -55,7 +55,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
     console.error("Error fetching meet info:", error)
     return {
       success: false,
-      error: "Internal Server Error",
+      message: "Internal Server Error",
     }
   }
 })

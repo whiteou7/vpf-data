@@ -43,7 +43,7 @@ export default defineEventHandler(async (): Promise<APIBody<{ athletes: AthleteC
     console.error("Error fetching athletes info:", error)
     return {
       success: false,
-      error: "Internal Server Error",
+      message: "Internal Server Error",
     }
   }
 })

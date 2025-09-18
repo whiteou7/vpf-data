@@ -26,7 +26,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     if (!hashedPassword || !user.vpf_id) {
       return {
         success: false,
-        error: "Invalid email or password",
+        message: "Invalid email or password",
       }
     }
 
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     if (!isMatch) {
       return {
         success: false,
-        error: "Invalid email or password",
+        message: "Invalid email or password",
       }
     }
 
@@ -57,7 +57,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     console.error("Error resetting password:", error)
     return {
       success: false,
-      error: (error as Error).message,
+      message: (error as Error).message,
     }
   }
 })

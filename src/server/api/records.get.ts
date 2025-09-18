@@ -64,7 +64,7 @@ export default defineEventHandler(async (): Promise<APIBody<ReturnType<typeof de
     console.error("Error fetching records info:", error)
     return {
       success: false,
-      error: "Internal Server Error",
+      message: "Internal Server Error",
     }
   }
 })

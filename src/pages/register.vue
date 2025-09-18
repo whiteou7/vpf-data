@@ -115,7 +115,7 @@ const handleRegister = async () => {
       router.push("/login")
     }, 3000)
   } else {
-    snackbarText.value = response.error || "An unknown error occurred."
+    snackbarText.value = response.message || "An unknown error occurred."
     snackbar.value = true
   }
 }

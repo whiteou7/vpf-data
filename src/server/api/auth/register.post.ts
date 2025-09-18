@@ -14,14 +14,14 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     if (!email || !password || !fullName) {
       return {
         success: false,
-        error: "Full name, password and email must be included"
+        message: "Full name, password and email must be included"
       }
     }
 
     if (!isValidEmail(email)) {
       return {
         success: false,
-        error: "Invalid email format",
+        message: "Invalid email format",
       }
     }
 
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     if (existingUser?.vpf_id) {
       return {
         success: false,
-        error: "Email already registered",
+        message: "Email already registered",
       }
     }
 
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     console.error("Error registering:", error)
     return {
       success: false,
-      error: (error as Error).message,
+      message: (error as Error).message,
     }
   }
 })
