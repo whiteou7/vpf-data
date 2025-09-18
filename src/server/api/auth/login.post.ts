@@ -2,12 +2,20 @@ import { db } from "~/db"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
 import type { APIBody } from "~/types/api"
+import { isValidEmail } from "../../utils/utils"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ session_id: string, vpf_id: string }>> => {
   try {
     const body: { email: string, password: string } = await readBody(event)
     const email = body.email as string | ""
     const password = body.password as string | ""
+
+    if (!isValidEmail(email)) {
+      return {
+        success: false,
+        error: "Invalid email format",
+      }
+    }
 
     // Fetch user by email
     const userArr = await db<{ vpf_id?: string, password?: string }[]>`
