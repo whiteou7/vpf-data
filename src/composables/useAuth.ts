@@ -40,11 +40,13 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      await $fetch("/api/auth/logout", {
+      const response = await $fetch("/api/auth/logout", {
         method: "POST",
       })
+
+      return response
     } catch (error) {
-      console.error("Error logging out", error)
+      return { success: false, error: (error as Error).message || "An error occurred" }
     } finally {
       setUserState("")
     }
