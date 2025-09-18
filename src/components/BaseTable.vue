@@ -6,7 +6,7 @@
     hide-default-footer
     density="compact"
     striped="odd"
-    class="rounded-lg bold-header-no-wrap"
+    class="rounded-lg bold-header-no-wrap-no-cursor"
     @click:row="rowClick"
   >
     <template #top>
@@ -115,10 +115,13 @@ const rowClick = (row) => {
 }
 </script>
 <style>
-.bold-header-no-wrap .v-data-table__th {
+.bold-header-no-wrap-no-cursor .v-data-table__th {
   font-weight: bold !important;
 }
-.bold-header-no-wrap .v-data-table__td {
+.bold-header-no-wrap-no-cursor .v-data-table__td {
   white-space: nowrap;
+}
+.bold-header-no-wrap-no-cursor .v-data-table__tr--clickable {
+  cursor: auto !important;
 }
 </style>
