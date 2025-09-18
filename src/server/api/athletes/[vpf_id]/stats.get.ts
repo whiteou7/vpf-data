@@ -1,10 +1,9 @@
-import { db } from "../../db"
+import { db } from "~/db"
 import type { AthletePB, AthleteCompInfo } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ results: AthleteCompInfo[], pb: AthletePB }>> => {
-  const query: { vpf_id: string } = getQuery(event)
-  const vpfId = query.vpf_id
+  const vpfId = event.context.params?.vpf_id
 
   if (!vpfId) {
     return {

@@ -1,10 +1,9 @@
-import { db } from "../../db"
+import { db } from "../../../db"
 import type { MeetResultDetailed } from "~/types/meet"
 import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ results: MeetResultDetailed[] }>> => {
-  const query: { meet_id: number } = getQuery(event)
-  const meetId = query.meet_id
+  const meetId = event.context.params?.meet_id
 
   if (!meetId) {
     return {

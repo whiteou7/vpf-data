@@ -48,7 +48,7 @@ const cityFilter = ref<string | null>(null)
 const yearFilter = ref<number | null>(null)
 
 onMounted(async () => {
-  const response = await $fetch<APIBody<{ meets: Meet[] }>>("/api/all-meet")
+  const response = await $fetch<APIBody<{ meets: Meet[] }>>("/api/meets")
 
   if (!response.success) {
     // TODO: Handle error

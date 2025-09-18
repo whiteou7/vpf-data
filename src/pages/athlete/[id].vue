@@ -14,7 +14,7 @@ onMounted(async () => {
   const response = await $fetch<APIBody<{
     results: AthleteCompInfo[]
     pb: AthletePB
-  }>>(`/api/athlete-result?vpf_id=${vpfId}`)
+  }>>(`/api/athletes/${vpfId}/stats`)
 
   if (response.success) {
     athleteResult.value = response.data?.results
