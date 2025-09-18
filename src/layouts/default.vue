@@ -114,6 +114,15 @@
         <slot />
       </v-container>
     </v-main>
+    <v-snackbar
+      v-model="snackbar"
+      :color="snackbarColor"
+      timeout="3000"
+      :location="top"
+      variant="tonal"
+    >
+      {{ snackbarText }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -124,13 +133,23 @@ import { useAuth } from "~/composables/useAuth"
 const { user, logout, validate } = useAuth()
 const router = useRouter()
 
+const snackbar = ref(false)
+const snackbarText = ref("")
+const snackbarColor = ref("error")
+
 onMounted(async () => {
   await validate()
 })
 
-const handleLogout = () => {
-  logout()
-  router.push("/login")
+const handleLogout = async () => {
+  const { success, message } = await logout()
+  if (!success) {
+    snackbarText.value = message || "An unknown error occurred."
+    snackbar.value = true
+    return
+  } else {
+    router.push("/login")
+  }
 }
 
 // Mobile drawer state
