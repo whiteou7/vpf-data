@@ -43,7 +43,7 @@ const meetId = pathToMeet[path]
 
 onMounted(async () => {
   if (meetId) {
-    const response = await $fetch<APIBody<{ results: MeetResultDetailed[] }>>(`/api/meet-info?meet_id=${meetId}`)
+    const response = await $fetch<APIBody<{ results: MeetResultDetailed[] }>>(`/api/meets/${meetId}`)
     if (response.success) {
       results.value = response.data?.results ?? []
     }
