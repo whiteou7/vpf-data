@@ -1,6 +1,7 @@
 import { db } from "~/db"
 import bcrypt from "bcryptjs"
 import type { APIBody } from "~/types/api"
+import { isValidEmail } from "../../utils/utils"
 
 export default defineEventHandler(async (event): Promise<APIBody<null>> => {
   try {
@@ -10,15 +11,22 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     const fullName = body.full_name
 
     // Check if password and email were included
-    if (!email || !password) {
+    if (!email || !password || !fullName) {
       return {
         success: false,
-        error: "Password and email must be included"
+        error: "Full name, password and email must be included"
+      }
+    }
+
+    if (!isValidEmail(email)) {
+      return {
+        success: false,
+        error: "Invalid email format",
       }
     }
 
     // Check if email already exists
-    const [existingUser] = await db<{ vpf_id?: string, password?: string }[]>`
+    const [existingUser] = await db<{ vpf_id: string }[]>`
       SELECT 
         m.vpf_id
       FROM 
@@ -28,7 +36,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     `
 
     // Throw error if user exists
-    if (existingUser.vpf_id) {
+    if (existingUser?.vpf_id) {
       return {
         success: false,
         error: "Email already registered",
