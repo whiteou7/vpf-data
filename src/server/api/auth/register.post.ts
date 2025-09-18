@@ -5,43 +5,37 @@ import type { APIBody } from "~/types/api"
 export default defineEventHandler(async (event): Promise<APIBody<null>> => {
   try {
     const body: { email: string, password: string } = await readBody(event)
-    const email = body.email as string | ""
-    const password = body.password as string |""
+    const email = body.email
+    const password = body.password
+
+    // Check if password and email were included
+    if (!email || !password) {
+      return {
+        success: false,
+        error: "Password and email must be included"
+      }
+    }
 
     // Check if email already exists
-    const existingArr = await db<{ vpf_id?: string, password?: string }[]>`
+    const [existingUser] = await db<{ vpf_id?: string, password?: string }[]>`
       SELECT 
-        m.vpf_id,
-        m.password
+        m.vpf_id
       FROM 
         members m 
       WHERE 
         m.email = ${email};
     `
-    const existingUser = existingArr[0] ?? {}
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    // Throw error if both member id and password exist
-    if (existingUser.vpf_id && existingUser.password) {
+    // Throw error if user exists
+    if (existingUser.vpf_id) {
       return {
         success: false,
         error: "Email already registered",
       }
     }
 
-    // Set password if not exists (for legacy members)
-    if (existingUser.vpf_id && !existingUser.password) {
-      console.log(hashedPassword)
-      await db`
-        UPDATE members SET password = ${hashedPassword} WHERE vpf_id = ${existingUser.vpf_id};
-      `
-      return {
-        success: true,
-        message: "Password set successfully",
-      }
-    }
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     // Insert new user for new account
     await db`
