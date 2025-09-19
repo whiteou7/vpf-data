@@ -2,7 +2,7 @@ import { db } from "../../db"
 import type { Meet } from "~/types/meet"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (): Promise<APIBody<{ meets: Meet[] }>> => {
+export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[] }>> => {
   try {
     const meets = await db<Meet[]>`
       SELECT 
@@ -26,6 +26,9 @@ export default defineEventHandler(async (): Promise<APIBody<{ meets: Meet[] }>> 
       ORDER BY
         host_date ASC
       `
+
+    setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")
+    
     // Format date
     return {
       success: true,
