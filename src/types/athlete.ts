@@ -25,3 +25,19 @@ export type AthletePB = {
   total_pb: number;
   dots_pb: number;
 }
+
+export type AthleteProfile = {
+  vpf_id: string
+  full_name: string
+  nationality?: string
+  dob?: string
+  national_id?: string
+  address?: string
+  phone_number?: string
+  squat_rack_pin?: number
+  bench_rack_pin?: number
+  bench_safety_pin?: number
+  bench_foot_block?: number
+  email: string
+  active: boolean
+}
