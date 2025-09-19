@@ -5,7 +5,7 @@ import type { AthletePB, AthleteCompInfo } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 
 const route = useRoute()
-const vpfId = route.params.id
+const vpfId = route.params.vpf_id
 
 const athleteResult = ref<AthleteCompInfo[]>()
 const athletePB = ref<AthletePB>()
@@ -14,7 +14,7 @@ onMounted(async () => {
   const response = await $fetch<APIBody<{
     results: AthleteCompInfo[]
     pb: AthletePB
-  }>>(`/api/athletes/${vpfId}/stats`)
+  }>>(`/api/athletes/${vpfId}`)
 
   if (response.success) {
     athleteResult.value = response.data?.results
