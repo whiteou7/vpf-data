@@ -2,7 +2,7 @@ import { db } from "../../db"
 import type { AthleteCompInfo } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (): Promise<APIBody<{ athletes: AthleteCompInfo[] }>> => {
+export default defineEventHandler(async (event): Promise<APIBody<{ athletes: AthleteCompInfo[] }>> => {
   try {
     const athletes = await db<AthleteCompInfo[]>`
       SELECT 
@@ -34,6 +34,8 @@ export default defineEventHandler(async (): Promise<APIBody<{ athletes: AthleteC
       ) sub
       ORDER BY gl DESC;
     `
+    
+    setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")
 
     return {
       success: true,

@@ -3,7 +3,7 @@ import type { LiftRecord, TotalRecord } from "~/types/record"
 import { destructureRecords } from "~/utils/utils"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (): Promise<APIBody<ReturnType<typeof destructureRecords>>> => {
+export default defineEventHandler(async (event): Promise<APIBody<ReturnType<typeof destructureRecords>>> => {
   try {
     const squat = await db<LiftRecord[]>`
       SELECT 
@@ -56,6 +56,8 @@ export default defineEventHandler(async (): Promise<APIBody<ReturnType<typeof de
       FROM
         total_records
     `
+    setHeader(event, "Cache-Control", "public, max-age=86400, s-maxage=86400")
+
     return {
       success: true,
       data: destructureRecords({ squat, bench, deadlift, total }),
