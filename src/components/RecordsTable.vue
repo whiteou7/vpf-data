@@ -48,7 +48,7 @@ const headers = ref([
   }
 ])
 
-const props = defineProps<{
+defineProps<{
   items: RecordTableRow[]
   loading: boolean
 }>()
