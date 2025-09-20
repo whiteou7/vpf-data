@@ -11,7 +11,7 @@ export async function validateSession(sessionId: string): Promise<APIBody<{ vpfI
   }
 
   const resultArr = await db<{ vpfId: string; expiresAt: string }[]>`
-    SELECT vpfId, expiresAt
+    SELECT vpf_id, expires_at
     FROM authentication.sessions
     WHERE session_id = ${sessionId}
   `
