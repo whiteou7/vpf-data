@@ -1,11 +1,10 @@
 import { db } from "../../db"
 import type { Meet } from "~/types/meet"
 import type { APIBody } from "~/types/api"
-import humps from "humps"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[] }>> => {
   try {
-    const meets = humps.camelizeKeys(await db`
+    const meets = await db<Meet[]>`
       SELECT 
         mi.meet_id,
         meet_name,
@@ -27,7 +26,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
         host_date
       ORDER BY
         host_date ASC
-      `) as Meet[]
+      `
 
     setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")
     

@@ -1,6 +1,5 @@
 import { db } from "~/db"
-import humps from "humps"
-import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettings } from "~/types/athlete"
+import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettings, Sex } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 import { validateSession } from "~/server/services/validate-session"
 
@@ -8,7 +7,7 @@ const fetchCompHistory = async (vpfId: string): Promise<{
   compInfo: AthleteCompInfo[], 
   pb: AthletePB[]
 }> => {
-  const compInfo = humps.camelizeKeys(await db`
+  const compInfo = await db<AthleteCompInfo[]>`
     SELECT
       full_name,
       sex,
@@ -27,8 +26,8 @@ const fetchCompHistory = async (vpfId: string): Promise<{
     FROM meet_result_detailed
     WHERE vpf_id = ${vpfId}
     ORDER BY meet_id DESC;
-  `) as AthleteCompInfo[]
-  const pb = humps.camelizeKeys(await db`
+  `
+  const pb = await db<AthletePB[]>`
     SELECT
       MAX(best_squat)::float as squat_pb,
       MAX(best_bench)::float as bench_pb,
@@ -37,7 +36,7 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       MAX(gl)::float as gl_pb
     FROM meet_result_detailed
     WHERE vpf_id = ${vpfId}
-  `) as AthletePB[]
+  `
 
   return { compInfo, pb }
 }
@@ -46,10 +45,8 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
   personalInfo: AthletePersonalInfo, 
   compSettings: AthleteCompSettings 
 }> => {
-  const [row] = humps.camelizeKeys(await db`
+  const [row] = await db<(AthleteCompSettings & AthletePersonalInfo)[]>`
     SELECT 
-      vpf_id,
-      full_name,
       nationality,
       dob,
       national_id,
@@ -65,7 +62,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       public.members
     WHERE
       vpf_id = ${vpfId}
-  `) as (AthleteCompSettings & AthletePersonalInfo)[]
+  `
   const compSettings: AthleteCompSettings = { ...row }
   const personalInfo: AthletePersonalInfo = { ...row }
 
@@ -73,6 +70,8 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
 }
 
 export default defineEventHandler(async (event): Promise<APIBody<{ 
+  fullName: string,
+  sex: Sex,
   compInfo: AthleteCompInfo[], 
   pb: AthletePB[], 
   personalInfo?: AthletePersonalInfo, 
@@ -92,11 +91,15 @@ export default defineEventHandler(async (event): Promise<APIBody<{
       }
     }
 
+    // Extract name & gender from comp history
+    const sex = compHistory.compInfo[0].sex
+    const fullName = compHistory.compInfo[0].fullName
+
     // Only return comp history info if url does not have private=true query
     if (!query || query.private !== "true") {
       return {
         success: true,
-        data: compHistory,
+        data: { fullName, sex, ...compHistory },
         message: "Fetched athlete public info"
       }
     }
@@ -120,7 +123,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
 
     return {
       success: true,
-      data: { ...compHistory, ...privateInfo },
+      data: { fullName, sex, ...compHistory, ...privateInfo },
       message: "Fetched athlete info"
     }
   } catch (error) {

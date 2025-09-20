@@ -1,11 +1,10 @@
 import { db } from "../../db"
 import type { AthleteCompInfo } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
-import humps from "humps"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ athletes: AthleteCompInfo[] }>> => {
   try {
-    const athletes = humps.camelizeKeys(await db`
+    const athletes = await db<AthleteCompInfo[]>`
       SELECT 
         ROW_NUMBER() OVER (ORDER BY gl DESC) AS "#",
         vpf_id,
@@ -34,7 +33,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ athletes: Ath
         ORDER BY vpf_id, gl DESC
       ) sub
       ORDER BY gl DESC;
-    `) as AthleteCompInfo[]
+    `
     
     setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")
 
