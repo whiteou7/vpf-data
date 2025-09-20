@@ -7,6 +7,7 @@ const setUserState = (vpf_id: string) => {
 }
 
 export const useAuth = () => {
+  // Set user state and set session_id cookie
   const login = async (email: string, password: string) => {
     try {
       const response = await $fetch<APIBody<{ session_id: string, vpf_id: string }>>("/api/auth/login", {
@@ -38,6 +39,7 @@ export const useAuth = () => {
     }
   }
 
+  // Clear user state and clear session cookie
   const logout = async () => {
     try {
       const response = await $fetch("/api/auth/logout", {
