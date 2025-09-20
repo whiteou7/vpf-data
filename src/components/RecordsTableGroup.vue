@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import type { RecordTableRowGroup } from "~/types/record"
 
-const props = defineProps<{
+defineProps<{
   items: RecordTableRowGroup
   loading: boolean
 }>()
