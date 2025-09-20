@@ -46,12 +46,19 @@
           </v-btn>
         </template>
         <ClientOnly>
-          <v-btn v-if="!user.vpf_id" to="/login" text color="secondary" class="mx-1">
-            Login
-          </v-btn>
-          <v-btn v-else text color="secondary" class="mx-1" @click="handleLogout">
-            Logout
-          </v-btn>
+          <template v-if="!user.vpf_id">
+            <v-btn to="/login" text color="secondary" class="mx-1">
+              Login
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn text color="secondary" class="mx-1" :to="`/athlete/${user.vpf_id}`">
+              Profile
+            </v-btn>
+            <v-btn text color="secondary" class="mx-1" @click="handleLogout">
+              Logout
+            </v-btn>
+          </template>
         </ClientOnly>
       </div>
 
@@ -98,12 +105,19 @@
           </v-list-item>
         </template>
         <ClientOnly>
-          <v-list-item v-if="!user.vpf_id" to="/login" @click="drawer = false">
-            <v-list-item-title class="text-secondary">Login</v-list-item-title>
-          </v-list-item>
-          <v-list-item v-else @click="handleLogout">
-            <v-list-item-title class="text-secondary">Logout</v-list-item-title>
-          </v-list-item>
+          <template v-if="!user.vpf_id">
+            <v-list-item to="/login" @click="drawer = false">
+              <v-list-item-title class="text-secondary">Login</v-list-item-title>
+            </v-list-item>
+          </template>
+          <template v-else>
+            <v-list-item to="/profile" @click="drawer = false">
+              <v-list-item-title class="text-secondary">Profile</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="handleLogout">
+              <v-list-item-title class="text-secondary">Logout</v-list-item-title>
+            </v-list-item>
+          </template>
         </ClientOnly>
       </v-list>
     </v-navigation-drawer>
