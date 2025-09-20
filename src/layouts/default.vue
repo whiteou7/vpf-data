@@ -144,19 +144,14 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue"
 import { useAuth } from "~/composables/useAuth"
 
-const { isLoggedIn, user, logout, validate } = useAuth()
+const { isLoggedIn, user, logout } = await useAuth()
 const router = useRouter()
 
 const snackbar = ref(false)
 const snackbarText = ref("")
 const snackbarColor = ref("error")
-
-onMounted(async () => {
-  await validate()
-})
 
 const handleLogout = async () => {
   const { success, message } = await logout()

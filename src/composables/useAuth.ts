@@ -7,8 +7,10 @@ const setUserState = (vpfId: string) => {
   user.value.vpfId = vpfId
 }
 
-export const useAuth = () => {
-  // Set user state and set sessionId cookie
+let validated = false
+
+export const useAuth = async () => {
+  // Login will set session cookie
   const login = async (email: string, password: string) => {
     try {
       const response = await $fetch<APIBody<{ sessionId: string, vpfId: string }>>("/api/auth/login", {
@@ -16,11 +18,6 @@ export const useAuth = () => {
         body: { email, password }
       })
 
-      if (response.success) {
-        setUserState(response.data?.vpfId ?? "")
-        return response
-      }
-      
       return response
     } catch (error) {
       return { success: false, error: (error as Error).message || "An error occurred" }
@@ -40,7 +37,7 @@ export const useAuth = () => {
     }
   }
 
-  // Clear user state and clear session cookie
+  // Logging out will clear user state and session cookie
   const logout = async () => {
     try {
       const response = await $fetch("/api/auth/logout", {
@@ -59,21 +56,22 @@ export const useAuth = () => {
     try {
       const response = await $fetch<APIBody<{ vpfId: string }>>("/api/auth/validate-session")
 
-      // Insane if clauses
-      // Dont log out if session doesnt exist in the first place
+      // Validating will set user state
       if (response.success) {
         setUserState(response.data?.vpfId ?? "")
-        return response
-      } else if (response.error == "SESSION_NOT_INCLUDED") {
-        return response
-      } else {
-        logout()
-        return response
-      }
+      } else if (response.error !== "SESSION_NOT_INCLUDED") {
+        logout() // Dont log out if session doesnt exist in the first place
+      } 
     } catch (error) {
       logout()
       return { success: false, error: (error as Error).message || "An error occurred" }
     }
+  }
+
+  // Always validate on first call
+  if (!validated) {
+    await validate()
+    validated = true
   }
 
   return {

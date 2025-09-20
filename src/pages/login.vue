@@ -64,7 +64,7 @@ const snackbar = ref(false)
 const snackbarText = ref("")
 const snackbarColor = ref("error")
 
-const { login } = useAuth()
+const { login } = await useAuth()
 const router = useRouter()
 const { smAndDown } = useDisplay()
 
