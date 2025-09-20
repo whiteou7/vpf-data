@@ -28,7 +28,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     // Check if email already exists
     const [existingUser] = await db<{ vpfId: string }[]>`
       SELECT 
-        m.vpf_id as vpfId
+        m.vpf_id 
       FROM 
         members m 
       WHERE 

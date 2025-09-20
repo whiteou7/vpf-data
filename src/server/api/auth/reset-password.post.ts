@@ -12,7 +12,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     // Fetch user by email
     const userArr = await db<{ vpfId?: string, password?: string }[]>`
       SELECT
-        m.vpf_id as vpfId,
+        m.vpf_id,
         m.password
       FROM
         members m

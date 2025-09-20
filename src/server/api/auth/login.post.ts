@@ -20,7 +20,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
     // Fetch user by email
     const userArr = await db<{ vpfId?: string, password?: string }[]>`
       SELECT
-        m.vpf_id as vpfId,
+        m.vpf_id,
         m.password
       FROM
         members m
@@ -29,7 +29,6 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
     `
     const user = userArr[0] ?? {}
     const hashedPassword = user.password as string | undefined
-
     // Check if user or password exists
     if (!hashedPassword || !user.vpfId) {
       return {

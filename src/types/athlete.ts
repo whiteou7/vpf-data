@@ -1,10 +1,10 @@
 export type AthleteCompInfo = {
   "#"?: number;
   vpfId: string;
-  fullName?: string;
+  fullName: string;
   weightClass: number;
   bodyWeight?: number;
-  sex?: Sex;
+  sex: Sex;
   division: Division;
   bestSquat: number;
   bestBench: number;
@@ -27,8 +27,6 @@ export type AthletePB = {
 }
 
 export type AthletePersonalInfo = {
-  vpfId: string
-  fullName: string
   nationality?: string
   dob?: string
   nationalId?: string
