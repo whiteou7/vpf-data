@@ -45,7 +45,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
   personal_info: AthletePersonalInfo, 
   comp_settings: AthleteCompSettings 
 }> => {
-  const [personalInfo] = await db<AthletePersonalInfo[]>`
+  const [row] = await db<(AthletePersonalInfo & AthleteCompSettings)[]>`
     SELECT 
       vpf_id,
       full_name,
@@ -55,15 +55,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       address,
       phone_number,
       email,
-      active
-    FROM 
-      public.members
-    WHERE
-      vpf_id = ${vpfId}
-  `
-
-  const [compSettings] = await db<AthleteCompSettings[]>`
-    SELECT 
+      active,
       squat_rack_pin,
       bench_rack_pin,
       bench_safety_pin,
@@ -73,6 +65,9 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     WHERE
       vpf_id = ${vpfId}
   `
+
+  const compSettings: AthleteCompSettings = { ...row }
+  const personalInfo: AthletePersonalInfo = { ...row }
 
   return { personal_info: personalInfo, comp_settings: compSettings }
 }
@@ -89,6 +84,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
 
     const compHistory = await fetchCompHistory(vpfId)
 
+    // Check if competition data is available
     if (compHistory.comp_info.length === 0) {
       return {
         success: false,
@@ -96,8 +92,8 @@ export default defineEventHandler(async (event): Promise<APIBody<{
       }
     }
 
-    // Only return comp history info if url has public=true query to avoid having to validate session
-    if (query && query.public === "true") {
+    // Only return comp history info if url does not have private=true query
+    if (!query || query.private !== "true") {
       return {
         success: true,
         data: compHistory,
