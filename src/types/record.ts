@@ -1,9 +1,9 @@
 import type { Division, Sex } from "./athlete"
 
 export type LiftRecord = {
-  meet_name: string;
-  full_name: string;
-  weight_class: number;
+  meetName: string;
+  fullName: string;
+  weightClass: number;
   rank: 1 | 2 | 3;
   sex: Sex;
   division: Division;
@@ -53,7 +53,7 @@ export type RecordTableRow = {
   gold: Result | null;
   silver: Result | null;
   bronze: Result | null;
-  weight_class: number;
+  weightClass: number;
   sex: Sex
 }
 

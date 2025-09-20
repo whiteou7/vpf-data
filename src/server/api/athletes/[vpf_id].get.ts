@@ -1,13 +1,14 @@
 import { db } from "~/db"
+import humps from "humps"
 import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettings } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 import { validateSession } from "~/server/services/validate-session"
 
 const fetchCompHistory = async (vpfId: string): Promise<{ 
-  comp_info: AthleteCompInfo[], 
+  compInfo: AthleteCompInfo[], 
   pb: AthletePB[]
 }> => {
-  const compInfo = await db<AthleteCompInfo[]>`
+  const compInfo = humps.camelizeKeys(await db`
     SELECT
       full_name,
       sex,
@@ -26,8 +27,8 @@ const fetchCompHistory = async (vpfId: string): Promise<{
     FROM meet_result_detailed
     WHERE vpf_id = ${vpfId}
     ORDER BY meet_id DESC;
-  `
-  const pb = await db<AthletePB[]>`
+  `) as AthleteCompInfo[]
+  const pb = humps.camelizeKeys(await db`
     SELECT
       MAX(best_squat)::float as squat_pb,
       MAX(best_bench)::float as bench_pb,
@@ -36,16 +37,16 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       MAX(gl)::float as gl_pb
     FROM meet_result_detailed
     WHERE vpf_id = ${vpfId}
-  `
+  `) as AthletePB[]
 
-  return { comp_info: compInfo, pb }
+  return { compInfo, pb }
 }
 
 const fetchPrivateInfo = async (vpfId: string): Promise<{ 
-  personal_info: AthletePersonalInfo, 
-  comp_settings: AthleteCompSettings 
+  personalInfo: AthletePersonalInfo, 
+  compSettings: AthleteCompSettings 
 }> => {
-  const [row] = await db<(AthletePersonalInfo & AthleteCompSettings)[]>`
+  const [row] = humps.camelizeKeys(await db`
     SELECT 
       vpf_id,
       full_name,
@@ -64,19 +65,18 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       public.members
     WHERE
       vpf_id = ${vpfId}
-  `
-
+  `) as (AthleteCompSettings & AthletePersonalInfo)[]
   const compSettings: AthleteCompSettings = { ...row }
   const personalInfo: AthletePersonalInfo = { ...row }
 
-  return { personal_info: personalInfo, comp_settings: compSettings }
+  return { personalInfo, compSettings }
 }
 
 export default defineEventHandler(async (event): Promise<APIBody<{ 
-  comp_info: AthleteCompInfo[], 
+  compInfo: AthleteCompInfo[], 
   pb: AthletePB[], 
-  personal_info?: AthletePersonalInfo, 
-  comp_settings?: AthleteCompSettings 
+  personalInfo?: AthletePersonalInfo, 
+  compSettings?: AthleteCompSettings 
 }>> => {
   try {  
     const vpfId = event.context.params?.vpf_id || ""
@@ -85,7 +85,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
     const compHistory = await fetchCompHistory(vpfId)
 
     // Check if competition data is available
-    if (compHistory.comp_info.length === 0) {
+    if (compHistory.compInfo.length === 0) {
       return {
         success: false,
         message: "No competition data available"
@@ -107,7 +107,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
     const sessionValidation = await validateSession(sessionId || "")
   
     // Extract vpfId from response
-    const validatedVpfId = sessionValidation?.data?.vpf_id
+    const validatedVpfId = sessionValidation?.data?.vpfId
 
     // Check if the validated session's vpfId matches the requested vpfId
     const authorized = validatedVpfId == vpfId

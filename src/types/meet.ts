@@ -1,22 +1,22 @@
 import type { Division, Sex } from "./athlete"
 
 export type Meet = {
-  id: number;
-  meet_name: string;
+  meetId: number;
+  meetName: string;
   city: string;
-  host_date: string;
-  media_link: string;
+  hostDate: string;
+  mediaLink: string;
   count: number;
   slug: string
 }
 
 export type MeetResult = {
-  meet_id: number;
-  athlete_id: string;
+  meetId: number;
+  athleteId: string;
   sex: Sex;
-  weight_class: number;
+  weightClass: number;
   division: Division;
-  body_weight: number;
+  bodyWeight: number;
   squat1: number;
   squat2: number;
   squat3: number;
@@ -28,7 +28,7 @@ export type MeetResult = {
   dead3: number;
   session: string;
   flight: string;
-  full_name: string;
+  fullName: string;
   total: number;
   gl: number;
 }

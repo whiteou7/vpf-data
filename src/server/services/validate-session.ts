@@ -1,7 +1,7 @@
 import { db } from "~/db"
 import type { APIBody } from "~/types/api"
 
-export async function validateSession(sessionId: string): Promise<APIBody<{ vpf_id: string }>> {
+export async function validateSession(sessionId: string): Promise<APIBody<{ vpfId: string }>> {
   if (!sessionId) {
     return {
       success: false,
@@ -10,8 +10,8 @@ export async function validateSession(sessionId: string): Promise<APIBody<{ vpf_
     }
   }
 
-  const resultArr = await db<{ vpf_id: string; expires_at: string }[]>`
-    SELECT vpf_id, expires_at
+  const resultArr = await db<{ vpfId: string; expiresAt: string }[]>`
+    SELECT vpfId, expiresAt
     FROM authentication.sessions
     WHERE session_id = ${sessionId}
   `
@@ -26,7 +26,7 @@ export async function validateSession(sessionId: string): Promise<APIBody<{ vpf_
   }
 
   // Check if session expired
-  if (new Date(result.expires_at).getTime() < Date.now()) {
+  if (new Date(result.expiresAt).getTime() < Date.now()) {
     return {
       success: false,
       message: "Session expired"
@@ -36,6 +36,6 @@ export async function validateSession(sessionId: string): Promise<APIBody<{ vpf_
   return {
     success: true,
     message: "Session validated",
-    data: { vpf_id: result.vpf_id }
+    data: { vpfId: result.vpfId }
   }
 }

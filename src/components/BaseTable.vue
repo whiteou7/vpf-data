@@ -15,20 +15,20 @@
     <template #loading>
       <v-skeleton-loader type="table-row@10"/>
     </template>
-    <template #item.full_name="{ item }">
-      <NuxtLink :to="`/athlete/${item.vpf_id}`" class="hover:text-red-500 active:text-red-500">
-        {{ item.full_name }}
+    <template #item.fullName="{ item }">
+      <NuxtLink :to="`/athlete/${item.vpfId}`" class="hover:text-red-500 active:text-red-500">
+        {{ item.fullName }}
       </NuxtLink>
     </template>
 
-    <template #item.meet_name="{ item }">
+    <template #item.meetName="{ item }">
       <NuxtLink :to="`/meet/${item.slug}`" class="hover:underline text-primary">
-        {{ item.meet_name }}
+        {{ item.meetName }}
       </NuxtLink>
     </template>
 
-    <template #item.media_link="{ item }">
-      <a v-if="item.media_link" :href="item.media_link" target="_blank">
+    <template #item.mediaLink="{ item }">
+      <a v-if="item.mediaLink" :href="item.mediaLink" target="_blank">
         <v-icon icon="mdi-folder-outline"/>
       </a>
       <a v-else class="cursor-not-allowed">
@@ -43,17 +43,17 @@
     <template #item.division="{ item }">
       {{ divisionMap[item.division] ?? item.division }}
     </template>
-    <template #item.weight_class="{ item }">
-      {{ getWeightClassDisplay(item.weight_class, item.sex as Sex) }}
+    <template #item.weightClass="{ item }">
+      {{ getWeightClassDisplay(item.weightClass, item.sex as Sex) }}
     </template>
-    <template #item.best_squat="{ item }">
-      <span class="text-yellow-400 font-semibold">{{ item.best_squat !== null && item.best_squat !== undefined ? item.best_squat : item.squat_pb }}</span>
+    <template #item.bestSquat="{ item }">
+      <span class="text-yellow-400 font-semibold">{{ item.bestSquat !== null && item.bestSquat !== undefined ? item.bestSquat : item.squatPb }}</span>
     </template>
-    <template #item.best_bench="{ item }">
-      <span class="text-cyan-400 font-semibold">{{ item.best_bench !== null && item.best_bench !== undefined ? item.best_bench : item.bench_pb }}</span>
+    <template #item.bestBench="{ item }">
+      <span class="text-cyan-400 font-semibold">{{ item.bestBench !== null && item.bestBench !== undefined ? item.bestBench : item.benchPb }}</span>
     </template>
-    <template #item.best_dead="{ item }">
-      <span class="text-purple-400 font-semibold">{{ item.best_dead !== null && item.best_dead !== undefined ? item.best_dead : item.deadlift_pb }}</span>
+    <template #item.bestDead="{ item }">
+      <span class="text-purple-400 font-semibold">{{ item.bestDead !== null && item.bestDead !== undefined ? item.bestDead : item.deadliftPb }}</span>
     </template>
 
     <template #item.squat1="{ item }">

@@ -3,7 +3,7 @@
     <div class="max-w-[95%] mx-auto">
       <!-- Shared Header -->
       <h1 class="text-3xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
-        {{ personalInfo?.full_name }}
+        {{ personalInfo?.fullName }}
         <span v-if="personalInfo?.sex"> ({{ personalInfo.sex === 'male' ? 'M' : 'F' }})</span>
       </h1>
       <!-- Navigation Buttons -->
@@ -26,13 +26,13 @@
           <v-card-title class="text-xl font-bold">Personal Information</v-card-title>
           <v-card-text>
             <div class="space-y-2">
-              <div><strong>Name:</strong> {{ personalInfo.full_name }}</div>
+              <div><strong>Name:</strong> {{ personalInfo.fullName }}</div>
               <div><strong>Email:</strong> {{ personalInfo.email }}</div>
               <div><strong>Nationality:</strong> {{ personalInfo.nationality }}</div>
               <div><strong>Date of Birth:</strong> {{ personalInfo.dob }}</div>
-              <div><strong>National ID:</strong> {{ personalInfo.national_id }}</div>
+              <div><strong>National ID:</strong> {{ personalInfo.nationalId }}</div>
               <div><strong>Address:</strong> {{ personalInfo.address }}</div>
-              <div><strong>Phone Number:</strong> {{ personalInfo.phone_number }}</div>
+              <div><strong>Phone Number:</strong> {{ personalInfo.phoneNumber }}</div>
             </div>
           </v-card-text>
         </v-card>
@@ -40,12 +40,12 @@
           <v-card-title class="text-xl font-bold">Competition Settings</v-card-title>
           <v-card-text>
             <div class="space-y-2">
-              <div><strong>Squat Rack Pin:</strong> {{ compSettings.squat_rack_pin }}</div>
-              <div><strong>Bench Rack Pin:</strong> {{ compSettings.bench_rack_pin }}</div>
-              <div><strong>Bench Safety Pin:</strong> {{ compSettings.bench_safety_pin }}</div>
-              <div><strong>Bench Foot Block:</strong> {{ compSettings.bench_foot_block }}</div>
+              <div><strong>Squat Rack Pin:</strong> {{ compSettings.squatRackPin }}</div>
+              <div><strong>Bench Rack Pin:</strong> {{ compSettings.benchRackPin }}</div>
+              <div><strong>Bench Safety Pin:</strong> {{ compSettings.benchSafetyPin }}</div>
+              <div><strong>Bench Foot Block:</strong> {{ compSettings.benchFootBlock }}</div>
               <div><strong>Active:</strong> {{ compSettings.active ? 'Yes' : 'No' }}</div>
-              <div><strong>Drug Violate:</strong> {{ compSettings.drug_violate ? 'Yes' : 'No' }}</div>
+              <div><strong>Drug Violate:</strong> {{ compSettings.drugViolate ? 'Yes' : 'No' }}</div>
             </div>
           </v-card-text>
         </v-card>
@@ -81,12 +81,12 @@ onMounted(async () => {
   try {
     // Get session info from validate-session endpoint
     const sessionRes = await $fetch("/api/auth/validate-session")
-    if (!sessionRes.success || !sessionRes.data?.vpf_id) {
+    if (!sessionRes.success || !sessionRes.data?.vpfId) {
       router.replace("/")
       return
     }
 
-    const vpfId = sessionRes.data.vpf_id
+    const vpfId = sessionRes.data.vpfId
     // Fetch settings for the logged-in user
     const res = await $fetch(`/api/athletes/${vpfId}`)
     if (!res.success || !res.data) {
@@ -94,8 +94,8 @@ onMounted(async () => {
       return
     }
 
-    personalInfo.value = res.data.personal_info
-    compSettings.value = res.data.comp_settings
+    personalInfo.value = res.data.personalInfo
+    compSettings.value = res.data.compSettings
     // Set tab from query param if present
     const tabParam = router.currentRoute.value.query.tab
     if (tabParam === "personal" || tabParam === "competition") {

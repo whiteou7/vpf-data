@@ -53,7 +53,7 @@ const filteredResults = computed(() => {
     const matchesSex = filters.sexFilter.value ? r.sex === filters.sexFilter.value : true
     const matchesDivision = filters.divisionFilter.value ? r.division === filters.divisionFilter.value : true
     const matchesWeightClass = filters.weightClassFilter.value.weight
-      ? r.weight_class === filters.weightClassFilter.value.weight && r.sex === filters.weightClassFilter.value.sex
+      ? r.weightClass === filters.weightClassFilter.value.weight && r.sex === filters.weightClassFilter.value.sex
       : true
     return matchesSex && matchesDivision && matchesWeightClass
   })
@@ -72,11 +72,11 @@ const groupedResults = computed(() => {
 })
 
 const headers = [
-  { title: "Full Name", value: "full_name" },
+  { title: "Full Name", value: "fullName" },
   { title: "Sex", value: "sex" },
-  { title: "Weight Class", value: "weight_class" },
+  { title: "Weight Class", value: "weightClass" },
   { title: "Division", value: "division" },
-  { title: "Body Weight", value: "body_weight" },
+  { title: "Body Weight", value: "bodyWeight" },
   { title: "Flight", value: "flight" },
   { title: "Squat 1", value: "squat1" },
   { title: "Squat 2", value: "squat2" },

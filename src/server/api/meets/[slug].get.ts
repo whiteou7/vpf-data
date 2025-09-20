@@ -1,6 +1,7 @@
 import { db } from "../../../db"
 import type { MeetResult } from "~/types/meet"
 import type { APIBody } from "~/types/api"
+import humps from "humps"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ results: MeetResult[] }>> => {
   const slug = event.context.params?.slug
@@ -13,7 +14,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
   }
 
   try {
-    const results = await db<MeetResult[]>`
+    const results = humps.camelizeKeys(await db`
       SELECT 
         meet_id,
         vpf_id,
@@ -45,7 +46,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
         weight_class,
         division,
         placement;
-    `
+    `) as MeetResult[]
     return {
       success: true,
       data: { results },

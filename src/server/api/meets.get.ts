@@ -1,10 +1,11 @@
 import { db } from "../../db"
 import type { Meet } from "~/types/meet"
 import type { APIBody } from "~/types/api"
+import humps from "humps"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[] }>> => {
   try {
-    const meets = await db<Meet[]>`
+    const meets = humps.camelizeKeys(await db`
       SELECT 
         mi.meet_id,
         meet_name,
@@ -26,14 +27,14 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
         host_date
       ORDER BY
         host_date ASC
-      `
+      `) as Meet[]
 
     setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")
     
     // Format date
     return {
       success: true,
-      data: { meets: meets.map(meet => ({ ...meet, host_date: new Date(meet.host_date).toLocaleDateString("en-GB") })) },
+      data: { meets: meets.map(meet => ({ ...meet, hostDate: new Date(meet.hostDate).toLocaleDateString("en-GB") })) },
     }
   } catch (error) {
     console.error("Error fetching meets info:", error)
