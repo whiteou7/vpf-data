@@ -1,19 +1,19 @@
 import { db } from "../../../db"
-import type { MeetResultDetailed } from "~/types/meet"
+import type { MeetResult } from "~/types/meet"
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event): Promise<APIBody<{ results: MeetResultDetailed[] }>> => {
-  const meetId = event.context.params?.meet_id
+export default defineEventHandler(async (event): Promise<APIBody<{ results: MeetResult[] }>> => {
+  const slug = event.context.params?.slug
 
-  if (!meetId) {
+  if (!slug) {
     return {
       success: false,
-      message: "meet_id is required",
+      message: "Slug is required",
     }
   }
 
   try {
-    const results = await db<MeetResultDetailed[]>`
+    const results = await db<MeetResult[]>`
       SELECT 
         meet_id,
         vpf_id,
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
       FROM
         meet_result_detailed
       WHERE
-        meet_id = ${meetId}
+        slug = ${slug}
       ORDER BY
         flight,
         weight_class,

@@ -2,14 +2,15 @@ import type { Division, Sex } from "./athlete"
 
 export type Meet = {
   id: number;
-  name: string;
+  meet_name: string;
   city: string;
   host_date: string;
   media_link: string;
   count: number;
+  slug: string
 }
 
-export type MeetResultDetailed = {
+export type MeetResult = {
   meet_id: number;
   athlete_id: string;
   sex: Sex;

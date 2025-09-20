@@ -7,11 +7,12 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
     const meets = await db<Meet[]>`
       SELECT 
         mi.meet_id,
-        name,
+        meet_name,
         city,
         host_date,
         media_link,
-        COUNT(vpf_id) as count
+        COUNT(vpf_id) as count,
+        slug
       FROM
         meet_info mi
       JOIN 
@@ -20,7 +21,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
         mi.meet_id = mr.meet_id
       GROUP BY
         mi.meet_id,
-        name,
+        meet_name,
         city,
         host_date
       ORDER BY
