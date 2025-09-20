@@ -7,7 +7,11 @@ const route = useRoute()
 const router = useRouter()
 
 const vpfId = route.params.vpf_id as string
-const isPrivate = route.query?.private == "true"
+const { user } = useAuth()
+
+// Variable to decide whether to request to fetch private information as well
+// Only request when vpf id of path matches vpf of user state (server still have to verify session_id)
+const isPrivate = vpfId == user.value.vpfId
 
 const loading = ref(true)
 const fullName = ref<string>()
