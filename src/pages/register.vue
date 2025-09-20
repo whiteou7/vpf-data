@@ -90,7 +90,7 @@ const snackbar = ref(false)
 const snackbarText = ref("")
 const snackbarColor = ref("error")
 
-const { register } = useAuth()
+const { register } = await useAuth()
 const router = useRouter()
 const { smAndDown } = useDisplay()
 
