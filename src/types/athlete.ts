@@ -26,7 +26,7 @@ export type AthletePB = {
   dots_pb: number;
 }
 
-export type AthleteProfile = {
+export type AthletePersonalInfo = {
   vpf_id: string
   full_name: string
   nationality?: string
@@ -34,10 +34,13 @@ export type AthleteProfile = {
   national_id?: string
   address?: string
   phone_number?: string
+  email: string
+  active: boolean
+}
+
+export type AthleteCompSettings = {
   squat_rack_pin?: number
   bench_rack_pin?: number
   bench_safety_pin?: number
   bench_foot_block?: number
-  email: string
-  active: boolean
 }
