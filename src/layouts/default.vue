@@ -45,14 +45,16 @@
             {{ item.name }}
           </v-btn>
         </template>
+
+        <!-- Rendered depending on logged in state -->
         <ClientOnly>
-          <template v-if="!user.vpfId">
+          <template v-if="!isLoggedIn">
             <v-btn to="/login" text color="secondary" class="mx-1">
               Login
             </v-btn>
           </template>
           <template v-else>
-            <v-btn text color="secondary" class="mx-1" :to="`/athlete/${user.vpfId}`">
+            <v-btn text color="secondary" class="mx-1" :to="`/athlete/${user.vpfId}?private=true`">
               Profile
             </v-btn>
             <v-btn text color="secondary" class="mx-1" @click="handleLogout">
@@ -104,14 +106,15 @@
             </v-list-item-title>
           </v-list-item>
         </template>
+        <!-- Rendered depending on logged in state -->
         <ClientOnly>
-          <template v-if="!user.vpfId">
+          <template v-if="!isLoggedIn">
             <v-list-item to="/login" @click="drawer = false">
               <v-list-item-title class="text-secondary">Login</v-list-item-title>
             </v-list-item>
           </template>
           <template v-else>
-            <v-list-item to="/profile" @click="drawer = false">
+            <v-list-item :to="`/athlete/${user.vpfId}?private=true`" @click="drawer = false">
               <v-list-item-title class="text-secondary">Profile</v-list-item-title>
             </v-list-item>
             <v-list-item @click="handleLogout">
@@ -144,7 +147,7 @@
 import { ref, watch, onMounted } from "vue"
 import { useAuth } from "~/composables/useAuth"
 
-const { user, logout, validate } = useAuth()
+const { isLoggedIn, user, logout, validate } = useAuth()
 const router = useRouter()
 
 const snackbar = ref(false)

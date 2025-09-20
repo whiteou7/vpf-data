@@ -1,5 +1,6 @@
 import type { APIBody } from "~/types/api"
 
+// Minimal current user state
 const user = ref<{ vpfId: string }>({ vpfId: "" })
 
 const setUserState = (vpfId: string) => {
@@ -76,6 +77,7 @@ export const useAuth = () => {
   }
 
   return {
+    isLoggedIn: computed(() => !!user.value.vpfId),
     user,
     login,
     register,
