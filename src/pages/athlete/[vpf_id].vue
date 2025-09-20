@@ -1,53 +1,38 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router"
 import BaseTable from "~/components/BaseTable.vue"
-import { ref, onMounted } from "vue"
-import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettings } from "~/types/athlete"
-import type { APIBody } from "~/types/api"
+import type { Sex } from "~/types/athlete"
 
 const route = useRoute()
 const router = useRouter()
-const vpfId = route.params.vpf_id
 
-const compInfo = ref<AthleteCompInfo[]>()
-const pb = ref<AthletePB>()
-const personalInfo = ref<AthletePersonalInfo>()
-const compSettings = ref<AthleteCompSettings>()
-const authorized = ref(false)
+const vpfId = route.params.vpf_id as string
+const isPrivate = route.query?.private == "true"
+
 const loading = ref(true)
-const activeTab = ref<'history' | 'personal' | 'competition'>('history')
+const fullName = ref<string>()
+const sex = ref<Sex>()
+const compInfo = ref()
+const pb = ref()
 
 onMounted(async () => {
-  // Fetch athlete data
-  const response = await $fetch<APIBody<{
-    compInfo: AthleteCompInfo[]
-    pb: AthletePB
-    personalInfo?: AthletePersonalInfo
-    compSettings?: AthleteCompSettings
-  }>>(`/api/athletes/${vpfId}`)
-  if (response.success) {
-    compInfo.value = response.data?.compInfo
-    pb.value = response.data?.pb
-    personalInfo.value = response.data?.personalInfo
-    compSettings.value = response.data?.compSettings
-  }
+  await useFetchAthlete().fetch(vpfId, isPrivate)
+  const data = useFetchAthlete()
 
-  // Check authorization
-  try {
-    const sessionRes = await $fetch('/api/auth/validate-session')
-    if (sessionRes.success && sessionRes.data?.vpfId == vpfId) {
-      authorized.value = true
-    }
-  } catch {}
+  fullName.value = data.fullName.value
+  sex.value = data.sex.value
+  compInfo.value = data.compInfo.value
+  pb.value = data.pb.value
+
   loading.value = false
 })
 
-function goToTab(tab: 'history' | 'personal' | 'competition') {
-  if (tab === 'history') {
+function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
+  if (tab === "compHistory") {
     router.push(`/athlete/${vpfId}`)
-  } else if (tab === 'personal') {
-    router.push(`/athlete/${vpfId}/settings`)
-  } else if (tab === 'competition') {
+  } else if (tab === "personalInfo") {
+    router.push(`/athlete/${vpfId}/personal-info`)
+  } else if (tab === "compSettings") {
     router.push(`/athlete/${vpfId}/settings`)
   }
 }
@@ -79,20 +64,20 @@ const compInfoHeaders = [
     <div v-if="loading" class="flex items-center justify-center h-96">
       <v-progress-circular color="primary" indeterminate :size="81" />
     </div>
-    <div v-else-if="compInfo && pb" class="max-w-[95%] mx-auto">
+    <div v-else-if="compInfo" class="max-w-[95%] mx-auto">
       <!-- Shared Header -->
       <h1 class="text-3xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
-        {{ compInfo[0].fullName + " (" + (compInfo[0].sex === 'male' ? 'M' : 'F') + ")" }}
+        {{ fullName + " (" + ((sex === 'male') ? 'M' : 'F') + ")" }}
       </h1>
       <!-- Navigation Buttons (only for authorized user) -->
-      <div v-if="authorized" class="flex gap-4 mb-6">
-        <v-btn :color="'primary'" variant="tonal" @click="goToTab('history')">
+      <div v-if="isPrivate" class="flex gap-4 mb-6">
+        <v-btn :color="'primary'" variant="tonal" @click="goToTab('compHistory')">
           Competition History
         </v-btn>
-        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('personal')">
+        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('personalInfo')">
           Personal Info
         </v-btn>
-        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('competition')">
+        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('compSettings')">
           Competition Settings
         </v-btn>
       </div>
@@ -112,6 +97,11 @@ const compInfoHeaders = [
         :headers="compInfoHeaders"
         :items="compInfo"
       />
+    </div>
+    <div v-else>
+      <h1 class="text-2xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
+        No competition data is available.
+      </h1>
     </div>
   </div>
 </template>
