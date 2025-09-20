@@ -1,22 +1,22 @@
 import type { APIBody } from "~/types/api"
 
-const user = ref<{ vpf_id: string }>({ vpf_id: "" })
+const user = ref<{ vpfId: string }>({ vpfId: "" })
 
-const setUserState = (vpf_id: string) => {
-  user.value.vpf_id = vpf_id
+const setUserState = (vpfId: string) => {
+  user.value.vpfId = vpfId
 }
 
 export const useAuth = () => {
-  // Set user state and set session_id cookie
+  // Set user state and set sessionId cookie
   const login = async (email: string, password: string) => {
     try {
-      const response = await $fetch<APIBody<{ session_id: string, vpf_id: string }>>("/api/auth/login", {
+      const response = await $fetch<APIBody<{ sessionId: string, vpfId: string }>>("/api/auth/login", {
         method: "POST",
         body: { email, password }
       })
 
       if (response.success) {
-        setUserState(response.data?.vpf_id ?? "")
+        setUserState(response.data?.vpfId ?? "")
         return response
       }
       
@@ -30,7 +30,7 @@ export const useAuth = () => {
     try {
       const response = await $fetch<APIBody<null>>("/api/auth/register", {
         method: "POST",
-        body: { full_name: fullName, email, password }
+        body: { fullName, email, password }
       })
 
       return response
@@ -56,12 +56,12 @@ export const useAuth = () => {
 
   const validate = async () => {
     try {
-      const response = await $fetch<APIBody<{ vpf_id: string }>>("/api/auth/validate-session")
+      const response = await $fetch<APIBody<{ vpfId: string }>>("/api/auth/validate-session")
 
       // Insane if clauses
       // Dont log out if session doesnt exist in the first place
       if (response.success) {
-        setUserState(response.data?.vpf_id ?? "")
+        setUserState(response.data?.vpfId ?? "")
         return response
       } else if (response.error == "SESSION_NOT_INCLUDED") {
         return response

@@ -2,10 +2,11 @@ import { db } from "../../db"
 import type { LiftRecord, TotalRecord } from "~/types/record"
 import { destructureRecords } from "~/utils/utils"
 import type { APIBody } from "~/types/api"
+import humps from "humps"
 
 export default defineEventHandler(async (event): Promise<APIBody<ReturnType<typeof destructureRecords>>> => {
   try {
-    const squat = await db<LiftRecord[]>`
+    const squat = humps.camelizeKeys(await db`
       SELECT 
         meet_name,
         full_name,
@@ -16,8 +17,8 @@ export default defineEventHandler(async (event): Promise<APIBody<ReturnType<type
         rank
       FROM
         squat_records
-    `
-    const bench = await db<LiftRecord[]>`
+    `) as LiftRecord[]
+    const bench = humps.camelizeKeys(await db`
       SELECT 
         meet_name,
         full_name,
@@ -28,8 +29,8 @@ export default defineEventHandler(async (event): Promise<APIBody<ReturnType<type
         rank
       FROM
         bench_records
-    `
-    const deadlift = await db<LiftRecord[]>`
+    `) as LiftRecord[]
+    const deadlift = humps.camelizeKeys(await db`
       SELECT 
         meet_name,
         full_name,
@@ -40,8 +41,8 @@ export default defineEventHandler(async (event): Promise<APIBody<ReturnType<type
         rank
       FROM
         deadlift_records
-    `
-    const total = await db<TotalRecord[]>`
+    `) as LiftRecord[]
+    const total = humps.camelizeKeys(await db`
       SELECT 
         meet_name,
         full_name,
@@ -55,7 +56,7 @@ export default defineEventHandler(async (event): Promise<APIBody<ReturnType<type
         rank
       FROM
         total_records
-    `
+    `) as TotalRecord[]
     setHeader(event, "Cache-Control", "public, max-age=86400, s-maxage=86400")
 
     return {

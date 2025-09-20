@@ -69,7 +69,7 @@ const cityOptions = computed<{ title: string, value: string | null }[]>(() => {
 })
 
 const yearOptions = computed<{ title: string, value: number | null }[]>(() => {
-  const years = new Set(meets.value.map(meet => new Date(meet.host_date).getFullYear()))
+  const years = new Set(meets.value.map(meet => new Date(meet.hostDate).getFullYear()))
   const options: { title: string, value: number | null }[] = [{ title: "All", value: null }]
   years.forEach(year => options.push({ title: year.toString(), value: year }))
   return options
@@ -78,18 +78,18 @@ const yearOptions = computed<{ title: string, value: number | null }[]>(() => {
 const filteredMeets = computed(() => {
   return meets.value.filter(meet => {
     const matchesCity = cityFilter.value ? meet.city === cityFilter.value : true
-    const matchesYear = yearFilter.value ? new Date(meet.host_date).getFullYear() === yearFilter.value : true
+    const matchesYear = yearFilter.value ? new Date(meet.hostDate).getFullYear() === yearFilter.value : true
     return matchesCity && matchesYear
   })
 })
 
 // Table header config
 const headers = [
-  { title: "Date", value: "host_date", sortable: false },
+  { title: "Date", value: "hostDate", sortable: false },
   { title: "City", value: "city", sortable: false },
-  { title: "Name", value: "meet_name", sortable: false },
+  { title: "Name", value: "meetName", sortable: false },
   { title: "Athletes", value: "count" },
-  { title: "Media", value: "media_link", sortable: false }
+  { title: "Media", value: "mediaLink", sortable: false }
 ]
 </script>
 

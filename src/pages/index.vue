@@ -45,7 +45,7 @@ const filteredAthletes = computed(() => {
     const matchesSex = filters.sexFilter.value ? athlete.sex === filters.sexFilter.value : true
     const matchesDivision = filters.divisionFilter.value ? athlete.division === filters.divisionFilter.value : true
     const matchesWeightClass = filters.weightClassFilter.value.weight
-      ? athlete.weight_class === filters.weightClassFilter.value.weight && athlete.sex === filters.weightClassFilter.value.sex
+      ? athlete.weightClass === filters.weightClassFilter.value.weight && athlete.sex === filters.weightClassFilter.value.sex
       : true
     return matchesSex && matchesDivision && matchesWeightClass
   })
@@ -53,10 +53,10 @@ const filteredAthletes = computed(() => {
 
 const headers = [
   { title: "#", value: "#", sortable: true },
-  { title: "Name", value: "full_name" },
+  { title: "Name", value: "fullName" },
   { 
     title: "Class", 
-    value: "weight_class", 
+    value: "weightClass", 
     sortable: true,
     // Custom sort function to handle the 999 value properly
     sort: (a: number, b: number): number => {
@@ -69,9 +69,9 @@ const headers = [
   },
   { title: "Sex", value: "sex" },
   { title: "Division", value: "division" },
-  { title: "Squat", value: "best_squat", sortable: true },
-  { title: "Bench", value: "best_bench", sortable: true },
-  { title: "Deadlift", value: "best_dead", sortable: true },
+  { title: "Squat", value: "bestSquat", sortable: true },
+  { title: "Bench", value: "bestBench", sortable: true },
+  { title: "Deadlift", value: "bestDead", sortable: true },
   { title: "Total", value: "total", sortable: true },
   { title: "GL", value: "gl", sortable: true },
 ]

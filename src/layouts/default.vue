@@ -46,13 +46,13 @@
           </v-btn>
         </template>
         <ClientOnly>
-          <template v-if="!user.vpf_id">
+          <template v-if="!user.vpfId">
             <v-btn to="/login" text color="secondary" class="mx-1">
               Login
             </v-btn>
           </template>
           <template v-else>
-            <v-btn text color="secondary" class="mx-1" :to="`/athlete/${user.vpf_id}`">
+            <v-btn text color="secondary" class="mx-1" :to="`/athlete/${user.vpfId}`">
               Profile
             </v-btn>
             <v-btn text color="secondary" class="mx-1" @click="handleLogout">
@@ -105,7 +105,7 @@
           </v-list-item>
         </template>
         <ClientOnly>
-          <template v-if="!user.vpf_id">
+          <template v-if="!user.vpfId">
             <v-list-item to="/login" @click="drawer = false">
               <v-list-item-title class="text-secondary">Login</v-list-item-title>
             </v-list-item>

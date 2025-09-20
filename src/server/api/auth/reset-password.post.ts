@@ -4,15 +4,15 @@ import type { APIBody } from "~/types/api"
 
 export default defineEventHandler(async (event): Promise<APIBody<null>> => {
   try {
-    const body: { email: string, current_password: string, new_password:string } = await readBody(event)
+    const body: { email: string, currentPassword: string, newPassword:string } = await readBody(event)
     const email = body.email
-    const currentPassword = body.current_password
-    const newPassword = body.new_password
+    const currentPassword = body.currentPassword
+    const newPassword = body.newPassword
 
     // Fetch user by email
-    const userArr = await db<{ vpf_id?: string, password?: string }[]>`
+    const userArr = await db<{ vpfId?: string, password?: string }[]>`
       SELECT
-        m.vpf_id,
+        m.vpf_id as vpfId,
         m.password
       FROM
         members m
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     const hashedPassword = user.password as string | undefined
 
     // Check if user or password exists
-    if (!hashedPassword || !user.vpf_id) {
+    if (!hashedPassword || !user.vpfId) {
       return {
         success: false,
         message: "Invalid email or password",
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     await db`
       UPDATE members
       SET password = ${hashedNewPassword}
-      WHERE vpf_id = ${user.vpf_id}
+      WHERE vpf_id = ${user.vpfId}
     `
 
     return {

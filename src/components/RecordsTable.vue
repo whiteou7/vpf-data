@@ -7,8 +7,8 @@
     density="compact"
     :loading="loading"
   >
-    <template #item.weight_class="{ item }">
-      {{ getWeightClassDisplay(item.weight_class, item.sex) }}
+    <template #item.weightClass="{ item }">
+      {{ getWeightClassDisplay(item.weightClass, item.sex) }}
     </template>
     <template #loading>
       <v-skeleton-loader type="table-row@10"/>
@@ -21,7 +21,7 @@ import type { RecordTableRow } from "~/types/record"
 
 // Header config for table
 const headers = ref([
-  { key: "weight_class", sortable: false },
+  { key: "weightClass", sortable: false },
   { 
     title: "Gold", 
     children: [

@@ -79,12 +79,12 @@ export function getWeightClassDisplay(weightClass: number, sex: Sex): string {
 export function transformRecordsToRows(records: LiftRecord[]): RecordTableRow[] {
   // Group records by weight class
   const groupedByWeightClass = records.reduce((acc, record) => {
-    const weightClass = record.weight_class
+    const weightClass = record.weightClass
     if (!acc[weightClass]) {
       acc[weightClass] = {}
     }
     acc[weightClass][record.rank] = {
-      name: record.full_name,
+      name: record.fullName,
       result: record.result
     }
     return acc
@@ -95,10 +95,10 @@ export function transformRecordsToRows(records: LiftRecord[]): RecordTableRow[] 
     gold: ranks[1] || null,
     silver: ranks[2] || null,
     bronze: ranks[3] || null,
-    weight_class: Number(weightClass),
+    weightClass: Number(weightClass),
     sex: records[0]?.sex
   }))
 
   // Sort by weight class
-  return row.sort((a, b) => a.weight_class - b.weight_class)
+  return row.sort((a, b) => a.weightClass - b.weightClass)
 }

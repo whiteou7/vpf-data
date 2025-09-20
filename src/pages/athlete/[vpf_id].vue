@@ -1,72 +1,116 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseTable from "~/components/BaseTable.vue"
-import type { AthletePB, AthleteCompInfo } from "~/types/athlete"
+import { ref, onMounted } from "vue"
+import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettings } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 
 const route = useRoute()
+const router = useRouter()
 const vpfId = route.params.vpf_id
 
-const athleteResult = ref<AthleteCompInfo[]>()
-const athletePB = ref<AthletePB>()
+const compInfo = ref<AthleteCompInfo[]>()
+const pb = ref<AthletePB>()
+const personalInfo = ref<AthletePersonalInfo>()
+const compSettings = ref<AthleteCompSettings>()
+const authorized = ref(false)
+const loading = ref(true)
+const activeTab = ref<'history' | 'personal' | 'competition'>('history')
 
 onMounted(async () => {
+  // Fetch athlete data
   const response = await $fetch<APIBody<{
-    results: AthleteCompInfo[]
+    compInfo: AthleteCompInfo[]
     pb: AthletePB
+    personalInfo?: AthletePersonalInfo
+    compSettings?: AthleteCompSettings
   }>>(`/api/athletes/${vpfId}`)
-
   if (response.success) {
-    athleteResult.value = response.data?.results
-    athletePB.value = response.data?.pb
+    compInfo.value = response.data?.compInfo
+    pb.value = response.data?.pb
+    personalInfo.value = response.data?.personalInfo
+    compSettings.value = response.data?.compSettings
   }
+
+  // Check authorization
+  try {
+    const sessionRes = await $fetch('/api/auth/validate-session')
+    if (sessionRes.success && sessionRes.data?.vpfId == vpfId) {
+      authorized.value = true
+    }
+  } catch {}
+  loading.value = false
 })
 
-const pb_headers = [
-  { title: "Squat PB", value: "squat_pb", key: "best_squat" },
-  { title: "Bench PB", value: "bench_pb", key: "best_bench" },
-  { title: "Deadlift PB", value: "deadlift_pb", key: "best_dead" },
-  { title: "Total PB", value: "total_pb" },
-  { title: "GL PB", value: "gl_pb" },
+function goToTab(tab: 'history' | 'personal' | 'competition') {
+  if (tab === 'history') {
+    router.push(`/athlete/${vpfId}`)
+  } else if (tab === 'personal') {
+    router.push(`/athlete/${vpfId}/settings`)
+  } else if (tab === 'competition') {
+    router.push(`/athlete/${vpfId}/settings`)
+  }
+}
+
+const pbHeaders = [
+  { title: "Squat PB", value: "squatPb", key: "bestSquat" },
+  { title: "Bench PB", value: "benchPb", key: "bestBench" },
+  { title: "Deadlift PB", value: "deadliftPb", key: "bestDead" },
+  { title: "Total PB", value: "totalPb" },
+  { title: "GL PB", value: "glPb" },
 ]
 
-const results_headers = [
-  { title: "Meet", value: "meet_name" },
-  { title: "Weight Class", value: "weight_class" },
+const compInfoHeaders = [
+  { title: "Meet", value: "meetName" },
+  { title: "Weight Class", value: "weightClass" },
   { title: "Division", value: "division" },
-  { title: "Best Squat", value: "best_squat" },
-  { title: "Best Bench", value: "best_bench" },
-  { title: "Best Deadlift", value: "best_dead" },
+  { title: "Best Squat", value: "bestSquat" },
+  { title: "Best Bench", value: "bestBench" },
+  { title: "Best Deadlift", value: "bestDead" },
   { title: "Total", value: "total" },
   { title: "GL", value: "gl" },
-  { title: "Body Weight", value: "body_weight" },
+  { title: "Body Weight", value: "bodyWeight" },
   { title: "#", value: "placement" }
 ]
 </script>
 
 <template>
   <div class="min-h-screen py-10">
-    <div
-      v-if="athleteResult && athletePB"
-      class="max-w-[95%] mx-auto"
-    >
+    <div v-if="loading" class="flex items-center justify-center h-96">
+      <v-progress-circular color="primary" indeterminate :size="81" />
+    </div>
+    <div v-else-if="compInfo && pb" class="max-w-[95%] mx-auto">
+      <!-- Shared Header -->
       <h1 class="text-3xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
-        {{ athleteResult[0].full_name + " (" + (athleteResult[0].sex === 'male' ? 'M' : 'F') + ")" }}
+        {{ compInfo[0].fullName + " (" + (compInfo[0].sex === 'male' ? 'M' : 'F') + ")" }}
       </h1>
+      <!-- Navigation Buttons (only for authorized user) -->
+      <div v-if="authorized" class="flex gap-4 mb-6">
+        <v-btn :color="'primary'" variant="tonal" @click="goToTab('history')">
+          Competition History
+        </v-btn>
+        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('personal')">
+          Personal Info
+        </v-btn>
+        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('competition')">
+          Competition Settings
+        </v-btn>
+      </div>
+      <!-- Athlete PBs -->
       <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
         Athlete PBs
       </h2>
       <BaseTable
-        :headers="pb_headers"
-        :items="[athletePB]"
+        :headers="pbHeaders"
+        :items="pb"
       />
-
+      <!-- Competition History -->
       <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
         Competition History
       </h2>
       <BaseTable
-        :headers="results_headers"
-        :items="athleteResult"
+        :headers="compInfoHeaders"
+        :items="compInfo"
       />
     </div>
   </div>

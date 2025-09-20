@@ -1,16 +1,16 @@
 export type AthleteCompInfo = {
   "#"?: number;
-  vpf_id: string;
-  full_name?: string;
-  weight_class: number;
-  body_weight?: number;
+  vpfId: string;
+  fullName?: string;
+  weightClass: number;
+  bodyWeight?: number;
   sex?: Sex;
   division: Division;
-  best_squat: number;
-  best_bench: number;
-  best_dead: number;
+  bestSquat: number;
+  bestBench: number;
+  bestDead: number;
   total: number;
-  dots: number;
+  gl: number;
   placement?: number;
 };
 
@@ -19,28 +19,28 @@ export type Sex = "male" | "female" | null
 export type Division = "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4"
 
 export type AthletePB = {
-  squat_pb: number;
-  bench_pb: number;
-  deadlift_pb: number;
-  total_pb: number;
-  dots_pb: number;
+  squatPb: number;
+  benchPb: number;
+  deadliftPb: number;
+  totalPb: number;
+  dotsPb: number;
 }
 
 export type AthletePersonalInfo = {
-  vpf_id: string
-  full_name: string
+  vpfId: string
+  fullName: string
   nationality?: string
   dob?: string
-  national_id?: string
+  nationalId?: string
   address?: string
-  phone_number?: string
+  phoneNumber?: string
   email: string
   active: boolean
 }
 
 export type AthleteCompSettings = {
-  squat_rack_pin?: number
-  bench_rack_pin?: number
-  bench_safety_pin?: number
-  bench_foot_block?: number
+  squatRackPin?: number
+  benchRackPin?: number
+  benchSafetyPin?: number
+  benchFootBlock?: number
 }
