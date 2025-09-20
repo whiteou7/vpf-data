@@ -22,8 +22,8 @@
     </template>
 
     <template #item.meet_name="{ item }">
-      <NuxtLink :to="`/meet/${meetToPath[item.id || item.meet_id]}`" class="hover:underline text-primary">
-        {{ item.name || item.meet_name }}
+      <NuxtLink :to="`/meet/${item.slug}`" class="hover:underline text-primary">
+        {{ item.meet_name }}
       </NuxtLink>
     </template>
 

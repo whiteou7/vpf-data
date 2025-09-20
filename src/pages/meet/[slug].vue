@@ -24,33 +24,30 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue"
 import { useRoute } from "vue-router"
-import type { MeetResultDetailed } from "~/types/meet"
-import { meetToPath } from "~/utils/mappings"
+import type { MeetResult } from "~/types/meet"
 import { useAthletesFilter } from "~/composables/useAthletesFilter"
 import AthletesFilter from "~/components/AthletesFilter.vue"
 
 import type { APIBody } from "~/types/api"
 
 const route = useRoute()
-const path = route.params.path as string
+const slug = route.params.slug as string
 const filters = useAthletesFilter()
 
-const results = ref<MeetResultDetailed[]>([])
+const results = ref<MeetResult[]>([])
 const loading = ref(true)
 
-const pathToMeet = Object.fromEntries(Object.entries(meetToPath).map(([key, value]) => [value, key]))
-const meetId = pathToMeet[path]
-
+// Fetch meet result
 onMounted(async () => {
-  if (meetId) {
-    const response = await $fetch<APIBody<{ results: MeetResultDetailed[] }>>(`/api/meets/${meetId}`)
-    if (response.success) {
-      results.value = response.data?.results ?? []
-    }
+  const response = await $fetch<APIBody<{ results: MeetResult[] }>>(`/api/meets/${slug}`)
+  if (response.success) {
+    results.value = response.data?.results ?? []
   }
+
   loading.value = false
 })
 
+// Computed values based on filters
 const filteredResults = computed(() => {
   return results.value.filter(r => {
     const matchesSex = filters.sexFilter.value ? r.sex === filters.sexFilter.value : true
@@ -62,6 +59,7 @@ const filteredResults = computed(() => {
   })
 })
 
+// Categorize results into sessions
 const groupedResults = computed(() => {
   return filteredResults.value.reduce((groups, item) => {
     const session = item.session || "Uncategorized"
@@ -70,7 +68,7 @@ const groupedResults = computed(() => {
     }
     groups[session].push(item)
     return groups
-  }, {} as Record<string, MeetResultDetailed[]>)
+  }, {} as Record<string, MeetResult[]>)
 })
 
 const headers = [
