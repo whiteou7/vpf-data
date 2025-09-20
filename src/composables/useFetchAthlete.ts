@@ -8,8 +8,14 @@ const pb = ref<AthletePB[]>()
 const personalInfo = ref<AthletePersonalInfo>()
 const compSettings = ref<AthleteCompSettings>()
 
+let storedVpfId: string = ""
+
 export function useFetchAthlete() {
   const fetch = async (vpfId: string, isPrivate: boolean) => {
+    // No need to fetch again for the same request
+    if (storedVpfId == vpfId) {
+      return
+    }
     if (isPrivate) {
       const response = await $fetch<APIBody<{
         fullName: string,
@@ -41,6 +47,8 @@ export function useFetchAthlete() {
         pb.value = response.data?.pb
       }
     }
+
+    storedVpfId = vpfId
   }
 
   return {
