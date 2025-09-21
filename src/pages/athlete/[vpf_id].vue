@@ -18,6 +18,8 @@ const fullName = ref<string>()
 const sex = ref<Sex>()
 const compInfo = ref()
 
+const currentTab = ref<string>(route.path.split("/").at(-1) ?? "")
+
 onMounted(async () => {
   await useFetchAthlete().fetch(vpfId, isPrivate.value)
   const data = useFetchAthlete()
@@ -31,10 +33,13 @@ onMounted(async () => {
 
 function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
   if (tab === "compHistory") {
+    currentTab.value = ""
     router.push(`/athlete/${vpfId}`)
   } else if (tab === "personalInfo") {
+    currentTab.value = "personal-info"
     router.push(`/athlete/${vpfId}/personal-info`)
   } else if (tab === "compSettings") {
+    currentTab.value = "settings"
     router.push(`/athlete/${vpfId}/settings`)
   }
 }
@@ -52,13 +57,13 @@ function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
       </h1>
       <!-- Navigation Buttons (only for authorized user) -->
       <div v-if="isPrivate" class="flex gap-4 mb-6">
-        <v-btn :color="'primary'" variant="tonal" @click="goToTab('compHistory')">
+        <v-btn :color="currentTab == '' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('compHistory')">
           Competition History
         </v-btn>
-        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('personalInfo')">
+        <v-btn :color="currentTab == 'personal-info' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('personalInfo')">
           Personal Info
         </v-btn>
-        <v-btn :color="'secondary'" variant="tonal" @click="goToTab('compSettings')">
+        <v-btn :color="currentTab == 'settings' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('compSettings')">
           Competition Settings
         </v-btn>
       </div>
