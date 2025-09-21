@@ -10,7 +10,7 @@ const setUserState = (vpfId: string) => {
 let validated = false
 
 export const useAuth = async () => {
-  // Login will set session cookie
+  // Login will set user state and cookie
   const login = async (email: string, password: string) => {
     try {
       const response = await $fetch<APIBody<{ sessionId: string, vpfId: string }>>("/api/auth/login", {
@@ -18,6 +18,9 @@ export const useAuth = async () => {
         body: { email, password }
       })
 
+      if (response.data?.vpfId) {
+        setUserState(response.data?.vpfId)
+      }
       return response
     } catch (error) {
       return { success: false, error: (error as Error).message || "An error occurred" }
