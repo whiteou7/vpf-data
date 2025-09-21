@@ -2,6 +2,7 @@
   <v-app>
     <!-- App Bar -->
     <v-app-bar
+      :key="user"
       color="surface"
       dark
       app
