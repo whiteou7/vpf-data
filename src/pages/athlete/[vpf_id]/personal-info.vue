@@ -1,50 +1,25 @@
 <script setup lang="ts">
 const { personalInfo } = useFetchAthlete()
-console.log(personalInfo.value)
+const fieldConfig = [
+  { value: "email", label: "Email", icon: "mdi-email-outline" },
+  { value: "nationality", label: "Nationality", icon: "mdi-flag" },
+  { value: "dob", label: "Date of Birth", icon: "mdi-cake" },
+  { value: "nationalId", label: "National ID", icon: "mdi-card-account-details" },
+  { value: "address", label: "Address", icon: "mdi-home" },
+  { value: "phoneNumber", label: "Phone Number", icon: "mdi-phone" }
+]
 </script>
 
 <template>
-  <div class="py-10">
+  <div>
     <v-card class="max-w-2xl mx-auto">
       <v-card-title class="text-2xl font-bold">
-        Personal Information
+        Membership status: {{ personalInfo?.active ? "active" : "inactive" }}
       </v-card-title>
       <v-card-text v-if="personalInfo">
-        <v-text-field
-          v-model="personalInfo.email"
-          label="Email"
-          readonly
-        />
-        <v-text-field
-          v-model="personalInfo.nationality"
-          label="Nationality"
-          readonly
-        />
-        <v-text-field
-          v-model="personalInfo.dob"
-          label="Date of Birth"
-          readonly
-        />
-        <v-text-field
-          v-model="personalInfo.nationalId"
-          label="National ID"
-          readonly
-        />
-        <v-text-field
-          v-model="personalInfo.address"
-          label="Address"
-          readonly
-        />
-        <v-text-field
-          v-model="personalInfo.phoneNumber"
-          label="Phone Number"
-          readonly
-        />
-        <v-switch
-          v-model="personalInfo.active"
-          label="Active"
-          readonly
-          color="primary"
+        <FormTextFields
+          :model="personalInfo"
+          :fields="fieldConfig"
         />
       </v-card-text>
       <v-card-text v-else>
