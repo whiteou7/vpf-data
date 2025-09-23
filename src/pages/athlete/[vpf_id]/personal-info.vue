@@ -3,7 +3,7 @@ const { personalInfo } = useFetchAthlete()
 const fieldConfig = [
   { value: "email", label: "Email", icon: "mdi-email-outline" },
   { value: "nationality", label: "Nationality", icon: "mdi-flag" },
-  { value: "dob", label: "Date of Birth", icon: "mdi-cake" },
+  { value: "dob", label: "Date of Birth", icon: "mdi-calendar-range" },
   { value: "nationalId", label: "National ID", icon: "mdi-card-account-details" },
   { value: "address", label: "Address", icon: "mdi-home" },
   { value: "phoneNumber", label: "Phone Number", icon: "mdi-phone" }
