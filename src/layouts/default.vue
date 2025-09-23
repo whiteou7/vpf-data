@@ -128,10 +128,11 @@
 
     <!-- Main Content -->
     <v-main>
-      <v-container fluid class="pa-0">
+      <div style="width: 95%" class="mx-auto py-5">
         <slot />
-      </v-container>
+      </div>
     </v-main>
+
     <v-snackbar
       v-model="snackbar"
       :color="snackbarColor"
