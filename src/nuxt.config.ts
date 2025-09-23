@@ -1,6 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-
-import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 export default defineNuxtConfig({
   routeRules: {
     "/": {
@@ -27,22 +24,33 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
-  css: ["~/assets/css/main.css"],
   modules: [
-    "@nuxtjs/tailwindcss",
-    (_options, nuxt) => {
-      nuxt.hooks.hook("vite:extendConfig", (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }))
-      })
-    },
+    "vuetify-nuxt-module",
     "@nuxt/eslint"
   ],
-  vite: {
-    vue: {
-      template: {
-        transformAssetUrls,
-      },
+  vuetify: {
+    moduleOptions: {
+      /* module specific options */
     },
+    vuetifyOptions: {
+      theme: {
+        defaultTheme: "dark",
+        themes: {
+          dark: {
+            dark: true,
+            colors: {
+              background: "#121212", // very dark gray
+              surface: "#1E1E1E", // dark gray surface
+              primary: "#EF4444", // Tailwind red-500
+              secondary: "#F87171", // Tailwind red-400
+              error: "#DC2626", // Tailwind red-600
+              success: "4CAF50", // green-500
+              onBackground: "#FFFFFF",
+              onSurface: "#E5E5E5",
+            }
+          }
+        }
+      }
+    }
   }
 })
