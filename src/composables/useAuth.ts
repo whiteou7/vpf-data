@@ -18,12 +18,12 @@ export const useAuth = async () => {
         body: { email, password }
       })
 
-      if (response.data?.vpfId) {
-        setUserState(response.data?.vpfId)
+      if (response.success) {
+        setUserState(response.data?.vpfId ?? "")
       }
       return response
     } catch (error) {
-      return { success: false, error: (error as Error).message || "An error occurred" }
+      return { success: false, message: (error as Error).message || "An error occurred" }
     }
   }
 
@@ -36,7 +36,7 @@ export const useAuth = async () => {
 
       return response
     } catch (error) {
-      return { success: false, error: (error as Error).message || "An error occurred" }
+      return { success: false, message: (error as Error).message || "An error occurred" }
     }
   }
 
@@ -49,7 +49,7 @@ export const useAuth = async () => {
 
       return response
     } catch (error) {
-      return { success: false, error: (error as Error).message || "An error occurred" }
+      return { success: false, message: (error as Error).message || "An error occurred" }
     } finally {
       setUserState("")
     }
