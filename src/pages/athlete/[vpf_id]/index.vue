@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Athlete PBs -->
-    <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
+    <h2 class="my-4 text-secondary pa-2">
       Athlete PBs
     </h2>
     <BaseTable
@@ -9,7 +9,7 @@
       :items="pb"
     />
     <!-- Competition History -->
-    <h2 class="text-2xl font-bold mt-4 mb-4 text-secondary tracking-wide pb-2 pt-2 px-2">
+    <h2 class="my-4 text-secondary pa-2">
       Competition History
     </h2>
     <BaseTable
@@ -27,7 +27,7 @@ onMounted(async () => {
   const data = await useFetchAthlete()
 
   compInfo.value = data.compInfo.value
-  pb.value = data.compInfo.value
+  pb.value = data.pb.value
 })
 const pbHeaders = [
   { title: "Squat PB", value: "squatPb", key: "bestSquat" },

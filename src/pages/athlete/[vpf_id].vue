@@ -18,7 +18,7 @@ const fullName = ref<string>()
 const sex = ref<Sex>()
 const compInfo = ref()
 
-const currentTab = ref<string>(route.path.split("/").at(-1) ?? "")
+const currentTab = ref<string>(route.path.split("/").at(3) ?? "")
 
 onMounted(async () => {
   await useFetchAthlete().fetch(vpfId, isPrivate.value)
@@ -46,17 +46,21 @@ function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
 </script>
 
 <template>
-  <div class="min-h-screen py-10">
-    <div v-if="loading" class="flex items-center justify-center h-96">
-      <v-progress-circular color="primary" indeterminate :size="81" />
+  <div>
+    <div v-if="loading" class="pa-10">
+      <v-progress-circular 
+        class="mx-auto d-block" 
+        color="primary" 
+        indeterminate 
+        :size="81"/>
     </div>
-    <div v-else-if="compInfo" class="max-w-[95%] mx-auto">
+    <div v-else-if="compInfo">
       <!-- Shared Header -->
-      <h1 class="text-3xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
+      <h1 class="mb-4 text-primary pa-2">
         {{ fullName + " (" + ((sex === 'male') ? 'M' : 'F') + ")" }}
       </h1>
       <!-- Navigation Buttons (only for authorized user) -->
-      <div v-if="isPrivate" class="flex gap-4 mb-6">
+      <div v-if="isPrivate" class="d-flex ga-4">
         <v-btn :color="currentTab == '' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('compHistory')">
           Competition History
         </v-btn>
@@ -70,7 +74,7 @@ function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
       <NuxtPage/>
     </div>
     <div v-else>
-      <h1 class="text-2xl font-bold mb-4 text-primary tracking-wide pb-2 pt-2 px-2">
+      <h1 class="mb-4 text-error pa-2">
         No competition data is available.
       </h1>
     </div>

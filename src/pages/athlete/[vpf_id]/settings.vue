@@ -10,7 +10,7 @@ const fieldConfig = [
 
 <template>
   <div>
-    <v-card class="max-w-2xl mx-auto">
+    <v-card max-width="500" class="mx-auto my-4">
       <v-card-text v-if="compSettings">
         <FormTextFields
           :model="compSettings"

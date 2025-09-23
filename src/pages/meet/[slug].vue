@@ -1,22 +1,24 @@
 <template>
-  <div class="min-h-screen py-10">
-    <div class="max-w-[95%] mx-auto">
-      <AthletesFilter/>
-      <div v-if="loading" class="flex justify-center items-center py-10">
-        <v-progress-circular color="primary" indeterminate :size="81"/>
-      </div>
+  <div>
+    <AthletesFilter/>
+    <div v-if="loading" class="pa-10">
+      <v-progress-circular 
+        class="mx-auto d-block" 
+        color="primary" 
+        indeterminate 
+        :size="81"/>
+    </div>
 
-      <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface my-8">
-        <h2 class="text-2xl font-bold text-primary">
-          Session {{ session }}
-        </h2>
+    <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface my-8">
+      <h2 class="ps-2 text-primary">
+        Session {{ session }}
+      </h2>
 
-        <BaseTable
-          :headers="headers"
-          :items="group"
-          :search="filters.search.value"
-        />
-      </div>
+      <BaseTable
+        :headers="headers"
+        :items="group"
+        :search="filters.search.value"
+      />
     </div>
   </div>
 </template>

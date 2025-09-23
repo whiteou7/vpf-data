@@ -1,18 +1,14 @@
 <template>
-  <div class="min-h-screen py-5 md:py-10">
-    <div class="max-w-[95%] mx-auto">
-      <AthletesCompTable
-        :items="filteredAthletes"
-        :headers="headers"
-        :loading="loading"
-        :search="filters.search.value"
-      >
-        <template #top>
-          <AthletesFilter />
-        </template>
-      </AthletesCompTable>
-    </div>
-  </div>
+  <AthletesCompTable
+    :items="filteredAthletes"
+    :headers="headers"
+    :loading="loading"
+    :search="filters.search.value"
+  >
+    <template #top>
+      <AthletesFilter />
+    </template>
+  </AthletesCompTable>
 </template>
 
 <script setup lang="ts">

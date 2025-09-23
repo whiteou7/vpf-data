@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-wrap gap-4 px-4 my-2">
-    <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+  <div style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
+    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 36px;">
       <v-text-field
         v-model="searchText"
         density="compact"
@@ -11,7 +11,7 @@
       />
     </div>
 
-    <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
       <v-select
         v-model="filters.sexFilter.value"
         :items="filters.sexOptions"
@@ -22,7 +22,7 @@
       />
     </div>
 
-    <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
       <v-select
         v-model="filters.divisionFilter.value"
         :items="filters.divisionOptions"
@@ -33,7 +33,7 @@
       />
     </div>
 
-    <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
+    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
       <v-select
         v-model="filters.weightClassFilter.value"
         :items="filters.weightClassOptions"

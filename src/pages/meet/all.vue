@@ -1,38 +1,34 @@
 <template>
-  <div class="min-h-screen py-5 md:py-10">
-    <div class="max-w-[95%] mx-auto rounded-lg">
-      <BaseTable
-        :items="filteredMeets"
-        :headers="headers"
-        :loading="loading"
-      >
-        <template #top>
-          <div class="flex flex-wrap gap-4 px-4 my-2">
-            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
-              <v-select
-                v-model="cityFilter"
-                :items="cityOptions"
-                label="City"
-                density="compact"
-                color="primary"
-                variant="solo-inverted"
-              />
-            </div>
-            <div class="flex-1 min-w-[100px] max-w-[200px] h-9">
-              <v-select
-                v-model="yearFilter"
-                :items="yearOptions"
-                label="Year"
-                density="compact"
-                color="primary"
-                variant="solo-inverted"
-              />
-            </div>
-          </div>
-        </template>
-      </BaseTable>
-    </div>
-  </div>
+  <BaseTable
+    :items="filteredMeets"
+    :headers="headers"
+    :loading="loading"
+  >
+    <template #top>
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
+        <div style="flex: 1; min-width: 150px; max-width: 200px; height: 36px;">
+          <v-select
+            v-model="cityFilter"
+            :items="cityOptions"
+            label="City"
+            density="compact"
+            color="primary"
+            variant="solo-inverted"
+          />
+        </div>
+        <div style="flex: 1; min-width: 150px; max-width: 200px; height: 36px;">
+          <v-select
+            v-model="yearFilter"
+            :items="yearOptions"
+            label="Year"
+            density="compact"
+            color="primary"
+            variant="solo-inverted"
+          />
+        </div>
+      </div>
+    </template>
+  </BaseTable>
 </template>
 
 <script setup lang="ts">

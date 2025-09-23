@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-5 md:py-10">
+  <div>
     <v-card max-width="500" class="mx-4 mx-md-auto">
       <v-card-text>
         <v-form @submit.prevent="handleRegister">
@@ -57,7 +57,7 @@
           </v-btn>
         </v-form>
         <div class="text-center mt-4">
-          <NuxtLink to="/login" class="text-sm">
+          <NuxtLink to="/login" style="text-decoration: none; color: inherit;">
             Already have an account? Login
           </NuxtLink>
         </div>
