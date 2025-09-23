@@ -12,8 +12,8 @@ const fieldConfig = [
 
 <template>
   <div>
-    <v-card class="max-w-2xl mx-auto">
-      <v-card-title class="text-2xl font-bold">
+    <v-card max-width="500" class="mx-auto my-4">
+      <v-card-title class="text-2xl">
         Membership status: {{ personalInfo?.active ? "active" : "inactive" }}
       </v-card-title>
       <v-card-text v-if="personalInfo">

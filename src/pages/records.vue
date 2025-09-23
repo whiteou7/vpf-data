@@ -1,19 +1,17 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
-  <div class="min-h-screen py-10">
-    <div class="max-w-[95%] mx-auto">
-      <h1 class="text-3xl font-bold mb-6 text-primary tracking-wide pb-2 pt-2 px-2">Male</h1>
-      <RecordsTableGroup
-        :loading="loading"
-        :items="maleRowGroup"
-      />
+  <div>
+    <h1 class="text-primary pa-2">Male</h1>
+    <RecordsTableGroup
+      :loading="loading"
+      :items="maleRowGroup"
+    />
 
-      <h1 class="text-3xl font-bold mb-6 text-primary tracking-wide pb-2 pt-2 px-2">Female</h1>
-      <RecordsTableGroup
-        :loading="loading"
-        :items="femaleRowGroup"
-      />
-    </div>
+    <h1 class="text-primary pa-2">Female</h1>
+    <RecordsTableGroup
+      :loading="loading"
+      :items="femaleRowGroup"
+    />
   </div>
 </template>
 

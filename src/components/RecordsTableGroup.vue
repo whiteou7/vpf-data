@@ -1,50 +1,50 @@
 <template>
-  <div class="flex flex-wrap gap-8 records-grid">
+  <div class="records-grid">
     <div class="records-column">
-      <h2 class="text-xl font-semibold text-primary">Squat</h2>
-      <h4 class="text-base font-medium text-primary">Sub Junior</h4>
+      <h2 class="text-primary">Squat</h2>
+      <h4 class="text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.squat.subjr || []"/>
-      <h4 class="text-base font-medium text-primary">Junior</h4>
+      <h4 class="text-primary">Junior</h4>
       <RecordsTable :loading="loading" :items="items.squat.jr || []"/>
-      <h4 class="text-base font-medium text-primary">Open</h4>
+      <h4 class="text-primary">Open</h4>
       <RecordsTable :loading="loading" :items="items.squat.open || []"/>
-      <h4 class="text-base font-medium text-primary">Masters</h4>
+      <h4 class="text-primary">Masters</h4>
       <RecordsTable :loading="loading" :items="items.squat.mas || []"/>
     </div>
     
     <div class="records-column">
-      <h2 class="text-xl font-semibold text-primary">Bench</h2>
-      <h4 class="text-base font-medium text-primary">Sub Junior</h4>
+      <h2 class="text-primary">Bench</h2>
+      <h4 class="text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.bench.subjr || []"/>
-      <h4 class="text-base font-medium text-primary">Junior</h4>
+      <h4 class="text-primary">Junior</h4>
       <RecordsTable :loading="loading" :items="items.bench.jr || []"/>
-      <h4 class="text-base font-medium text-primary">Open</h4>
+      <h4 class="text-primary">Open</h4>
       <RecordsTable :loading="loading" :items="items.bench.open || []"/>
-      <h4 class="text-base font-medium text-primary">Masters</h4>
+      <h4 class="text-primary">Masters</h4>
       <RecordsTable :loading="loading" :items="items.bench.mas || []"/>
     </div>
     
     <div class="records-column">
-      <h2 class="text-xl font-semibold text-primary">Deadlift</h2>
-      <h4 class="text-base font-medium text-primary">Sub Junior</h4>
+      <h2 class="text-primary">Deadlift</h2>
+      <h4 class="text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.deadlift.subjr || []"/>
-      <h4 class="text-base font-medium text-primary">Junior</h4>
+      <h4 class="text-primary">Junior</h4>
       <RecordsTable :loading="loading" :items="items.deadlift.jr || []"/>
-      <h4 class="text-base font-medium text-primary">Open</h4>
+      <h4 class="text-primary">Open</h4>
       <RecordsTable :loading="loading" :items="items.deadlift.open || []"/>
-      <h4 class="text-base font-medium text-primary">Masters</h4>
+      <h4 class="text-primary">Masters</h4>
       <RecordsTable :loading="loading" :items="items.deadlift.mas || []"/>
     </div>
     
     <div class="records-column">
-      <h2 class="text-xl font-semibold text-primary">Total</h2>
-      <h4 class="text-base font-medium text-primary">Sub Junior</h4>
+      <h2 class="text-primary">Total</h2>
+      <h4 class="text-primary">Sub Junior</h4>
       <RecordsTable :loading="loading" :items="items.total.subjr || []"/>
-      <h4 class="text-base font-medium text-primary">Junior</h4>
+      <h4 class="text-primary">Junior</h4>
       <RecordsTable :loading="loading" :items="items.total.jr || []"/>
-      <h4 class="text-base font-medium text-primary">Open</h4>
+      <h4 class="text-primary">Open</h4>
       <RecordsTable :loading="loading" :items="items.total.open || []"/>
-      <h4 class="text-base font-medium text-primary">Masters</h4>
+      <h4 class="text-primary">Masters</h4>
       <RecordsTable :loading="loading" :items="items.total.mas || []"/>
     </div>
   </div>
@@ -73,11 +73,6 @@ defineProps<{
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
   padding: 1rem;
   width: 100%;
-}
-
-.records-grid h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
 }
 
 .records-grid h4 {

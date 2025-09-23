@@ -15,14 +15,16 @@
     <template #loading>
       <v-skeleton-loader type="table-row@10"/>
     </template>
+
+    <!-- Links config -->
     <template #item.fullName="{ item }">
-      <NuxtLink :to="`/athlete/${item.vpfId}`" class="hover:text-red-500 active:text-red-500">
+      <NuxtLink :to="`/athlete/${item.vpfId}`" class="athlete-link">
         {{ item.fullName }}
       </NuxtLink>
     </template>
 
     <template #item.meetName="{ item }">
-      <NuxtLink :to="`/meet/${item.slug}`" class="hover:underline text-primary">
+      <NuxtLink :to="`/meet/${item.slug}`" class="meet-link">
         {{ item.meetName }}
       </NuxtLink>
     </template>
@@ -37,23 +39,28 @@
 
     </template>
 
+    <!-- Gender/Division/WC display config -->
     <template #item.sex="{ item }">
       {{ item.sex === 'male' ? 'M' : item.sex === 'female' ? 'F' : item.sex }}
     </template>
+
     <template #item.division="{ item }">
       {{ divisionMap[item.division] ?? item.division }}
     </template>
+
     <template #item.weightClass="{ item }">
       {{ getWeightClassDisplay(item.weightClass, item.sex as Sex) }}
     </template>
+
+    <!-- SBD Coloring config-->
     <template #item.bestSquat="{ item }">
-      <span class="text-yellow-400 font-semibold">{{ item.bestSquat !== null && item.bestSquat !== undefined ? item.bestSquat : item.squatPb }}</span>
+      <span style="color: #facc15; font-weight: 600;">{{ item.bestSquat !== null && item.bestSquat !== undefined ? item.bestSquat : item.squatPb }}</span>
     </template>
     <template #item.bestBench="{ item }">
-      <span class="text-cyan-400 font-semibold">{{ item.bestBench !== null && item.bestBench !== undefined ? item.bestBench : item.benchPb }}</span>
+      <span style="color: #22d3ee; font-weight: 600;">{{ item.bestBench !== null && item.bestBench !== undefined ? item.bestBench : item.benchPb }}</span>
     </template>
     <template #item.bestDead="{ item }">
-      <span class="text-purple-400 font-semibold">{{ item.bestDead !== null && item.bestDead !== undefined ? item.bestDead : item.deadliftPb }}</span>
+      <span style="color: #c084fc; font-weight: 600;">{{ item.bestDead !== null && item.bestDead !== undefined ? item.bestDead : item.deadliftPb }}</span>
     </template>
 
     <template #item.squat1="{ item }">
@@ -123,5 +130,17 @@ const rowClick = (row) => {
 }
 .bold-header-no-wrap-no-cursor .v-data-table__tr--clickable {
   cursor: auto !important;
+}
+.athlete-link {
+  text-decoration: none;
+  color: inherit;
+}
+.athlete-link:hover,
+.athlete-link:active {
+  color: rgb(var(--v-theme-primary));
+}
+.meet-link {
+  text-decoration: none;
+  color: rgb(var(--v-theme-primary))
 }
 </style>
