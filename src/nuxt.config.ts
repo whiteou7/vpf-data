@@ -24,10 +24,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
-  modules: [
-    "vuetify-nuxt-module",
-    "@nuxt/eslint"
-  ],
+  modules: ["vuetify-nuxt-module", "@nuxt/eslint", "@nuxtjs/supabase"],
   vuetify: {
     moduleOptions: {
       /* module specific options */
