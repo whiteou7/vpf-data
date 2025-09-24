@@ -58,7 +58,9 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
     setCookie(event, "session_id", sessionId, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict"
+      sameSite: "strict",
+      maxAge: 3 * 30 * 24 * 60 * 60, // 3 months
+      expires: new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000)
     })
 
     return {
