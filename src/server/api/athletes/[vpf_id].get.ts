@@ -57,7 +57,8 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       squat_rack_pin,
       bench_rack_pin,
       bench_safety_pin,
-      bench_foot_block
+      bench_foot_block,
+      social_id_image_url
     FROM 
       public.members
     WHERE
@@ -108,7 +109,12 @@ export default defineEventHandler(async (event): Promise<APIBody<{
 
     // Validate session
     const sessionValidation = await validateSession(sessionId || "")
-  
+    if (!sessionValidation.success) return {
+      success: true,
+      data: { fullName, sex, ...compHistory },
+      message: "Fetched athlete info"
+    }
+    
     // Extract vpfId from response
     const validatedVpfId = sessionValidation?.data?.vpfId
 

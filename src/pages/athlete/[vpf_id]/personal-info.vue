@@ -11,9 +11,9 @@ const fieldConfig = [
 </script>
 
 <template>
-  <div>
-    <v-card max-width="500" class="mx-auto my-4">
-      <v-card-title class="text-2xl">
+  <div class="d-flex ga-4 justify-center">
+    <v-card max-width="500" style="flex: 1;" class="ma-4">
+      <v-card-title>
         Membership status: {{ personalInfo?.active ? "active" : "inactive" }}
       </v-card-title>
       <v-card-text v-if="personalInfo">
@@ -24,6 +24,24 @@ const fieldConfig = [
       </v-card-text>
       <v-card-text v-else>
         No personal information available.
+      </v-card-text>
+    </v-card>
+
+    <v-card max-width="500" style="flex: 1;" class="ma-4" title="National ID">
+      <v-card-text>
+        <div v-if="personalInfo?.socialIdImageUrl">
+          <v-img
+            :src="personalInfo.socialIdImageUrl"
+            aspect-ratio="16/9"
+            alt="National ID"
+            class="rounded-lg"
+          />
+        </div>
+        <div v-else>
+          <v-alert type="info" variant="tonal">
+            No National ID image uploaded.
+          </v-alert>
+        </div>
       </v-card-text>
     </v-card>
   </div>
