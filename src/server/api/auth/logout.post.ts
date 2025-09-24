@@ -1,6 +1,6 @@
 import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event): Promise<APIBody<unknown>> => {
+export default defineEventHandler(async (event): Promise<APIBody<null>> => {
   try {
     setCookie(event, "session_id", "", {
       httpOnly: true,
@@ -11,6 +11,7 @@ export default defineEventHandler(async (event): Promise<APIBody<unknown>> => {
 
     return {
       success: true,
+      data: null,
       message: "Logged out"
     }
   } catch (error) {

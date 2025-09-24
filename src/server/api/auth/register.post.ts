@@ -53,6 +53,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
 
     return {
       success: true,
+      data: null,
       message: "Account created successfully",
     }
   } catch (error) {

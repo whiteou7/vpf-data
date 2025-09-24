@@ -51,6 +51,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
 
     return {
       success: true,
+      data: null,
       message: "Password updated successfully",
     }
   } catch (error) {
