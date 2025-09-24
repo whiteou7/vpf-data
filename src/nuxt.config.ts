@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      SHOP_URL: process.env.SHOP_URL
+      SHOP_URL: process.env.SHOP_URL,
     }
   },
   app: {
