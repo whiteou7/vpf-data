@@ -29,9 +29,9 @@ const fieldConfig = [
 
     <v-card max-width="500" style="flex: 1;" class="ma-4" title="National ID">
       <v-card-text>
-        <div v-if="personalInfo?.socialIdImageUrl">
+        <div v-if="personalInfo?.nationalIdImageUrl">
           <v-img
-            :src="personalInfo.socialIdImageUrl"
+            :src="personalInfo.nationalIdImageUrl"
             aspect-ratio="16/9"
             alt="National ID"
             class="rounded-lg"
