@@ -102,3 +102,15 @@ export function transformRecordsToRows(records: LiftRecord[]): RecordTableRow[] 
   // Sort by weight class
   return row.sort((a, b) => a.weightClass - b.weightClass)
 }
+
+export async function getHashedFileName(str1: string, str2: string, length = 16) {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(str1 + str2)
+  
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data)
+
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
+
+  return hashHex.slice(0, length)
+}

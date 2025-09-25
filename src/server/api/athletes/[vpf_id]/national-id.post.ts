@@ -3,8 +3,10 @@ import { defineEventHandler, readMultipartFormData, getCookie } from "h3"
 import { storage } from "~/storage"
 import { validateSession } from "~/server/services/validate-session"
 import { db } from "~/db"
+import { getHashedFileName } from "~/utils/utils"
+import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<APIBody<{ imageUrl: string }>> => {
   try {
     const { vpf_id: vpfId } = event.context.params as { vpf_id: string }
     const sessionId = getCookie(event, "session_id")
@@ -35,7 +37,12 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const fileName = crypto.randomUUID()
+    // Generate a deterministic hashed file name for each user because why not
+    if (!process.env.HASH_SEED) {
+      throw new Error("No hash seed set")
+    }
+    const hashSeed = process.env.HASH_SEED
+    const fileName = await getHashedFileName(vpfId, hashSeed)
 
     const filePath = `${vpfId}/${fileName}.png`
     const { error } = await storage
@@ -56,17 +63,17 @@ export default defineEventHandler(async (event) => {
       .from("members")
       .getPublicUrl(filePath)
 
-    const imageURL = data.publicUrl
+    const imageUrl = data.publicUrl
 
     await db`
       UPDATE members
-      SET national_id_image_url = ${imageURL}
+      SET national_id_image_url = ${imageUrl}
       WHERE vpf_id = ${vpfId}
     `
 
     return {
       success: true,
-      data: { imageURL },
+      data: { imageUrl },
       message: "Image uploaded successfully"
     }
   } catch (error) {
