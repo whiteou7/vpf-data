@@ -1,6 +1,6 @@
 export type APIBody<T> = {
   success: true;
-  data: T | null;
+  data: T;
   message?: string;
 } | {
   success: false;
