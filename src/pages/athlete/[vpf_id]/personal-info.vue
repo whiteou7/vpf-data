@@ -27,7 +27,7 @@ const handleUpload = async () => {
   formData.append("national_id", nationalIdImage.value)
 
   const response = await $fetch<APIBody<{ imageUrl: string }>>(`/api/athletes/${vpfId}/national-id`, {
-    method: "POST",
+    method: "PUT",
     body: formData,
   })
 
