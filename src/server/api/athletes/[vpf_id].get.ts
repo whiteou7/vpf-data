@@ -58,7 +58,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       bench_rack_pin,
       bench_safety_pin,
       bench_foot_block,
-      social_id_image_url
+      national_id_image_url
     FROM 
       public.members
     WHERE

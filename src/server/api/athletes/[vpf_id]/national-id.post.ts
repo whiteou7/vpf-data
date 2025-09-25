@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const formData = await readMultipartFormData(event)
-    const file = formData?.find((part) => part.name === "social_id")
+    const file = formData?.find((part) => part.name === "national_id")
 
     if (!file || !file.data) {
       setResponseStatus(event, 400)
@@ -35,7 +35,9 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const filePath = `${vpfId}/social_id.png`
+    const fileName = crypto.randomUUID()
+
+    const filePath = `${vpfId}/${fileName}.png`
     const { error } = await storage
       .from("members")
       .upload(filePath, file.data, {
@@ -58,7 +60,7 @@ export default defineEventHandler(async (event) => {
 
     await db`
       UPDATE members
-      SET social_id_image_url = ${imageURL}
+      SET national_id_image_url = ${imageURL}
       WHERE vpf_id = ${vpfId}
     `
 
@@ -68,7 +70,7 @@ export default defineEventHandler(async (event) => {
       message: "Image uploaded successfully"
     }
   } catch (error) {
-    console.error("Error uploading social id: ", error)
+    console.error("Error uploading national id: ", error)
     return {
       success: false,
       message: (error as Error).message,

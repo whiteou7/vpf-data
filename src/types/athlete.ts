@@ -34,7 +34,7 @@ export type AthletePersonalInfo = {
   phoneNumber?: string
   email: string
   active: boolean
-  socialIdImageUrl: string
+  nationalIdImageUrl: string
 }
 
 export type AthleteCompSettings = {
