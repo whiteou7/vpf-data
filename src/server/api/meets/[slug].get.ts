@@ -6,6 +6,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
   const slug = event.context.params?.slug
 
   if (!slug) {
+    setResponseStatus(event, 400)
     return {
       success: false,
       message: "Slug is required",
@@ -52,9 +53,10 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
     }
   } catch (error) {
     console.error("Error fetching meet info:", error)
+    setResponseStatus(event, 500)
     return {
       success: false,
-      message: "Internal Server Error",
+      message: (error as Error).message
     }
   }
 })
