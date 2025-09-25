@@ -16,6 +16,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     }
   } catch (error) {
     console.error("Error logging out", error)
+    setResponseStatus(event, 500)
     return {
       success: false,
       message: (error as Error).message,

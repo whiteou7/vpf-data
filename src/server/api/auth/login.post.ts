@@ -11,6 +11,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
     const password = body.password as string | ""
 
     if (!isValidEmail(email)) {
+      setResponseStatus(event, 400)
       return {
         success: false,
         message: "Invalid email format",
@@ -31,6 +32,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
     const hashedPassword = user.password as string | undefined
     // Check if user or password exists
     if (!hashedPassword || !user.vpfId) {
+      setResponseStatus(event, 401)
       return {
         success: false,
         message: "Invalid email or password",
@@ -40,6 +42,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
     // Compare password using bcrypt
     const isMatch = await bcrypt.compare(password, hashedPassword)
     if (!isMatch) {
+      setResponseStatus(event, 401)
       return {
         success: false,
         message: "Invalid email or password",
@@ -69,6 +72,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
     }
   } catch (error) {
     console.error("Error logging in", error)
+    setResponseStatus(event, 500)
     return {
       success: false,
       message: (error as Error).message,

@@ -86,6 +86,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
 
     // Check if competition data is available
     if (compHistory.compInfo.length === 0) {
+      setResponseStatus(event, 404)
       return {
         success: false,
         message: "No competition data available"
@@ -134,6 +135,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
     }
   } catch (error) {
     console.error("Error fetching athlete:", error)
+    setResponseStatus(event, 500)
     return {
       success: false,
       message: (error as Error).message,

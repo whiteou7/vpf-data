@@ -12,6 +12,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ imageUrl: str
     const sessionId = getCookie(event, "session_id")
 
     if (!sessionId) {
+      setResponseStatus(event, 401)
       return {
         success: false,
         message: "Unauthorized",
@@ -20,6 +21,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ imageUrl: str
 
     const sessionValidation = await validateSession(sessionId)
     if (!sessionValidation.success) {
+      setResponseStatus(event, 401)
       return {
         success: false,
         message: sessionValidation.message,
@@ -53,6 +55,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ imageUrl: str
       })
 
     if (error) {
+      setResponseStatus(event, 500)
       return {
         success: false,
         message: error.message
@@ -78,6 +81,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ imageUrl: str
     }
   } catch (error) {
     console.error("Error uploading national id: ", error)
+    setResponseStatus(event, 500)
     return {
       success: false,
       message: (error as Error).message,

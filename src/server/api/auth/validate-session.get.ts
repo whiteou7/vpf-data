@@ -7,6 +7,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ vpfId: string
     return await validateSession(sessionId || "")
   } catch (error) {
     console.error("Failed to validate session", error)
+    setResponseStatus(event, 500)
     return {
       success: false,
       message: (error as Error).message

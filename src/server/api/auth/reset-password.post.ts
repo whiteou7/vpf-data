@@ -24,6 +24,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
 
     // Check if user or password exists
     if (!hashedPassword || !user.vpfId) {
+      setResponseStatus(event, 401)
       return {
         success: false,
         message: "Invalid email or password",
@@ -33,6 +34,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     // Compare password using bcrypt
     const isMatch = await bcrypt.compare(currentPassword, hashedPassword)
     if (!isMatch) {
+      setResponseStatus(event, 401)
       return {
         success: false,
         message: "Invalid email or password",
@@ -56,6 +58,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     }
   } catch (error) {
     console.error("Error resetting password:", error)
+    setResponseStatus(event, 500)
     return {
       success: false,
       message: (error as Error).message,
