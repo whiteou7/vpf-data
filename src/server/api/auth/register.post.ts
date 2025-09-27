@@ -53,7 +53,8 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
     await db`
       INSERT INTO members (email, full_name, password) VALUES (${email}, ${fullName}, ${hashedPassword});
     `
-
+    
+    setResponseStatus(event, 201)
     return {
       success: true,
       data: null,

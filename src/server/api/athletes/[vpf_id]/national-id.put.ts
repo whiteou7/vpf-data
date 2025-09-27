@@ -74,6 +74,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ imageUrl: str
       WHERE vpf_id = ${vpfId}
     `
 
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: { imageUrl },

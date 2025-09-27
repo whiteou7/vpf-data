@@ -99,6 +99,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
 
     // Only return comp history info if url does not have private=true query
     if (!query || query.private !== "true") {
+      setResponseStatus(event, 200)
       return {
         success: true,
         data: { fullName, sex, ...compHistory },
@@ -128,6 +129,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{
       privateInfo = await fetchPrivateInfo(vpfId)
     }
 
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: { fullName, sex, ...compHistory, ...privateInfo },

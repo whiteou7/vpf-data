@@ -58,6 +58,7 @@ export default defineEventHandler(async (event): Promise<APIBody<ReturnType<type
     `
     setHeader(event, "Cache-Control", "public, max-age=86400, s-maxage=86400")
 
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: destructureRecords({ squat, bench, deadlift, total }),

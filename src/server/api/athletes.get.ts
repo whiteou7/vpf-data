@@ -37,6 +37,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ athletes: Ath
     
     setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")
 
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: { athletes },

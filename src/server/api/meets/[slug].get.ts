@@ -47,6 +47,16 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
         division,
         placement;
     `
+
+    if (results.length === 0) {
+      setResponseStatus(event, 404)
+      return {
+        success: false,
+        message: "No results found for this meet",
+      }
+    }
+
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: { results },
