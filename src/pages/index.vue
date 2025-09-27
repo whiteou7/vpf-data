@@ -26,7 +26,7 @@ const loading = ref(true)
 const filters = useAthletesFilter()
 
 onMounted(async () => {  
-  const response = await $fetch<APIBody<{ athletes: AthleteCompInfo[] }>>("/api/athletes")
+  const response = await $fetch<APIBody<{ athletes: AthleteCompInfo[] }>>("/api/athletes", { ignoreResponseError: true })
   if (!response.success) {
     // TODO: Handle error
     return

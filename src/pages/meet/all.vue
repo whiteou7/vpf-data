@@ -45,15 +45,11 @@ const yearFilter = ref<number | null>(null)
 
 // Fetch all meets
 onMounted(async () => {
-  const response = await $fetch<APIBody<{ meets: Meet[] }>>("/api/meets")
-
-  if (!response.success) {
-    // TODO: Handle error
-    return
+  const response = await $fetch<APIBody<{ meets: Meet[] }>>("/api/meets", { ignoreResponseError: true })
+  if (response.success) {
+    meets.value = response.data?.meets ?? []
   }
-
   loading.value = false
-  meets.value = response.data?.meets ?? []
 })
 
 // Auto generated items for filter buttons

@@ -1,6 +1,8 @@
 import type { RecordTableRow, Result, LiftRecord, DestructuredRecord, TotalRecord } from "~/types/record"
 import type { Sex } from "~/types/athlete"
 
+import type { FormTextFieldConfig } from "~/types/component"
+
 // Destructure raw record data
 export function destructureRecords(
   records: {
@@ -113,4 +115,21 @@ export async function getHashedFileName(str1: string, str2: string, length = 16)
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
 
   return hashHex.slice(0, length)
+}
+
+// Used for FormData, cast all fields with number type to number
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function normalizeFormData<T extends Record<string, any>>(
+  model: T,
+  fields: Array<FormTextFieldConfig>
+): Record<string, number | string | null> {
+  const payload: Record<string, number | string | null> = { ...model }
+
+  for (const field of fields) {
+    if (field.type === "number" && payload[field.value] !== "" && payload[field.value] != null) {
+      payload[field.value] = Number(payload[field.value])
+    }
+  }
+
+  return payload
 }
