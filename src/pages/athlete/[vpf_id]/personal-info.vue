@@ -68,8 +68,8 @@ const submit = async () => {
 </script>
 
 <template>
-  <div class="d-flex ga-4 justify-center">
-    <v-card max-width="500" style="flex: 1;" class="ma-4">
+  <div class="d-flex flex-column flex-md-row ga-4 my-4 justify-center">
+    <v-card max-width="500" style="flex: 1;">
       <v-card-title>
         Membership status: {{ personalInfo?.active ? "active" : "inactive" }}
       </v-card-title>
@@ -85,7 +85,7 @@ const submit = async () => {
       </v-card-text>
     </v-card>
 
-    <v-card max-width="500" style="flex: 1;" class="ma-4" title="National ID">
+    <v-card max-width="500" style="flex: 1;" title="National ID">
       <v-card-text>
         <div v-if="personalInfo?.nationalIdImageUrl">
           <v-img
