@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { APIBody } from "~/types/api"
+import type { FormTextFieldConfig } from "~/types/component"
 
 const { personalInfo } = useFetchAthlete()
-const fieldConfig = [
-  { value: "email", label: "Email", icon: "mdi-email-outline" },
+const fieldConfig: Array<FormTextFieldConfig> = [
+  { value: "email", label: "Email", icon: "mdi-email-outline", type: "email" },
   { value: "nationality", label: "Nationality", icon: "mdi-flag" },
   { value: "dob", label: "Date of Birth", icon: "mdi-calendar-range" },
-  { value: "nationalId", label: "National ID", icon: "mdi-card-account-details" },
+  { value: "nationalId", label: "National ID", icon: "mdi-card-account-details", type: "number" },
   { value: "address", label: "Address", icon: "mdi-home" },
-  { value: "phoneNumber", label: "Phone Number", icon: "mdi-phone" }
+  { value: "phoneNumber", label: "Phone Number", icon: "mdi-phone", type: "number" }
 ]
 const snackbar = useSnackbar()
 const nationalIdImage = ref<File>()
@@ -16,12 +17,11 @@ const previewUrl = computed(() =>
   nationalIdImage.value ? window.URL.createObjectURL(nationalIdImage.value) : ""
 )
 const dialog = ref(false)
+const route = useRoute()
+const vpfId = route.params.vpf_id as string
 
 const handleUpload = async () => {
   if (!nationalIdImage.value) return
-
-  const route = useRoute()
-  const vpfId = route.params.vpf_id as string
 
   const formData = new FormData()
   formData.append("national_id", nationalIdImage.value)
@@ -29,6 +29,7 @@ const handleUpload = async () => {
   const response = await $fetch<APIBody<{ imageUrl: string }>>(`/api/athletes/${vpfId}/national-id`, {
     method: "PUT",
     body: formData,
+    ignoreResponseError: true
   })
 
   if (response.success) {
@@ -36,7 +37,7 @@ const handleUpload = async () => {
       text: response.message ?? "",
       color: "success",
     })
-    // Refetch
+    // Refetch to display new image
     await useFetchAthlete().fetch(vpfId, true)
   } else {
     snackbar.push({
@@ -48,6 +49,22 @@ const handleUpload = async () => {
   dialog.value = false
   
 }
+
+const submit = async () => {
+  // Filter out unnecessary keys
+  const { active, nationalIdImageUrl, ...bodyRaw } = personalInfo.value
+  const body = normalizeFormData(bodyRaw, fieldConfig)
+  const response = await $fetch(`/api/athletes/${vpfId}/personal-info`, {
+    ignoreResponseError: true,
+    method: "PATCH",
+    body
+  })
+
+  snackbar.push({
+    color: response.success ? "success" : "error",
+    text: response.message ?? "An error has occured"
+  })
+}
 </script>
 
 <template>
@@ -57,9 +74,10 @@ const handleUpload = async () => {
         Membership status: {{ personalInfo?.active ? "active" : "inactive" }}
       </v-card-title>
       <v-card-text v-if="personalInfo">
-        <FormTextFields
+        <DataForm
           :model="personalInfo"
           :fields="fieldConfig"
+          :onSubmit="submit"
         />
       </v-card-text>
       <v-card-text v-else>
@@ -94,8 +112,8 @@ const handleUpload = async () => {
         </div>
       </v-card-text>
       <v-card-actions class="d-flex justify-end">
-        <div class="text-center pa-4">
-          <v-btn @click="dialog = true">
+        <div class="text-center px-4">
+          <v-btn class="px-4" @click="dialog = true">
             Edit/Upload National ID
           </v-btn>
 

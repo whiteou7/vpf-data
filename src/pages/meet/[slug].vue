@@ -41,7 +41,7 @@ const loading = ref(true)
 
 // Fetch meet result
 onMounted(async () => {
-  const response = await $fetch<APIBody<{ results: MeetResult[] }>>(`/api/meets/${slug}`)
+  const response = await $fetch<APIBody<{ results: MeetResult[] }>>(`/api/meets/${slug}`, { ignoreResponseError: true })
   if (response.success) {
     results.value = response.data?.results ?? []
   }

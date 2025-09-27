@@ -64,8 +64,38 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     WHERE
       vpf_id = ${vpfId}
   `
-  const compSettings: AthleteCompSettings = { ...row }
-  const personalInfo: AthletePersonalInfo = { ...row }
+  const {
+    nationality,
+    dob,
+    nationalId,
+    address,
+    phoneNumber,
+    email,
+    nationalIdImageUrl,
+    active,
+    squatRackPin,
+    benchRackPin,
+    benchSafetyPin,
+    benchFootBlock,
+  } = row
+
+  const personalInfo: AthletePersonalInfo = {
+    nationality,
+    dob,
+    nationalId,
+    address,
+    phoneNumber,
+    email,
+    nationalIdImageUrl,
+    active
+  }
+
+  const compSettings: AthleteCompSettings = {
+    squatRackPin,
+    benchRackPin,
+    benchSafetyPin,
+    benchFootBlock,
+  }
 
   return { personalInfo, compSettings }
 }

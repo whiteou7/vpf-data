@@ -137,7 +137,7 @@
       v-model="snackbar"
       :color="snackbarColor"
       timeout="3000"
-      :location="top"
+      location="top"
       variant="tonal"
     >
       {{ snackbarText }}

@@ -5,8 +5,22 @@ const fullName = ref<string>()
 const sex = ref<Sex>()
 const compInfo = ref<AthleteCompInfo[]>()
 const pb = ref<AthletePB[]>()
-const personalInfo = ref<AthletePersonalInfo>()
-const compSettings = ref<AthleteCompSettings>()
+const personalInfo = ref<AthletePersonalInfo>({
+  nationality: null,
+  dob: null,
+  nationalId: null,
+  address: null,
+  phoneNumber: null,
+  email: null,
+  active: false,
+  nationalIdImageUrl: null
+})
+const compSettings = ref<AthleteCompSettings>({
+  squatRackPin: null,
+  benchRackPin: null,
+  benchFootBlock: null,
+  benchSafetyPin: null
+})
 
 let storedVpfId: string = ""
 
@@ -24,14 +38,15 @@ export function useFetchAthlete() {
         pb: AthletePB[]
         personalInfo?: AthletePersonalInfo
         compSettings?: AthleteCompSettings
-      }>>(`/api/athletes/${vpfId}?private=true`)
+      }>>(`/api/athletes/${vpfId}?private=true`, { ignoreResponseError: true })
       if (response.success) {
         fullName.value = response.data?.fullName
         sex.value = response.data?.sex
         compInfo.value = response.data?.compInfo
         pb.value = response.data?.pb
-        personalInfo.value = response.data?.personalInfo
-        compSettings.value = response.data?.compSettings
+        if (response.data?.personalInfo) personalInfo.value = response.data?.personalInfo 
+        if (response.data?.compSettings) compSettings.value = response.data?.compSettings 
+        console.log(compSettings.value)
       }
     } else {
       const response = await $fetch<APIBody<{
@@ -39,7 +54,7 @@ export function useFetchAthlete() {
         sex: Sex,
         compInfo: AthleteCompInfo[]
         pb: AthletePB[]
-      }>>(`/api/athletes/${vpfId}`)
+      }>>(`/api/athletes/${vpfId}`, { ignoreResponseError: true })
       if (response.success) {
         fullName.value = response.data?.fullName
         sex.value = response.data?.sex

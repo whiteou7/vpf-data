@@ -15,7 +15,8 @@ export const useAuth = async () => {
     try {
       const response = await $fetch<APIBody<{ sessionId: string, vpfId: string }>>("/api/auth/login", {
         method: "POST",
-        body: { email, password }
+        body: { email, password },
+        ignoreResponseError: true
       })
 
       if (response.success) {
@@ -31,7 +32,8 @@ export const useAuth = async () => {
     try {
       const response = await $fetch<APIBody<null>>("/api/auth/register", {
         method: "POST",
-        body: { fullName, email, password }
+        body: { fullName, email, password },
+        ignoreResponseError: true
       })
 
       return response
@@ -45,6 +47,7 @@ export const useAuth = async () => {
     try {
       const response = await $fetch("/api/auth/logout", {
         method: "POST",
+        ignoreResponseError: true
       })
 
       return response
@@ -57,7 +60,7 @@ export const useAuth = async () => {
 
   const validate = async () => {
     try {
-      const response = await $fetch<APIBody<{ vpfId: string }>>("/api/auth/validate-session")
+      const response = await $fetch<APIBody<{ vpfId: string }>>("/api/auth/validate-session", { ignoreResponseError: true })
 
       // Validating will set user state
       if (response.success) {

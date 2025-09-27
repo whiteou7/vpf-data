@@ -1,9 +1,9 @@
 export type AthleteCompInfo = {
-  "#"?: number;
+  "#": number;
   vpfId: string;
   fullName: string;
   weightClass: number;
-  bodyWeight?: number;
+  bodyWeight: number;
   sex: Sex;
   division: Division;
   bestSquat: number;
@@ -11,7 +11,7 @@ export type AthleteCompInfo = {
   bestDead: number;
   total: number;
   gl: number;
-  placement?: number;
+  placement: number;
 };
 
 export type Sex = "male" | "female" | null
@@ -27,19 +27,19 @@ export type AthletePB = {
 }
 
 export type AthletePersonalInfo = {
-  nationality?: string
-  dob?: string
-  nationalId?: string
-  address?: string
-  phoneNumber?: string
-  email: string
-  active: boolean
-  nationalIdImageUrl: string
+  nationality: string | null
+  dob: string | null
+  nationalId: number | null
+  address: string | null
+  phoneNumber: number | null
+  email: string | null
+  active?: boolean
+  nationalIdImageUrl?: string | null
 }
 
 export type AthleteCompSettings = {
-  squatRackPin?: number
-  benchRackPin?: number
-  benchSafetyPin?: number
-  benchFootBlock?: number
+  squatRackPin: number | null
+  benchRackPin: number | null
+  benchSafetyPin: number | null
+  benchFootBlock: number | null
 }

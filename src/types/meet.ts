@@ -5,7 +5,7 @@ export type Meet = {
   meetName: string;
   city: string;
   hostDate: string;
-  mediaLink: string;
+  mediaLink: string | null;
   count: number;
   slug: string
 }

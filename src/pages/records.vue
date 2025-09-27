@@ -39,7 +39,7 @@ const femaleRowGroup: RecordTableRowGroup = {
 
 onMounted(async () => {  
   // Fetch
-  const response = await $fetch<APIBody<{ male: DestructuredRecord, female: DestructuredRecord }>>("/api/records")
+  const response = await $fetch<APIBody<{ male: DestructuredRecord, female: DestructuredRecord }>>("/api/records", { ignoreResponseError: true })
   if (!response.success || !response.data) {
     // TODO: Handle error
     return
