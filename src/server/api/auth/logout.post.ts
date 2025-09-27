@@ -9,6 +9,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
       expires: new Date(0),
     })
 
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: null,

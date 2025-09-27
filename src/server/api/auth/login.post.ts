@@ -66,6 +66,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ sessionId: st
       expires: new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000)
     })
 
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: { sessionId, vpfId: user.vpfId }

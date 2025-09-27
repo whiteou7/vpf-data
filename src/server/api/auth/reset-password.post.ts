@@ -51,6 +51,7 @@ export default defineEventHandler(async (event): Promise<APIBody<null>> => {
       WHERE vpf_id = ${user.vpfId}
     `
 
+    setResponseStatus(event, 200)
     return {
       success: true,
       data: null,
