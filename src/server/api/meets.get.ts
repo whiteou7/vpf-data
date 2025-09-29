@@ -12,7 +12,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
         host_date,
         media_link,
         COUNT(vpf_id) as count,
-        slug
+        meet_slug
       FROM
         meet_info mi
       JOIN 
