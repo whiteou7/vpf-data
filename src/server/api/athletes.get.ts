@@ -1,10 +1,8 @@
 import { db } from "../../db"
-import type { AthleteCompInfo } from "~/types/athlete"
-import type { APIBody } from "~/types/api"
 
-export default defineEventHandler(async (event): Promise<APIBody<{ athletes: AthleteCompInfo[] }>> => {
+export default defineEventHandler(async (event) => {
   try {
-    const athletes = await db<AthleteCompInfo[]>`
+    const athletes = await db`
       SELECT 
         ROW_NUMBER() OVER (ORDER BY gl DESC) AS "#",
         vpf_id,

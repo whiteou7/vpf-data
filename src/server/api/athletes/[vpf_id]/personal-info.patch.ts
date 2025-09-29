@@ -6,7 +6,7 @@ import type { APIBody } from "~/types/api"
 import type { AthletePersonalInfo } from "~/types/athlete"
 import { isValidYOB } from "~/utils/utils"
 
-type Data = Omit<AthletePersonalInfo, "active" | "nationalIdImageUrl" | "fullName">
+type Data = Omit<AthletePersonalInfo, "active" | "nationalIdImageUrl" | "fullName" | "vpfId">
 
 export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
   try {
