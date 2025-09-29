@@ -46,7 +46,6 @@ export function useFetchAthlete() {
         pb.value = response.data?.pb
         if (response.data?.personalInfo) personalInfo.value = response.data?.personalInfo 
         if (response.data?.compSettings) compSettings.value = response.data?.compSettings 
-        console.log(compSettings.value)
       }
     } else {
       const response = await $fetch<APIBody<{
