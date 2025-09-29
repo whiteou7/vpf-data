@@ -133,3 +133,12 @@ export function normalizeFormData<T extends Record<string, any>>(
 
   return payload
 }
+
+export function isValidYOB(input: string) {
+  const yobRegex = /^(19|20)\d{2}$/
+  if (!yobRegex.test(input)) return false
+
+  const year = parseInt(input, 10)
+  const currentYear = new Date().getFullYear()
+  return year >= 1900 && year <= currentYear
+}

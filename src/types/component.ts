@@ -4,5 +4,5 @@ export type FormTextFieldConfig = {
   value: string
   label: string
   icon?: string
-  type?: "email" | "number" | "text-digit-only"
+  type?: "email" | "number" | "text-digit-only" | "nationality" | "year"
 }
