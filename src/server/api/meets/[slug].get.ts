@@ -40,7 +40,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ results: Meet
       FROM
         meet_result_detailed
       WHERE
-        slug = ${slug}
+        meet_slug = ${slug}
       ORDER BY
         flight,
         weight_class,
