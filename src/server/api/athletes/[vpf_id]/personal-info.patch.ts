@@ -4,6 +4,7 @@ import { validateSession } from "~/server/services/validate-session"
 import { isValidEmail } from "~/server/utils/utils"
 import type { APIBody } from "~/types/api"
 import type { AthletePersonalInfo } from "~/types/athlete"
+import { isValidYOB } from "~/utils/utils"
 
 type Data = Omit<AthletePersonalInfo, "active" | "nationalIdImageUrl">
 
@@ -70,6 +71,13 @@ export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
       return {
         success: false,
         message: "Phone number must be a number",
+      }
+    }
+
+    if (dob && !isValidYOB(dob)) {
+      return {
+        success: false,
+        message: "Invalid YOB",
       }
     }
 

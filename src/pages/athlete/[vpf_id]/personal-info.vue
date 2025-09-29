@@ -6,8 +6,8 @@ import VuePictureCropper, { cropper } from "vue-picture-cropper"
 const { personalInfo } = useFetchAthlete()
 const fieldConfig: Array<FormTextFieldConfig> = [
   { value: "email", label: "Email", icon: "mdi-email-outline", type: "email" },
-  { value: "nationality", label: "Nationality", icon: "mdi-flag" },
-  { value: "dob", label: "Date of Birth", icon: "mdi-calendar-range" },
+  { value: "nationality", label: "Nationality", icon: "mdi-flag", type: "nationality" },
+  { value: "dob", label: "Year of Birth", icon: "mdi-calendar-range", type: "year" },
   { value: "nationalId", label: "National ID", icon: "mdi-card-account-details", type: "text-digit-only" },
   { value: "address", label: "Address", icon: "mdi-home" },
   { value: "phoneNumber", label: "Phone Number", icon: "mdi-phone", type: "text-digit-only" }
