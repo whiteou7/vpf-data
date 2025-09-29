@@ -7,26 +7,25 @@ const router = useRouter()
 const vpfId = route.params.vpf_id as string
 const { user } = await useAuth()
 
-// Variable to decide whether to request to fetch private information as well
-// Only request when vpf id of path matches vpf of user state (server still have to verify session_id)
-const isPrivate = ref<boolean>(false)
-
-isPrivate.value = vpfId == user.value.vpfId
+const renderButtons = ref<boolean>(false)
+renderButtons.value = vpfId == user.value.vpfId
 
 const loading = ref(true)
-const fullName = ref<string>()
+const personalInfo = ref()
 const sex = ref<Sex>()
-const compInfo = ref()
 
 const currentTab = ref<string>(route.path.split("/").at(3) ?? "")
 
 onMounted(async () => {
-  await useFetchAthlete().fetch(vpfId, isPrivate.value)
+  await useFetchAthlete().fetch(vpfId)
   const data = useFetchAthlete()
 
-  fullName.value = data.fullName.value
-  sex.value = data.sex.value
-  compInfo.value = data.compInfo.value
+  personalInfo.value = data.personalInfo.value
+  if (data.compInfo.value && data.compInfo.value.length > 0) {
+    sex.value = data.compInfo.value[0].sex
+  } else {
+    sex.value = undefined
+  }
 
   loading.value = false
 })
@@ -43,6 +42,10 @@ function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
     router.push(`/athlete/${vpfId}/settings`)
   }
 }
+
+const routeInstagram = () => {
+  window.open(`https://instagram.com/${personalInfo.value.instagramUsername}`)
+}
 </script>
 
 <template>
@@ -54,13 +57,22 @@ function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
         indeterminate 
         :size="81"/>
     </div>
-    <div v-else-if="compInfo">
+    <div v-else-if="personalInfo">
       <!-- Shared Header -->
-      <h1 class="mb-4 text-primary justify-start pa-2">
-        {{ fullName + " (" + ((sex === 'male') ? 'M' : 'F') + ")" }}
-      </h1>
+      <div class="d-flex align-center">
+        <h1 class="text-primary justify-start pa-2">
+          {{ personalInfo.fullName + " (" + ((sex === 'male') ? 'M' : 'F') + ")" }}
+        </h1>
+        <v-icon-btn
+          v-if="personalInfo.instagramUsername"
+          variant="plain"
+          icon="mdi-instagram"
+          @click="routeInstagram"
+        />
+      </div>
+      
       <!-- Navigation Buttons (only for authorized user) -->
-      <div v-if="isPrivate" class="d-flex flex-column flex-md-row ga-4">
+      <div v-if="renderButtons" class="d-flex flex-column flex-md-row ga-4">
         <v-btn :color="currentTab == '' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('compHistory')">
           Competition History
         </v-btn>

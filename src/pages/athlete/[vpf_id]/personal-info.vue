@@ -10,7 +10,8 @@ const fieldConfig: Array<FormTextFieldConfig> = [
   { value: "dob", label: "Year of Birth", icon: "mdi-calendar-range", type: "year" },
   { value: "nationalId", label: "National ID", icon: "mdi-card-account-details", type: "text-digit-only" },
   { value: "address", label: "Address", icon: "mdi-home" },
-  { value: "phoneNumber", label: "Phone Number", icon: "mdi-phone", type: "text-digit-only" }
+  { value: "phoneNumber", label: "Phone Number", icon: "mdi-phone", type: "text-digit-only" },
+  { value: "instagramUsername", label: "Instagram Username", icon: "mdi-instagram" }
 ]
 const snackbar = useSnackbar()
 
