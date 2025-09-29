@@ -9,6 +9,7 @@
       density="compact"
       :prepend-inner-icon="field.icon"
       :type="field.type"
+      :rules="field.type == 'text-digit-only' ? [value => /^\d*$/.test(value)] : undefined"
     />
     <div class="d-flex justify-end">
       <v-btn class="max-auto" variant="text" text="Submit" type="submit"/>

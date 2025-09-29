@@ -57,7 +57,7 @@ export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
       }
     }
 
-    if (nationalId && typeof nationalId != "number") {
+    if (nationalId && !/^\d+$/.test(nationalId)) {
       setResponseStatus(event, 400)
       return {
         success: false,
@@ -65,7 +65,7 @@ export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
       }
     }
 
-    if (phoneNumber && typeof phoneNumber != "number") {
+    if (phoneNumber && !/^\d+$/.test(phoneNumber)) {
       setResponseStatus(event, 400)
       return {
         success: false,
