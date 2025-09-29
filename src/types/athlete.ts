@@ -24,7 +24,7 @@ export type AthletePB = {
   benchPb: number;
   deadliftPb: number;
   totalPb: number;
-  dotsPb: number;
+  glPb: number;
 }
 
 export type AthletePersonalInfo = {

@@ -12,7 +12,6 @@ export type LiftRecord = {
 
 export type TotalRecord = LiftRecord & { 
   ipf: number,
-  dots: number,
   gl: number
 }
 
