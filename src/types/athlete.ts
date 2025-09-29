@@ -29,9 +29,9 @@ export type AthletePB = {
 export type AthletePersonalInfo = {
   nationality: string | null
   dob: string | null
-  nationalId: number | null
+  nationalId: string | null
   address: string | null
-  phoneNumber: number | null
+  phoneNumber: string | null
   email: string | null
   active?: boolean
   nationalIdImageUrl?: string | null
