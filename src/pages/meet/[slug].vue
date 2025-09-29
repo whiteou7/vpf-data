@@ -14,10 +14,11 @@
         Session {{ session }}
       </h2>
 
-      <BaseTable
+      <MeetResultTable
         :headers="headers"
         :items="group"
         :search="filters.search.value"
+        height="700"
       />
     </div>
   </div>
@@ -76,22 +77,22 @@ const groupedResults = computed(() => {
 const headers = [
   { title: "Full Name", value: "fullName" },
   { title: "Sex", value: "sex" },
-  { title: "Weight Class", value: "weightClass" },
-  { title: "Division", value: "division" },
-  { title: "Body Weight", value: "bodyWeight" },
+  { title: "Weight Class", value: "weightClass", sortable: true },
+  { title: "Division", value: "division", sortable: true },
+  { title: "Body Weight", value: "bodyWeight", sortable: true },
   { title: "Flight", value: "flight" },
-  { title: "Squat 1", value: "squat1" },
-  { title: "Squat 2", value: "squat2" },
-  { title: "Squat 3", value: "squat3" },
-  { title: "Bench 1", value: "bench1" },
-  { title: "Bench 2", value: "bench2" },
-  { title: "Bench 3", value: "bench3" },
-  { title: "Deadlift 1", value: "dead1" },
-  { title: "Deadlift 2", value: "dead2" },
-  { title: "Deadlift 3", value: "dead3" },
-  { title: "Total", value: "total" },
-  { title: "GL Points", value: "gl" },
-  { title: "#", value: "placement" }
+  { title: "Squat 1", value: "squat1", sortable: true },
+  { title: "Squat 2", value: "squat2", sortable: true },
+  { title: "Squat 3", value: "squat3", sortable: true },
+  { title: "Bench 1", value: "bench1", sortable: true },
+  { title: "Bench 2", value: "bench2", sortable: true },
+  { title: "Bench 3", value: "bench3", sortable: true },
+  { title: "Deadlift 1", value: "dead1", sortable: true },
+  { title: "Deadlift 2", value: "dead2", sortable: true },
+  { title: "Deadlift 3", value: "dead3", sortable: true },
+  { title: "Total", value: "total", sortable: true },
+  { title: "GL Points", value: "gl", sortable: true },
+  { title: "#", value: "placement", sortable: true }
 ]
 </script>
 

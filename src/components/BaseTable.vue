@@ -5,7 +5,6 @@
     fixed-header
     hide-default-footer
     density="compact"
-    striped="odd"
     class="rounded-lg bold-header-no-wrap-no-cursor"
     @click:row="rowClick"
   >
