@@ -20,8 +20,10 @@
 </template>
 
 <script lang="ts" setup>
-const pb = ref()
-const compInfo = ref()
+import type { AthletePB, AthleteCompInfo } from "~/types/athlete"
+
+const pb = ref<AthletePB[]>()
+const compInfo = ref<AthleteCompInfo[]>()
 
 onMounted(async () => {
   const data = await useFetchAthlete()

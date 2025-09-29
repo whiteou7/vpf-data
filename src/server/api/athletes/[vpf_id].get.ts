@@ -20,8 +20,7 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       body_weight::float as body_weight,
       placement,
       meet_name,
-      meet_id,
-      vpf_id
+      meet_slug
     FROM meet_result_detailed
     WHERE vpf_id = ${vpfId}
     ORDER BY meet_id DESC;
@@ -46,6 +45,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
 }> => {
   const [row] = await db<(AthleteCompSettings & AthletePersonalInfo)[]>`
     SELECT 
+      vpf_id,
       full_name,
       nationality,
       dob,
@@ -83,6 +83,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
   } = row
 
   const personalInfo: AthletePersonalInfo = {
+    vpfId,
     fullName,
     nationality,
     dob,

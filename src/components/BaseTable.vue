@@ -32,7 +32,7 @@
     </template>
 
     <template #item.meetName="{ item }">
-      <NuxtLink :to="`/meet/${item.slug}`" class="meet-link">
+      <NuxtLink :to="`/meet/${item.meetSlug}`" class="meet-link">
         {{ item.meetName }}
       </NuxtLink>
     </template>

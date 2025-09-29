@@ -18,15 +18,13 @@ import AthletesFilter from "~/components/AthletesFilter.vue"
 import { useAthletesFilter } from "~/composables/useAthletesFilter"
 
 // Fetch
-import type { APIBody } from "~/types/api"
-
 const athletes = ref<AthleteCompInfo[]>([])
 const loading = ref(true)
 
 const filters = useAthletesFilter()
 
 onMounted(async () => {  
-  const response = await $fetch<APIBody<{ athletes: AthleteCompInfo[] }>>("/api/athletes", { ignoreResponseError: true })
+  const response = await $fetch("/api/athletes", { ignoreResponseError: true })
   if (!response.success) {
     // TODO: Handle error
     return
