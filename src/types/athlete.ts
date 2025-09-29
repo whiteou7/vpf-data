@@ -1,7 +1,6 @@
 export type AthleteCompInfo = {
   "#": number;
   vpfId: string;
-  fullName: string;
   weightClass: number;
   bodyWeight: number;
   sex: Sex;
@@ -12,6 +11,8 @@ export type AthleteCompInfo = {
   total: number;
   gl: number;
   placement: number;
+  fullName?: string
+  instagramUsername?: string | null
 };
 
 export type Sex = "male" | "female" | null
@@ -27,6 +28,7 @@ export type AthletePB = {
 }
 
 export type AthletePersonalInfo = {
+  fullName: string;
   nationality: string | null
   dob: string | null
   nationalId: string | null
@@ -35,6 +37,7 @@ export type AthletePersonalInfo = {
   email: string | null
   active?: boolean
   nationalIdImageUrl?: string | null
+  instagramUsername: string | null
 }
 
 export type AthleteCompSettings = {

@@ -6,7 +6,7 @@ import type { APIBody } from "~/types/api"
 import type { AthletePersonalInfo } from "~/types/athlete"
 import { isValidYOB } from "~/utils/utils"
 
-type Data = Omit<AthletePersonalInfo, "active" | "nationalIdImageUrl">
+type Data = Omit<AthletePersonalInfo, "active" | "nationalIdImageUrl" | "fullName">
 
 export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
   try {
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
       }
     }
 
-    const { email, nationality, dob, nationalId, address, phoneNumber } = body
+    const { email, nationality, dob, nationalId, address, phoneNumber, instagramUsername } = body
 
     // Sanity check
     if (email && !isValidEmail(email)) {
@@ -89,7 +89,8 @@ export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
         dob = ${dob},
         national_id = ${nationalId},
         address = ${address},
-        phone_number = ${phoneNumber}
+        phone_number = ${phoneNumber},
+        instagram_username = ${instagramUsername}
       WHERE vpf_id = ${vpfId}
     `
 
@@ -97,7 +98,7 @@ export default defineEventHandler(async (event): Promise<APIBody<Data>> => {
     return {
       success: true,
       message: "Personal information updated successfully",
-      data: { email, nationality, dob, nationalId, address, phoneNumber },
+      data: { email, nationality, dob, nationalId, address, phoneNumber, instagramUsername },
     }
   } catch (error) {
     console.error("Error updating personal info: ", error)

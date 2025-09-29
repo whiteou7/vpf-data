@@ -16,7 +16,8 @@ export default defineEventHandler(async (event): Promise<APIBody<{ athletes: Ath
         best_bench::float as best_bench,
         best_dead::float as best_dead,
         total::float as total,
-        gl
+        gl,
+        instagram_username
       FROM (
         SELECT DISTINCT ON (vpf_id) 
           vpf_id,
@@ -28,7 +29,8 @@ export default defineEventHandler(async (event): Promise<APIBody<{ athletes: Ath
           best_bench,
           best_dead,
           total,
-          gl
+          gl,
+          instagram_username
         FROM meet_result_detailed
         ORDER BY vpf_id, gl DESC
       ) sub

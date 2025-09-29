@@ -21,6 +21,14 @@
       <NuxtLink :to="`/athlete/${item.vpfId}`" class="athlete-link">
         {{ item.fullName }}
       </NuxtLink>
+
+      <v-icon-btn
+        v-if="item.instagramUsername"
+        size="small"
+        variant="plain"
+        icon="mdi-instagram"
+        @click="routeInstagram(item.instagramUsername)"
+      />
     </template>
 
     <template #item.meetName="{ item }">
@@ -119,6 +127,10 @@ const rowClick = (row) => {
   // Set new row
   currentRow = tr
   tr.bgColor = "#303030"
+}
+
+const routeInstagram = (username: string) => {
+  window.open(`https://instagram.com/${username}`)
 }
 </script>
 <style>

@@ -1,5 +1,5 @@
 import { db } from "~/db"
-import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettings, Sex } from "~/types/athlete"
+import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettings } from "~/types/athlete"
 import type { APIBody } from "~/types/api"
 import { validateSession } from "~/server/services/validate-session"
 
@@ -9,7 +9,6 @@ const fetchCompHistory = async (vpfId: string): Promise<{
 }> => {
   const compInfo = await db<AthleteCompInfo[]>`
     SELECT
-      full_name,
       sex,
       weight_class,
       division,
@@ -47,6 +46,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
 }> => {
   const [row] = await db<(AthleteCompSettings & AthletePersonalInfo)[]>`
     SELECT 
+      full_name,
       nationality,
       dob,
       national_id,
@@ -58,13 +58,15 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       bench_rack_pin,
       bench_safety_pin,
       bench_foot_block,
-      national_id_image_url
+      national_id_image_url,
+      instagram_username
     FROM 
       public.members
     WHERE
       vpf_id = ${vpfId}
   `
   const {
+    fullName,
     nationality,
     dob,
     nationalId,
@@ -77,9 +79,11 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     benchRackPin,
     benchSafetyPin,
     benchFootBlock,
+    instagramUsername
   } = row
 
   const personalInfo: AthletePersonalInfo = {
+    fullName,
     nationality,
     dob,
     nationalId,
@@ -87,7 +91,8 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     phoneNumber,
     email,
     nationalIdImageUrl,
-    active
+    active,
+    instagramUsername
   }
 
   const compSettings: AthleteCompSettings = {
@@ -101,18 +106,20 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
 }
 
 export default defineEventHandler(async (event): Promise<APIBody<{ 
-  fullName: string,
-  sex: Sex,
   compInfo: AthleteCompInfo[], 
   pb: AthletePB[], 
-  personalInfo?: AthletePersonalInfo, 
-  compSettings?: AthleteCompSettings 
+  personalInfo: AthletePersonalInfo, 
+  compSettings: AthleteCompSettings 
+} | {
+  compInfo: AthleteCompInfo[], 
+  pb: AthletePB[], 
+  personalInfo: { fullName: string, instagramUsername: string | null },  
 }>> => {
   try {  
     const vpfId = event.context.params?.vpf_id || ""
-    const query = getQuery(event)
 
     const compHistory = await fetchCompHistory(vpfId)
+    const privateInfo = await fetchPrivateInfo(vpfId)
 
     // Check if competition data is available
     if (compHistory.compInfo.length === 0) {
@@ -123,46 +130,38 @@ export default defineEventHandler(async (event): Promise<APIBody<{
       }
     }
 
-    // Extract name & gender from comp history
-    const sex = compHistory.compInfo[0].sex
-    const fullName = compHistory.compInfo[0].fullName
-
-    // Only return comp history info if url does not have private=true query
-    if (!query || query.private !== "true") {
-      setResponseStatus(event, 200)
-      return {
-        success: true,
-        data: { fullName, sex, ...compHistory },
-        message: "Fetched athlete public info"
+    const sessionId = getCookie(event, "session_id")
+    let authorized = false
+    // Validate session
+    const sessionValidation = await validateSession(sessionId || "")
+    
+    // Extract vpfId from response
+    if (sessionValidation.success) {
+      const validatedVpfId = sessionValidation?.data?.vpfId
+      const matchedVpfId = validatedVpfId == vpfId
+      if (matchedVpfId) {
+        authorized = true
       }
     }
 
-    const sessionId = getCookie(event, "session_id")
-
-    // Validate session
-    const sessionValidation = await validateSession(sessionId || "")
-    if (!sessionValidation.success) return {
-      success: true,
-      data: { fullName, sex, ...compHistory },
-      message: "Fetched athlete info"
-    }
-    
-    // Extract vpfId from response
-    const validatedVpfId = sessionValidation?.data?.vpfId
-
-    // Check if the validated session's vpfId matches the requested vpfId
-    const authorized = validatedVpfId == vpfId
-
-    // Fetch private info if authorized
-    let privateInfo = undefined
     if (authorized) {
-      privateInfo = await fetchPrivateInfo(vpfId)
+      setResponseStatus(event, 200)
+      return {
+        success: true,
+        data: { ...compHistory, ...privateInfo },
+        message: "Fetched athlete info"
+      }
     }
 
-    setResponseStatus(event, 200)
     return {
       success: true,
-      data: { fullName, sex, ...compHistory, ...privateInfo },
+      data: { 
+        ...compHistory, 
+        personalInfo: { 
+          fullName: privateInfo.personalInfo.fullName,
+          instagramUsername: privateInfo.personalInfo.instagramUsername,
+        }
+      },
       message: "Fetched athlete info"
     }
   } catch (error) {
