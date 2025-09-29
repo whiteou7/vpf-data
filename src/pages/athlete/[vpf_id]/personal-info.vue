@@ -154,7 +154,7 @@ const submit = async () => {
       </v-card-text>
 
       <!-- Button to edit/upload -->
-      <v-card-actions class="d-flex justify-end">
+      <v-card-actions class="d-flex justify-end pa-0 pb-4">
         <div class="text-center px-4">
           <v-btn class="px-4" @click="isUploadModalOpen = true">
             Edit/Upload National ID
@@ -170,7 +170,6 @@ const submit = async () => {
       persistent
     >
       <v-card
-        width="600"
         class="pa-4"
       >
         <v-card-title v-if="croppedImageUrl" class="pb-2 pt-0 px-0">Preview Image</v-card-title>
@@ -235,7 +234,7 @@ const submit = async () => {
           </div>
         </v-card-text>
         <v-card-actions class="justify-end">
-          <v-btn color="primary" text="Crop Image" @click="handleCropping" />
+          <v-btn class="mx-auto" color="primary" text="Crop Image" @click="handleCropping" />
           <v-btn
             class="mx-auto"
             text="Cancel"

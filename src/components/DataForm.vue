@@ -26,7 +26,7 @@
     </template>
 
     <div class="d-flex justify-end">
-      <v-btn class="max-auto" variant="text" text="Submit" type="submit" />
+      <v-btn variant="text" text="Submit" type="submit" />
     </div>
   </v-form>
 </template>

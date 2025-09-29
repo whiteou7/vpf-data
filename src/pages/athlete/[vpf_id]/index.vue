@@ -7,6 +7,7 @@
     <BaseTable
       :headers="pbHeaders"
       :items="pb"
+      striped="odd"
     />
     <!-- Competition History -->
     <h2 class="my-4 text-secondary pa-2">
@@ -15,6 +16,7 @@
     <BaseTable
       :headers="compInfoHeaders"
       :items="compInfo"
+      striped="odd"
     />
   </div>
 </template>
