@@ -36,6 +36,7 @@ onUnmounted(() => {
   position: sticky;
   left: 0;
   z-index: 1 !important;
+  min-width: 100px;
 }
 
 :deep(.v-table__wrapper > table > thead > tr > th) {

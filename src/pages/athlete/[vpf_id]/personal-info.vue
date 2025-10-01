@@ -15,10 +15,10 @@ const fieldConfig: Array<FormTextFieldConfig> = [
 ]
 const snackbar = useSnackbar()
 
-const version = ref<number>(0)
-
 const nationalIdImage = ref<File | undefined>()
 const croppedImageUrl = ref<string | undefined>()
+
+const rerender = ref<number>(0) // temp variable to trigger image rerender
 
 // Image cropper related refs
 const isCropperModalOpen = ref<boolean>(false)
@@ -77,8 +77,7 @@ const handleUpload = async () => {
       color: "success",
     })
 
-    // Re-render the image component
-    version.value++
+    rerender.value++
   } else {
     snackbar.push({
       text: response.message,
@@ -130,7 +129,8 @@ const submit = async () => {
       <v-card-text>
         <div v-if="personalInfo?.nationalIdImageUrl">
           <v-img
-            :src="`${personalInfo.nationalIdImageUrl}?version=${version}`"
+            :key="rerender"
+            :src="`${personalInfo.nationalIdImageUrl}?t=${Date.now()}`"
             aspect-ratio="16/9"
             alt="National ID"
             class="rounded-lg"
@@ -203,6 +203,7 @@ const submit = async () => {
           />
           <v-btn
             v-if="nationalIdImage"
+            color="primary"
             class="mx-auto"
             text="Upload"
             @click="handleUpload"
