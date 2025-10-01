@@ -48,6 +48,12 @@ watch(weightClassFilter, (newVal) => {
   }
 })
 
+watch(sexFilter, (newVal) => {
+  if (newVal !== weightClassFilter.value.sex) {
+    weightClassFilter.value = { weight: null, sex:null }
+  }
+})
+
 export function useAthletesFilter() {
   search.value = ""
   sexFilter.value = null
