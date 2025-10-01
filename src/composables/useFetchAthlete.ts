@@ -4,6 +4,7 @@ import type { AthleteCompInfo, AthletePB, AthletePersonalInfo, AthleteCompSettin
 const compInfo = ref<AthleteCompInfo[]>()
 const pb = ref<AthletePB[]>()
 const personalInfo = ref<AthletePersonalInfo>({
+  vpfId: "",
   fullName: "",
   nationality: null,
   dob: null,
