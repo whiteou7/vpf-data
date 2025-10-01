@@ -13,6 +13,22 @@ export type AthleteCompInfo = {
   meetSlug: string
 };
 
+// Used for /api/athletes
+export type Athlete = {
+  "#": number
+  vpfId: string
+  fullName: string
+  weightClass: number
+  sex: Sex
+  division: Division
+  bestSquat: number
+  bestBench: number
+  bestDead: number
+  total: number
+  gl: number
+  instagramUsername: string | null
+}
+
 export type Sex = "male" | "female" | null
 
 export type Division = "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4"
