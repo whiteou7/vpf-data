@@ -60,12 +60,22 @@ function handleSort(e: Array<{ key: string, order: string}>) {
 
 // Reset visible count upon filter actions
 watch(
-  () => [filters.sexFilter.value, filters.divisionFilter.value, filters.weightClassFilter.value, filters.search.value],
+  () => [filters.sexFilter.value, filters.divisionFilter.value, filters.weightClassFilter.value],
   () => {
     visibleCount.value = 50
   }
 )
 
+// Make sure that searching is done on the entire data set
+watch(filters.search, () => {
+  if (filters.search.value === "") {
+    visibleCount.value = 50
+  } else {
+    visibleCount.value = 999
+  }
+})
+
+// Fetch from server for meet type filter
 watch(filters.meetTypeFilter, async () => {
   const type = filters.meetTypeFilter.value
   const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(`/api/athletes?type=${type == null ? "all" : type}`, { ignoreResponseError: true })
