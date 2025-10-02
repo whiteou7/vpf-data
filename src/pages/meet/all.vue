@@ -62,7 +62,9 @@ const cityOptions = computed<{ title: string, value: string | null }[]>(() => {
 })
 
 const yearOptions = computed<{ title: string, value: number | null }[]>(() => {
-  const years = new Set(meets.value.map(meet => new Date(meet.hostDate).getFullYear()))
+  const years = new Set(meets.value.map(meet => {
+    return Number(meet.hostDate.split("/")[2]) // Date constructor wouldnt accept ddmmyyyy holyshit
+  }))
   const options: { title: string, value: number | null }[] = [{ title: "All", value: null }]
   years.forEach(year => options.push({ title: year.toString(), value: year }))
   return options
