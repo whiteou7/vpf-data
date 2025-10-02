@@ -11,7 +11,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
       <v-select
         v-model="filters.sexFilter.value"
         :items="filters.sexOptions"
@@ -22,7 +22,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
       <v-select
         v-model="filters.divisionFilter.value"
         :items="filters.divisionOptions"
@@ -33,7 +33,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
       <v-select
         v-model="filters.weightClassFilter.value"
         :items="filters.weightClassOptions"
@@ -44,7 +44,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
       <slot name="meetTypeFilter"/>
     </div>
   </div>
