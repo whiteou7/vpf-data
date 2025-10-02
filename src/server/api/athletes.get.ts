@@ -1,9 +1,15 @@
 import type { Athlete } from "~/types/athlete"
 import { db } from "../../db"
 import type { APIBody } from "~/types/api"
+import type { MeetType } from "~/types/meet"
 
 export default defineEventHandler(async (event): Promise<APIBody<{ athletes: Athlete[] }>> => {
   try {
+    const query = getQuery(event)
+    const meetType = query.type as MeetType | "all" | undefined
+
+    const whereClause = meetType == "all" ? db`` : meetType == undefined ? db`` : db`WHERE type = ${meetType}`
+
     const athletes = await db<Athlete[]>`
       SELECT 
         ROW_NUMBER() OVER (ORDER BY gl DESC) AS "#",
@@ -32,6 +38,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ athletes: Ath
           gl,
           instagram_username
         FROM meet_result_detailed
+        ${whereClause}
         ORDER BY vpf_id, gl DESC
       ) sub
       ORDER BY gl DESC;

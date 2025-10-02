@@ -1,10 +1,19 @@
 import { ref, watch } from "vue"
 import type { Sex, Division } from "~/types/athlete"
+import type { MeetType } from "~/types/meet"
 
 const search = ref<string>("")
 const sexFilter = ref<Sex>(null)
-const divisionFilter = ref<Division>()
+const divisionFilter = ref<Division | null>()
 const weightClassFilter = ref<{ weight: number | null, sex: Sex }>({ weight: null, sex:null })
+const meetTypeFilter = ref<MeetType | null>(null)
+
+const meetTypeOptions = [
+  { title: "All", value: null },
+  { title: "National", value: "national" },
+  { title: "National Qualifier", value: "national_qualifier" },
+  { title: "Amateur", value: "amateur" },
+]
 
 const sexOptions = [
   { title: "All", value: null },
@@ -57,7 +66,7 @@ watch(sexFilter, (newVal) => {
 export function useAthletesFilter() {
   search.value = ""
   sexFilter.value = null
-  divisionFilter.value = undefined
+  divisionFilter.value = null
   weightClassFilter.value = { weight: null, sex: null }
 
   return {
@@ -65,8 +74,10 @@ export function useAthletesFilter() {
     sexFilter,
     divisionFilter,
     weightClassFilter,
+    meetTypeFilter,
     sexOptions,
     divisionOptions,
     weightClassOptions,
+    meetTypeOptions
   }
 }

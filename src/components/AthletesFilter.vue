@@ -43,6 +43,10 @@
         variant="solo-inverted"
       />
     </div>
+
+    <div style="flex: 1; min-width: 100px; max-width: 200px; height: 36px;">
+      <slot name="meetTypeFilter"/>
+    </div>
   </div>
 </template>
 

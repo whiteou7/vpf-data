@@ -8,7 +8,18 @@
     @update:sortBy="handleSort"
   >
     <template #top>
-      <AthletesFilter />
+      <AthletesFilter>
+        <template #meetTypeFilter>
+          <v-select
+            v-model="filters.meetTypeFilter.value"
+            :items="filters.meetTypeOptions"
+            label="Meet Type"
+            density="compact"
+            color="primary"
+            variant="solo-inverted"
+          />
+        </template>
+      </AthletesFilter>
     </template>
   </AthletesCompTable>
 </template>
@@ -54,6 +65,15 @@ watch(
     visibleCount.value = 50
   }
 )
+
+watch(filters.meetTypeFilter, async () => {
+  const type = filters.meetTypeFilter.value
+  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(`/api/athletes?type=${type == null ? "all" : type}`, { ignoreResponseError: true })
+  if (!response.success) {
+    return
+  }
+  athletes.value = response.data.athletes
+})
 
 onMounted(async () => {  
   // Fetch

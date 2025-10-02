@@ -10,6 +10,8 @@ export type Meet = {
   slug: string
 }
 
+export type MeetType = "national" | "amateur" | "national_qualifier" | "other"
+
 export type MeetResult = {
   meetId: number;
   athleteId: string;
