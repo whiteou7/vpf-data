@@ -17,8 +17,7 @@
 
 <script setup lang="ts">
 import RecordsTableGroup from "~/components/RecordsTableGroup.vue"
-import type { DestructuredRecord, RecordTableRowGroup } from "~/types/record"
-import { transformRecordsToRows } from "~/utils/utils"
+import type { RecordTableRowGroup } from "~/types/record"
 import type { APIBody } from "~/types/api"
 
 const loading = ref(true)
@@ -39,7 +38,7 @@ const femaleRowGroup: RecordTableRowGroup = {
 
 onMounted(async () => {  
   // Fetch
-  const response = await $fetch<APIBody<{ male: DestructuredRecord, female: DestructuredRecord }>>("/api/records", { ignoreResponseError: true })
+  const response = await $fetch<APIBody<{ male: RecordTableRowGroup, female: RecordTableRowGroup }>>("/api/records", { ignoreResponseError: true })
   if (!response.success || !response.data) {
     // TODO: Handle error
     return
@@ -50,48 +49,49 @@ onMounted(async () => {
 
   // Map data to row object
   if (male) {
-    maleRowGroup.squat.subjr = transformRecordsToRows(male.squat.subjr)
-    maleRowGroup.squat.jr = transformRecordsToRows(male.squat.jr)
-    maleRowGroup.squat.open = transformRecordsToRows(male.squat.open)
-    maleRowGroup.squat.mas = transformRecordsToRows(male.squat.mas)
+    maleRowGroup.squat.subjr = male.squat.subjr
+    maleRowGroup.squat.jr = male.squat.jr
+    maleRowGroup.squat.open = male.squat.open
+    maleRowGroup.squat.mas = male.squat.mas
 
-    maleRowGroup.bench.subjr = transformRecordsToRows(male.bench.subjr)
-    maleRowGroup.bench.jr = transformRecordsToRows(male.bench.jr)
-    maleRowGroup.bench.open = transformRecordsToRows(male.bench.open)
-    maleRowGroup.bench.mas = transformRecordsToRows(male.bench.mas)
+    maleRowGroup.bench.subjr = male.bench.subjr
+    maleRowGroup.bench.jr = male.bench.jr
+    maleRowGroup.bench.open = male.bench.open
+    maleRowGroup.bench.mas = male.bench.mas
 
-    maleRowGroup.deadlift.subjr = transformRecordsToRows(male.deadlift.subjr)
-    maleRowGroup.deadlift.jr = transformRecordsToRows(male.deadlift.jr)
-    maleRowGroup.deadlift.open = transformRecordsToRows(male.deadlift.open)
-    maleRowGroup.deadlift.mas = transformRecordsToRows(male.deadlift.mas)
+    maleRowGroup.deadlift.subjr = male.deadlift.subjr
+    maleRowGroup.deadlift.jr = male.deadlift.jr
+    maleRowGroup.deadlift.open = male.deadlift.open
+    maleRowGroup.deadlift.mas = male.deadlift.mas
 
-    maleRowGroup.total.subjr = transformRecordsToRows(male.total.subjr)
-    maleRowGroup.total.jr = transformRecordsToRows(male.total.jr)
-    maleRowGroup.total.open = transformRecordsToRows(male.total.open)
-    maleRowGroup.total.mas = transformRecordsToRows(male.total.mas)
+    maleRowGroup.total.subjr = male.total.subjr
+    maleRowGroup.total.jr = male.total.jr
+    maleRowGroup.total.open = male.total.open
+    maleRowGroup.total.mas = male.total.mas
   }
 
   if (female) {
-    femaleRowGroup.squat.subjr = transformRecordsToRows(female.squat.subjr)
-    femaleRowGroup.squat.jr = transformRecordsToRows(female.squat.jr)
-    femaleRowGroup.squat.open = transformRecordsToRows(female.squat.open)
-    femaleRowGroup.squat.mas = transformRecordsToRows(female.squat.mas)
+    femaleRowGroup.squat.subjr = female.squat.subjr
+    femaleRowGroup.squat.jr = female.squat.jr
+    femaleRowGroup.squat.open = female.squat.open
+    femaleRowGroup.squat.mas = female.squat.mas
 
-    femaleRowGroup.bench.subjr = transformRecordsToRows(female.bench.subjr)
-    femaleRowGroup.bench.jr = transformRecordsToRows(female.bench.jr)
-    femaleRowGroup.bench.open = transformRecordsToRows(female.bench.open)
-    femaleRowGroup.bench.mas = transformRecordsToRows(female.bench.mas)
+    femaleRowGroup.bench.subjr = female.bench.subjr
+    femaleRowGroup.bench.jr = female.bench.jr
+    femaleRowGroup.bench.open = female.bench.open
+    femaleRowGroup.bench.mas = female.bench.mas
 
-    femaleRowGroup.deadlift.subjr = transformRecordsToRows(female.deadlift.subjr)
-    femaleRowGroup.deadlift.jr = transformRecordsToRows(female.deadlift.jr)
-    femaleRowGroup.deadlift.open = transformRecordsToRows(female.deadlift.open)
-    femaleRowGroup.deadlift.mas = transformRecordsToRows(female.deadlift.mas)
+    femaleRowGroup.deadlift.subjr = female.deadlift.subjr
+    femaleRowGroup.deadlift.jr = female.deadlift.jr
+    femaleRowGroup.deadlift.open = female.deadlift.open
+    femaleRowGroup.deadlift.mas = female.deadlift.mas
 
-    femaleRowGroup.total.subjr = transformRecordsToRows(female.total.subjr)
-    femaleRowGroup.total.jr = transformRecordsToRows(female.total.jr)
-    femaleRowGroup.total.open = transformRecordsToRows(female.total.open)
-    femaleRowGroup.total.mas = transformRecordsToRows(female.total.mas)
+    femaleRowGroup.total.subjr = female.total.subjr
+    femaleRowGroup.total.jr = female.total.jr
+    femaleRowGroup.total.open = female.total.open
+    femaleRowGroup.total.mas = female.total.mas
   }
+  console.log(maleRowGroup)
 
 })
 
