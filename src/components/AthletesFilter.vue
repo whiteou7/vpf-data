@@ -1,6 +1,6 @@
 <template>
-  <div style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 36px;">
+  <div class="no-scrollbar" style="overflow-x:auto; display: flex; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
+    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
       <v-text-field
         v-model="searchText"
         density="compact"
@@ -11,7 +11,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
       <v-select
         v-model="filters.sexFilter.value"
         :items="filters.sexOptions"
@@ -22,7 +22,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
       <v-select
         v-model="filters.divisionFilter.value"
         :items="filters.divisionOptions"
@@ -33,7 +33,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
       <v-select
         v-model="filters.weightClassFilter.value"
         :items="filters.weightClassOptions"
@@ -44,7 +44,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
+    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
       <slot name="meetTypeFilter"/>
     </div>
   </div>
@@ -62,3 +62,14 @@ const onInput = debounce(() => {
 }, 500)
 
 </script>
+
+<style scoped>
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+</style>
