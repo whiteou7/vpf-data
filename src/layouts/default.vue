@@ -48,6 +48,7 @@
         </template>
 
         <!-- Rendered depending on logged in state -->
+        <!-- Disable in current prod
         <ClientOnly>
           <template v-if="!isLoggedIn">
             <v-btn to="/login" text color="secondary" class="mx-1">
@@ -63,7 +64,8 @@
             </v-btn>
           </template>
         </ClientOnly>
-      </div>
+        -->
+      </div>    
 
       <!-- Mobile Menu Button -->
       <v-app-bar-nav-icon
@@ -108,6 +110,7 @@
           </v-list-item>
         </template>
         <!-- Rendered depending on logged in state -->
+        <!-- Disable in current prod
         <ClientOnly>
           <template v-if="!isLoggedIn">
             <v-list-item to="/login" @click="drawer = false">
@@ -123,6 +126,7 @@
             </v-list-item>
           </template>
         </ClientOnly>
+      -->
       </v-list>
     </v-navigation-drawer>
 
@@ -148,13 +152,15 @@
 <script setup>
 import { useAuth } from "~/composables/useAuth"
 
-const { isLoggedIn, user, logout } = await useAuth()
-const router = useRouter()
+// const { isLoggedIn, user, logout } = await useAuth()
+const { user } = await useAuth()
+// const router = useRouter()
 
 const snackbar = ref(false)
 const snackbarText = ref("")
 const snackbarColor = ref("error")
 
+/*
 const handleLogout = async () => {
   const { success, message } = await logout()
   if (!success) {
@@ -165,6 +171,7 @@ const handleLogout = async () => {
     router.push("/login")
   }
 }
+  */
 
 // Mobile drawer state
 const drawer = ref(false)
