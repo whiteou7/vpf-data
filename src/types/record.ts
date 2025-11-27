@@ -53,6 +53,7 @@ export type RecordTableRow = {
   silver: Result | null;
   bronze: Result | null;
   weightClass: number;
+  bodyWeight: number;
   sex: Sex
 }
 
