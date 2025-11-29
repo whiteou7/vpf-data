@@ -94,6 +94,10 @@ const headers = [
   { title: "GL Points", value: "gl", sortable: true },
   { title: "#", value: "placement", sortable: true }
 ]
+
+useHead({ 
+  title: "VPF Meet Result"
+})
 </script>
 
 <style scoped>

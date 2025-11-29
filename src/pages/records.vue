@@ -95,4 +95,8 @@ onMounted(async () => {
 
 })
 
+useHead({ 
+  title: "VPF National Records"
+})
+
 </script>

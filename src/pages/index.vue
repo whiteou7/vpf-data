@@ -5,7 +5,7 @@
     :headers="headers"
     :loading="loading"
     :search="filters.search.value"
-    @update:sortBy="handleSort"
+    @update:sort-by="handleSort"
   >
     <template #top>
       <AthletesFilter>
@@ -150,4 +150,8 @@ const headers = [
   { title: "Total", value: "total", sortable: true },
   { title: "GL", value: "gl", sortable: true },
 ]
+
+useHead({ 
+  title: "VPF Athlete Rankings"
+})
 </script>

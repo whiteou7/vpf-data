@@ -21,6 +21,9 @@ onMounted(async () => {
   const data = useFetchAthlete()
 
   personalInfo.value = data.personalInfo.value
+  useHead({ 
+    title: `${personalInfo.value?.fullName ?? ""}` 
+  })
   if (data.compInfo.value && data.compInfo.value.length > 0) {
     sex.value = data.compInfo.value[0].sex
   } else {
