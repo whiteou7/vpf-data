@@ -47,6 +47,15 @@
           </v-btn>
         </template>
 
+        <v-btn
+          text
+          color="secondary"
+          class="mx-1"
+          @click="showContact = true"
+        >
+          Contact
+        </v-btn>
+
         <!-- Rendered depending on logged in state -->
         <!-- Disable in current prod
         <ClientOnly>
@@ -127,11 +136,20 @@
           </template>
         </ClientOnly>
       -->
+        <v-list-item
+          @click="showContact = true"
+        >
+        <v-list-item-title class="text-secondary">Contact</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <!-- Main Content -->
     <v-main>
+       <v-dialog v-model="showContact" max-width="500">
+        <ContactCard />
+      </v-dialog>
+
       <div style="width: 95%" class="mx-auto py-5">
         <slot />
       </div>
@@ -159,6 +177,7 @@ const { user } = await useAuth()
 const snackbar = ref(false)
 const snackbarText = ref("")
 const snackbarColor = ref("error")
+const showContact = ref(false)
 
 /*
 const handleLogout = async () => {
@@ -185,8 +204,7 @@ const navigationItems = [
   { name: "Rankings", path: "/" },
   { name: "Records", path: "/records" },
   { name: "Meets", path: "/meet/all" },
-  { name: "Shop", path: SHOP_URL, external: true },
-  { name: "Contact", path: "/contact" }
+  { name: "Shop", path: SHOP_URL, external: true }
 ]
 
 // Close drawer when route changes

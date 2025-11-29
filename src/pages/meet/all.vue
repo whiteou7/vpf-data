@@ -86,6 +86,10 @@ const headers = [
   { title: "Athletes", value: "count" },
   { title: "Media", value: "mediaLink", sortable: false }
 ]
+
+useHead({ 
+  title: "VPF Meets"
+})
 </script>
 
 <style>
