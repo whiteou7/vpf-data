@@ -194,16 +194,11 @@ const handleLogout = async () => {
 // Mobile drawer state
 const drawer = ref(false)
 
-// Get public runtime config
-const config = useRuntimeConfig()
-const SHOP_URL = config.public.SHOP_URL
-
 // Navigation items
 const navigationItems = [
   { name: "Rankings", path: "/" },
   { name: "Records", path: "/records" },
-  { name: "Meets", path: "/meet/all" },
-  { name: "Shop", path: SHOP_URL, external: true }
+  { name: "Competitions", path: "/meet/all" }
 ]
 
 // Close drawer when route changes
