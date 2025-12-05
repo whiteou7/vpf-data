@@ -4,6 +4,46 @@ import type { APIBody } from "~/types/api"
 import type { Sex } from "~/types/athlete"
 import type { MeetResult } from "~/types/meet"
 
+// IPF Weight Classes (2023 onwards)
+const MALE_WEIGHT_CLASSES = [59, 66, 74, 83, 93, 105, 120, 999] // 999 represents 120+
+const FEMALE_WEIGHT_CLASSES = [47, 52, 57, 63, 69, 76, 84, 999] // 999 represents 84+
+
+function createEmptyRow(weightClass: number, sex: Sex): RecordTableRow {
+  return {
+    vpfId: "",
+    weightClass,
+    fullName: "-",
+    result: 0,
+    bodyWeight: 0,
+    yearOfBirth: 0,
+    sex,
+    date: "-"
+  }
+}
+
+function fillEmptyWeightClasses(group: RecordTableRowGroup, sex: Sex) {
+  const weightClasses = sex === "male" ? MALE_WEIGHT_CLASSES : FEMALE_WEIGHT_CLASSES
+  const divisions: Array<"subjr" | "jr" | "open" | "mas"> = ["subjr", "jr", "open", "mas"]
+  const lifts: Array<"squat" | "bench" | "deadlift" | "total"> = ["squat", "bench", "deadlift", "total"]
+
+  divisions.forEach(division => {
+    lifts.forEach(lift => {
+      const existingWeightClasses = new Set(
+        group[division][lift].map(row => row.weightClass)
+      )
+
+      weightClasses.forEach(wc => {
+        if (!existingWeightClasses.has(wc)) {
+          group[division][lift].push(createEmptyRow(wc, sex))
+        }
+      })
+
+      // Sort by weight class
+      group[division][lift].sort((a, b) => a.weightClass - b.weightClass)
+    })
+  })
+}
+
 export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordTableRowGroup, female: RecordTableRowGroup}>> => {
   try {
     const res = await db<MeetResult[]>`
@@ -11,19 +51,20 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
       FROM public.meet_result_detailed
       WHERE type='national'
     `
+    console.log(res)
 
     const maleRowGroup: RecordTableRowGroup = {
-      squat: { subjr: [], jr: [], open: [], mas: [] },
-      bench: { subjr: [], jr: [], open: [], mas: [] },
-      deadlift: { subjr: [], jr: [], open: [], mas: [] },
-      total: { subjr: [], jr: [], open: [], mas: [] },
+      subjr: { squat: [], bench: [], deadlift: [], total: [] },
+      jr: { squat: [], bench: [], deadlift: [], total: [] },
+      open: { squat: [], bench: [], deadlift: [], total: [] },
+      mas: { squat: [], bench: [], deadlift: [], total: [] },
     }
 
     const femaleRowGroup: RecordTableRowGroup = {
-      squat: { subjr: [], jr: [], open: [], mas: [] },
-      bench: { subjr: [], jr: [], open: [], mas: [] },
-      deadlift: { subjr: [], jr: [], open: [], mas: [] },
-      total: { subjr: [], jr: [], open: [], mas: [] },
+      subjr: { squat: [], bench: [], deadlift: [], total: [] },
+      jr: { squat: [], bench: [], deadlift: [], total: [] },
+      open: { squat: [], bench: [], deadlift: [], total: [] },
+      mas: { squat: [], bench: [], deadlift: [], total: [] },
     }
 
     // Group results by sex, target division (with promotion), weight class, and lift
@@ -36,11 +77,11 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
       // Normalize original division
       let originalDiv: "subjr" | "jr" | "open" | "mas"
       const divisionValue = row.division === "mas1" ? "mas" : row.division
-      if (divisionValue === "subjr" || divisionValue === "sub-jr" || divisionValue === "subjunior") {
+      if (divisionValue === "subjr") {
         originalDiv = "subjr"
-      } else if (divisionValue === "jr" || divisionValue === "junior") {
+      } else if (divisionValue === "jr") {
         originalDiv = "jr"
-      } else if (divisionValue === "mas" || divisionValue === "master" || divisionValue === "masters") {
+      } else if (divisionValue === "mas") {
         originalDiv = "mas"
       } else {
         originalDiv = "open"
@@ -87,7 +128,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
       }
     })
 
-    // Process each group to find top 3 records
+    // Process each group to find the top record
     groupedResults.forEach((results, key) => {
       const [sex, division, weightClass, lift] = key.split("-")
       
@@ -99,41 +140,38 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
         return a.bodyWeight - b.bodyWeight
       })
 
-      // Take top 3 unique athletes
-      const uniqueAthletes = new Map<string, MeetResult>()
-      results.forEach(result => {
-        if (uniqueAthletes.size < 3 && !uniqueAthletes.has(result.fullName)) {
-          uniqueAthletes.set(result.fullName, result)
-        }
-      })
+      // Take the top result (best athlete)
+      const topResult = results[0]
+      if (!topResult) return
 
-      const topResults = Array.from(uniqueAthletes.values())
-
-      // Only create a row if we have at least one result
-      if (topResults.length === 0) return
-
-      // Consolidate into single row for the weight class
-      const consolidatedRow: RecordTableRow = {
-        gold: topResults[0] ? { name: topResults[0].fullName, result: (topResults[0] as any).currentValue } : null,
-        silver: topResults[1] ? { name: topResults[1].fullName, result: (topResults[1] as any).currentValue } : null,
-        bronze: topResults[2] ? { name: topResults[2].fullName, result: (topResults[2] as any).currentValue } : null,
+      // Create row for the weight class
+      const recordRow: RecordTableRow = {
+        vpfId: topResult.vpfId,
         weightClass: Number(weightClass),
-        bodyWeight: topResults[0]?.bodyWeight ?? 0,
+        fullName: topResult.fullName,
+        result: (topResult as any).currentValue,
+        bodyWeight: topResult.bodyWeight,
+        yearOfBirth: topResult.dob ?? 0,
         sex: sex as Sex,
+        date: topResult.hostDate.toISOString().split("T")[0]
       }
 
-      // Insert into appropriate group
+      // Insert into appropriate group with new nesting structure
       const group = sex === "male" ? maleRowGroup : femaleRowGroup
-      const liftKey = lift as "squat" | "bench" | "deadlift" | "total"
       const divKey = division as "subjr" | "jr" | "open" | "mas"
+      const liftKey = lift as "squat" | "bench" | "deadlift" | "total"
       
       // Safety check
-      if (group[liftKey] && group[liftKey][divKey]) {
-        group[liftKey][divKey].push(consolidatedRow)
+      if (group[divKey] && group[divKey][liftKey]) {
+        group[divKey][liftKey].push(recordRow)
       } else {
-        console.warn(`Invalid group key: lift=${liftKey}, division=${divKey}, sex=${sex}`)
+        console.warn(`Invalid group key: division=${divKey}, lift=${liftKey}, sex=${sex}`)
       }
     })
+
+    // Fill in empty weight classes for both male and female
+    fillEmptyWeightClasses(maleRowGroup, "male")
+    fillEmptyWeightClasses(femaleRowGroup, "female")
 
     setHeader(event, "Cache-Control", "public, max-age=86400, s-maxage=86400")
     setResponseStatus(event, 200)

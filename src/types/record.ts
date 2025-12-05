@@ -42,45 +42,42 @@ export type DestructuredRecord = {
   }
 }
 
-export type Result = {
-  name: string,
-  result: number
-}
-
 // table-compatible type for rows
 export type RecordTableRow = {
-  gold: Result | null;
-  silver: Result | null;
-  bronze: Result | null;
   weightClass: number;
+  fullName: string,
+  vpfId: string
+  result: number,
   bodyWeight: number;
-  sex: Sex
+  yearOfBirth: number,
+  sex: Sex,
+  date: string
 }
 
 // table-compatible type for the entire card
 export type RecordTableRowGroup = {
-  squat: {
-    subjr: RecordTableRow[],
-    jr: RecordTableRow[],
-    open: RecordTableRow[],
-    mas: RecordTableRow[]
+  subjr: {
+    squat: RecordTableRow[],
+    bench: RecordTableRow[],
+    deadlift: RecordTableRow[],
+    total: RecordTableRow[]
   },
-  bench: {
-    subjr: RecordTableRow[],
-    jr: RecordTableRow[],
-    open: RecordTableRow[],
-    mas: RecordTableRow[]
+  jr: {
+    squat: RecordTableRow[],
+    bench: RecordTableRow[],
+    deadlift: RecordTableRow[],
+    total: RecordTableRow[]
   },
-  deadlift: {
-    subjr: RecordTableRow[],
-    jr: RecordTableRow[],
-    open: RecordTableRow[],
-    mas: RecordTableRow[]
+  open: {
+    squat: RecordTableRow[],
+    bench: RecordTableRow[],
+    deadlift: RecordTableRow[],
+    total: RecordTableRow[]
   },
-  total: {
-    subjr: RecordTableRow[],
-    jr: RecordTableRow[],
-    open: RecordTableRow[],
-    mas: RecordTableRow[]
+  mas: {
+    squat: RecordTableRow[],
+    bench: RecordTableRow[],
+    deadlift: RecordTableRow[],
+    total: RecordTableRow[]
   }
 }
