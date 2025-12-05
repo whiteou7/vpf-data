@@ -14,7 +14,7 @@ export type MeetType = "national" | "amateur" | "national_qualifier" | "other"
 
 export type MeetResult = {
   meetId: number;
-  athleteId: string;
+  vpfId: string;
   sex: Sex;
   weightClass: number;
   division: Division;
@@ -33,4 +33,6 @@ export type MeetResult = {
   fullName: string;
   total: number;
   gl: number;
+  dob: number
+  hostDate: Date
 }
