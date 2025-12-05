@@ -13,6 +13,17 @@
 
     <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
       <v-select
+        v-model="filters.sort.value"
+        :items="filters.sortOptions"
+        label="Sort"
+        density="compact"
+        color="primary"
+        variant="solo-inverted"
+      />
+    </div>
+
+    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
+      <v-select
         v-model="filters.sexFilter.value"
         :items="filters.sexOptions"
         label="Sex"

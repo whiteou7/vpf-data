@@ -5,7 +5,7 @@
     :headers="headers"
     :loading="loading"
     :search="filters.search.value"
-    @update:sort-by="handleSort"
+    disable-sort
   >
     <template #top>
       <AthletesFilter>
@@ -49,18 +49,9 @@ function handleScroll(e: Event) {
   }
 }
 
-// Load all item into table if sort, will improve later
-function handleSort(e: Array<{ key: string, order: string}>) {
-  if (e.length) {
-    visibleCount.value = 999
-  } else {
-    visibleCount.value = 50
-  }
-}
-
 // Reset visible count upon filter actions
 watch(
-  () => [filters.sexFilter.value, filters.divisionFilter.value, filters.weightClassFilter.value],
+  () => [filters.sexFilter.value, filters.divisionFilter.value, filters.weightClassFilter.value, filters.sort.value],
   () => {
     visibleCount.value = 50
   }
@@ -79,6 +70,16 @@ watch(filters.search, () => {
 watch(filters.meetTypeFilter, async () => {
   const type = filters.meetTypeFilter.value
   const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(`/api/athletes?type=${type == null ? "all" : type}`, { ignoreResponseError: true })
+  if (!response.success) {
+    return
+  }
+  athletes.value = response.data.athletes
+})
+
+// Fetch from server for sorting
+watch(filters.sort, async () => {
+  const sort = filters.sort.value
+  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(`/api/athletes?sort=${sort}`, { ignoreResponseError: true })
   if (!response.success) {
     return
   }
