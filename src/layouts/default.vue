@@ -11,7 +11,6 @@
       <!-- Logo with Image -->
       <v-img
         src="/logo.jpg"
-        cover
         class="diagonal-blur-image"
         height="100%"
       />

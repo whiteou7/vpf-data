@@ -3,10 +3,19 @@ import type { Sex, Division } from "~/types/athlete"
 import type { MeetType } from "~/types/meet"
 
 const search = ref<string>("")
+const sort = ref<string>("GL Point")
 const sexFilter = ref<Sex>(null)
 const divisionFilter = ref<Division | null>()
 const weightClassFilter = ref<{ weight: number | null, sex: Sex }>({ weight: null, sex:null })
 const meetTypeFilter = ref<MeetType | null>(null)
+
+const sortOptions = [
+  { title: "GL Point", value: "gl" },
+  { title: "Squat", value: "best_squat" },
+  { title: "Bench", value: "best_bench" },
+  { title: "Deadlift", value: "best_dead" },
+  { title: "Total", value: "total" }
+]
 
 const meetTypeOptions = [
   { title: "All", value: null },
@@ -78,6 +87,8 @@ export function useAthletesFilter() {
     sexOptions,
     divisionOptions,
     weightClassOptions,
-    meetTypeOptions
+    meetTypeOptions,
+    sort,
+    sortOptions
   }
 }
