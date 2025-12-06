@@ -17,9 +17,10 @@
 
     <!-- Links config -->
     <template #item.fullName="{ item }">
-      <NuxtLink :to="`/athlete/${item.vpfId}`" class="athlete-link">
+      <NuxtLink v-if="item.vpfId" :to="`/athlete/${item.vpfId}`" class="athlete-link">
         {{ item.fullName }}
       </NuxtLink>
+      <a v-else> {{ item.fullName }} </a>
 
       <v-icon-btn
         v-if="item.instagramUsername"

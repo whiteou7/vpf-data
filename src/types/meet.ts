@@ -35,4 +35,5 @@ export type MeetResult = {
   gl: number;
   dob: number
   hostDate: Date
+  placement: number
 }
