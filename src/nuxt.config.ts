@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       "/_nuxt/**": { headers: { "cache-control": "public,max-age=31536000,s-maxage=31536000" } },
     }
   },
+  css: ["~/public/styles.css"],
   runtimeConfig: {
     public: {
       SHOP_URL: process.env.SHOP_URL,
@@ -31,7 +32,13 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
-  modules: ["vuetify-nuxt-module", "@nuxt/eslint"],
+  modules: ["vuetify-nuxt-module", "@nuxt/eslint", "@nuxtjs/google-fonts"],
+  googleFonts: {
+    families: {
+      "Noto Sans": [400, 500, 600, 700]
+    },
+    display: "swap"
+  },
   vuetify: {
     moduleOptions: {
       /* module specific options */

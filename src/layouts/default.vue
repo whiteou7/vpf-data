@@ -13,6 +13,7 @@
         src="/logo.jpg"
         class="diagonal-blur-image"
         height="100%"
+        cover
       />
 
       <v-spacer/>

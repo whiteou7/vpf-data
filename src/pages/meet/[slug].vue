@@ -26,7 +26,7 @@
       </div>
 
       <!-- Session Results Section -->
-      <h2 class="text-primary">Session Results</h2>
+      <h2 class="text-primary">Session View</h2>
       <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface my-4">
         <h2 class="ps-2 text-primary">
           Session {{ session }}
@@ -176,7 +176,7 @@ const headers = [
 ]
 
 useHead({ 
-  title: "VPF Meet Result"
+  title: "VPF Competition Result"
 })
 </script>
 
