@@ -26,7 +26,7 @@
       <v-select
         v-model="filters.sexFilter.value"
         :items="filters.sexOptions"
-        label="Sex"
+        label="Sport Gender"
         density="compact"
         color="primary"
         variant="solo-inverted"

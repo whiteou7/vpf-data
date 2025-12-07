@@ -13,7 +13,7 @@
           <v-select
             v-model="filters.meetTypeFilter.value"
             :items="filters.meetTypeOptions"
-            label="Meet Type"
+            label="Competition Type"
             density="compact"
             color="primary"
             variant="solo-inverted"
@@ -143,7 +143,7 @@ const headers = [
       return a - b
     }
   },
-  { title: "Sex", value: "sex" },
+  { title: "Sport Gender", value: "sex" },
   { title: "Division", value: "division" },
   { title: "Squat", value: "bestSquat", sortable: true },
   { title: "Bench", value: "bestBench", sortable: true },

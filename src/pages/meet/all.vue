@@ -88,7 +88,7 @@ const headers = [
 ]
 
 useHead({ 
-  title: "VPF Meets"
+  title: "VPF Competitions"
 })
 </script>
 

@@ -42,7 +42,7 @@ const pbHeaders = [
 ]
 
 const compInfoHeaders = [
-  { title: "Meet", value: "meetName" },
+  { title: "Competition", value: "meetName" },
   { title: "Weight Class", value: "weightClass" },
   { title: "Division", value: "division" },
   { title: "Best Squat", value: "bestSquat" },
