@@ -3,7 +3,7 @@ import type { Sex, Division } from "~/types/athlete"
 import type { MeetType } from "~/types/meet"
 
 const search = ref<string>("")
-const sort = ref<string>("GL Point")
+const sort = ref<string>("gl")
 const sexFilter = ref<Sex>(null)
 const divisionFilter = ref<Division | null>()
 const weightClassFilter = ref<{ weight: number | null, sex: Sex }>({ weight: null, sex:null })
