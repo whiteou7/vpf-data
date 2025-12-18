@@ -1,7 +1,7 @@
 <template>
   <AthletesCompTable
     ref="tableRef"
-    :items="filteredAthletes"
+    :items="athletesDisplay"
     :headers="headers"
     :loading="loading"
     :search="filters.search.value"
@@ -49,41 +49,64 @@ function handleScroll(e: Event) {
   }
 }
 
-// Reset visible count upon filter actions
+// Handle filtering and sorting
+let initialized = false
 watch(
-  () => [filters.sexFilter.value, filters.divisionFilter.value, filters.weightClassFilter.value, filters.sort.value],
-  () => {
+  () => [
+    filters.sexFilter.value,
+    filters.divisionFilter.value,
+    filters.weightClassFilter.value.weight,
+    filters.weightClassFilter.value.sex,
+    filters.sort.value,
+    filters.meetTypeFilter.value
+  ],
+  async () => {
+    if (!initialized) {
+      initialized = true
+      return
+    }
+    const params = new URLSearchParams()
+
+    params.set("sort", filters.sort.value)
+
+    // optional filters
+    if (filters.sexFilter.value)
+      params.set("sex", filters.sexFilter.value)
+
+    if (filters.divisionFilter.value)
+      params.set("division", filters.divisionFilter.value)
+
+    if (filters.meetTypeFilter.value)
+      params.set("type", filters.meetTypeFilter.value)
+
+    const wc = filters.weightClassFilter.value
+    if (wc?.weight != null)
+      params.set("weightClass", String(wc.weight))
+
+    if (wc?.sex)
+      params.set("weightSex", wc.sex)
+
+    const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(
+      `/api/athletes?${params.toString()}`,
+      { ignoreResponseError: true }
+    )
+
+    if (!response.success) return
+
+    athletes.value = response.data.athletes
     visibleCount.value = 50
   }
 )
 
 // Make sure that searching is done on the entire data set
-watch(filters.search, () => {
+watch(() => [filters.search.value, athletes.value], () => {
+  console.log("triggered")
   if (filters.search.value === "") {
     visibleCount.value = 50
   } else {
-    visibleCount.value = 999
+    console.log("debug")
+    visibleCount.value = 9999
   }
-})
-
-// Fetch from server for meet type filter
-watch(filters.meetTypeFilter, async () => {
-  const type = filters.meetTypeFilter.value
-  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(`/api/athletes?type=${type == null ? "all" : type}`, { ignoreResponseError: true })
-  if (!response.success) {
-    return
-  }
-  athletes.value = response.data.athletes
-})
-
-// Fetch from server for sorting
-watch(filters.sort, async () => {
-  const sort = filters.sort.value
-  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(`/api/athletes?sort=${sort}`, { ignoreResponseError: true })
-  if (!response.success) {
-    return
-  }
-  athletes.value = response.data.athletes
 })
 
 onMounted(async () => {  
@@ -106,25 +129,14 @@ onMounted(async () => {
   }
 })
 
+// pagnitation
+const athletesDisplay = computed(() => athletes.value.slice(0, visibleCount.value))
+
 // Remove event
 onBeforeUnmount(() => {
   const rootEl = tableRef.value?.$el as HTMLElement
   const wrapper = rootEl?.querySelector(".v-table__wrapper") as HTMLElement
   wrapper?.removeEventListener("scroll", handleScroll)
-})
-
-// Computed filtering logic
-const filteredAthletes = computed(() => {
-  const result = athletes.value.filter(athlete => {
-    const matchesSex = filters.sexFilter.value ? athlete.sex === filters.sexFilter.value : true
-    const matchesDivision = filters.divisionFilter.value ? athlete.division === filters.divisionFilter.value : true
-    const matchesWeightClass = filters.weightClassFilter.value.weight
-      ? athlete.weightClass === filters.weightClassFilter.value.weight && athlete.sex === filters.weightClassFilter.value.sex
-      : true
-    return matchesSex && matchesDivision && matchesWeightClass
-  })
-
-  return result.slice(0, visibleCount.value) // only show up to visibleCount
 })
 
 const headers = [
