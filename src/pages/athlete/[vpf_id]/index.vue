@@ -45,12 +45,12 @@ const compInfoHeaders = [
   { title: "Competition", value: "meetName" },
   { title: "Weight Class", value: "weightClass" },
   { title: "Division", value: "division" },
-  { title: "Best Squat", value: "bestSquat" },
-  { title: "Best Bench", value: "bestBench" },
-  { title: "Best Deadlift", value: "bestDead" },
-  { title: "Total", value: "total" },
-  { title: "GL", value: "gl" },
-  { title: "Body Weight", value: "bodyWeight" },
-  { title: "#", value: "placement" }
+  { title: "Best Squat", value: "bestSquat", align: "end" },
+  { title: "Best Bench", value: "bestBench", align: "end" },
+  { title: "Best Deadlift", value: "bestDead", align: "end" },
+  { title: "Total", value: "total", align: "end" },
+  { title: "GL", value: "gl", align: "end" },
+  { title: "Body Weight", value: "bodyWeight", align: "end" },
+  { title: "#", value: "placement", align: "end" }
 ]
 </script>

@@ -3,10 +3,15 @@ import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettin
 import type { APIBody } from "~/types/api"
 import { validateSession } from "~/server/services/validate-session"
 
+function isValidVPF(str: string) {
+  return /^VPF\d{6}$/.test(str)
+}
+
 const fetchCompHistory = async (vpfId: string): Promise<{ 
   compInfo: AthleteCompInfo[], 
   pb: AthletePB[]
 }> => {
+  const isVPF = isValidVPF(vpfId)
   const compInfo = await db<AthleteCompInfo[]>`
     SELECT
       sex,
@@ -22,7 +27,7 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       meet_name,
       meet_slug
     FROM meet_result_detailed
-    WHERE vpf_id = ${vpfId}
+    WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
     ORDER BY meet_id DESC;
   `
   const pb = await db<AthletePB[]>`
@@ -33,7 +38,7 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       MAX(total)::float as total_pb,
       MAX(gl)::float as gl_pb
     FROM meet_result_detailed
-    WHERE vpf_id = ${vpfId}
+    WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
   `
 
   return { compInfo, pb }
@@ -43,6 +48,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
   personalInfo: AthletePersonalInfo, 
   compSettings: AthleteCompSettings 
 }> => {
+  const isVPF = isValidVPF(vpfId)
   const [row] = await db<(AthleteCompSettings & AthletePersonalInfo)[]>`
     SELECT 
       vpf_id,
@@ -62,8 +68,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       instagram_username
     FROM 
       public.members
-    WHERE
-      vpf_id = ${vpfId}
+      WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
   `
   const {
     fullName,

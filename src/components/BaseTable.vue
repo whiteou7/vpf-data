@@ -14,10 +14,19 @@
     <template #loading>
       <v-skeleton-loader type="table-row@10"/>
     </template>
+    <template #item.bodyWeight="{ item }">
+      {{ item.bodyWeight == 0 ? "-" : formatFloat(item.bodyWeight) }}
+    </template>
+    <template #item.yearOfBirth="{ item }">
+      {{ item.yearOfBirth == 0 ? "-" : item.yearOfBirth }}
+    </template>
+    <template #item.result="{ item }">
+      {{ item.result == 0 ? "-" : formatFloat(item.result) }}
+    </template>
 
     <!-- Links config -->
     <template #item.fullName="{ item }">
-      <NuxtLink v-if="item.vpfId" :to="`/athlete/${item.vpfId}`" class="athlete-link">
+      <NuxtLink v-if="item.slug" :to="`/athlete/${item.slug}`" class="athlete-link">
         {{ item.fullName }}
       </NuxtLink>
       <a v-else> {{ item.fullName }} </a>
@@ -32,7 +41,7 @@
     </template>
 
     <template #item.meetName="{ item }">
-      <NuxtLink :to="`/meet/${item.meetSlug}`" class="meet-link">
+      <NuxtLink :to="`/competition/${item.meetSlug}`" class="meet-link">
         {{ item.meetName }}
       </NuxtLink>
     </template>
@@ -56,55 +65,74 @@
       {{ divisionMap[item.division] ?? item.division }}
     </template>
 
+    <template #item.placement="{ item }">
+      {{ item.placement == null ? "-" : item.placement }}
+    </template>
+
     <template #item.weightClass="{ item }">
       {{ getWeightClassDisplay(item.weightClass, item.sex as Sex) }}
     </template>
 
     <!-- SBD Coloring config-->
     <template #item.bestSquat="{ item }">
-      <span style="color: #facc15; font-weight: 600;">{{ item.bestSquat !== null && item.bestSquat !== undefined ? item.bestSquat : item.squatPb }}</span>
+      <span style="color: #facc15; font-weight: 600;">{{ item.bestSquat !== null && item.bestSquat !== undefined ? formatFloat(item.bestSquat) : formatFloat(item.squatPb) }}</span>
     </template>
     <template #item.bestBench="{ item }">
-      <span style="color: #22d3ee; font-weight: 600;">{{ item.bestBench !== null && item.bestBench !== undefined ? item.bestBench : item.benchPb }}</span>
+      <span style="color: #22d3ee; font-weight: 600;">{{ item.bestBench !== null && item.bestBench !== undefined ? formatFloat(item.bestBench) : formatFloat(item.benchPb) }}</span>
     </template>
     <template #item.bestDead="{ item }">
-      <span style="color: #c084fc; font-weight: 600;">{{ item.bestDead !== null && item.bestDead !== undefined ? item.bestDead : item.deadliftPb }}</span>
+      <span style="color: #c084fc; font-weight: 600;">{{ item.bestDead !== null && item.bestDead !== undefined ? formatFloat(item.bestDead) : formatFloat(item.deadliftPb) }}</span>
+    </template>
+
+    <template #item.total="{ item }">
+      {{ formatFloat(item.total) }}
+    </template>
+    <template #item.gl="{ item }">
+      {{ formatFloat(item.gl) }}
     </template>
 
     <template #item.squat1="{ item }">
-      <span :class="item.squat1 <= 0 ? 'text-error' : 'text-success'">{{ item.squat1 }}</span>
+      <span :class="item.squat1 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.squat1) }}</span>
     </template>
     <template #item.squat2="{ item }">
-      <span :class="item.squat2 <= 0 ? 'text-error' : 'text-success'">{{ item.squat2 }}</span>
+      <span :class="item.squat2 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.squat2) }}</span>
     </template>
     <template #item.squat3="{ item }">
-      <span :class="item.squat3 <= 0 ? 'text-error' : 'text-success'">{{ item.squat3 }}</span>
+      <span :class="item.squat3 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.squat3) }}</span>
     </template>
 
     <template #item.bench1="{ item }">
-      <span :class="item.bench1 <= 0 ? 'text-error' : 'text-success'">{{ item.bench1 }}</span>
+      <span :class="item.bench1 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.bench1) }}</span>
     </template>
     <template #item.bench2="{ item }">
-      <span :class="item.bench2 <= 0 ? 'text-error' : 'text-success'">{{ item.bench2 }}</span>
+      <span :class="item.bench2 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.bench2) }}</span>
     </template>
     <template #item.bench3="{ item }">
-      <span :class="item.bench3 <= 0 ? 'text-error' : 'text-success'">{{ item.bench3 }}</span>
+      <span :class="item.bench3 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.bench3) }}</span>
     </template>
 
     <template #item.dead1="{ item }">
-      <span :class="item.dead1 <= 0 ? 'text-error' : 'text-success'">{{ item.dead1 }}</span>
+      <span :class="item.dead1 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.dead1) }}</span>
     </template>
     <template #item.dead2="{ item }">
-      <span :class="item.dead2 <= 0 ? 'text-error' : 'text-success'">{{ item.dead2 }}</span>
+      <span :class="item.dead2 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.dead2) }}</span>
     </template>
     <template #item.dead3="{ item }">
-      <span :class="item.dead3 <= 0 ? 'text-error' : 'text-success'">{{ item.dead3 }}</span>
+      <span :class="item.dead3 <= 0 ? 'text-error' : 'text-success'">{{ formatFloat(item.dead3) }}</span>
     </template>
   </v-data-table>
 </template>
 <script setup lang="ts">
 import type { Sex } from "~/types/athlete"
 import { divisionMap } from "~/utils/mappings"
+
+function formatFloat(value: string | number): string {
+  if (typeof value == "string") return value
+  const n = Number(value)
+  if (!Number.isFinite(n)) return "000.00"
+
+  return n.toFixed(2)
+}
 
 let currentRow = null
 

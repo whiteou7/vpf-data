@@ -11,12 +11,14 @@ export type AthleteCompInfo = {
   placement: number;
   meetName: string
   meetSlug: string
+  slug: string
 };
 
 // Used for /api/athletes
 export type Athlete = {
   "#": number
   vpfId: string
+  slug: string
   fullName: string
   weightClass: number
   sex: Sex
@@ -53,6 +55,7 @@ export type AthletePersonalInfo = {
   active: boolean
   nationalIdImageUrl: string | null
   instagramUsername: string | null
+  slug: string
 }
 
 export type AthleteCompSettings = {

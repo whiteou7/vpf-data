@@ -129,10 +129,11 @@ const filteredAthletes = computed(() => {
 
 const headers = [
   { title: "#", value: "#", sortable: true },
-  { title: "Name", value: "fullName" },
+  { title: "Name", value: "fullName", width: "15%" },
   { 
     title: "Class", 
     value: "weightClass", 
+    align: "end", width: "10%",
     sortable: true,
     // Custom sort function to handle the 999 value properly
     sort: (a: number, b: number): number => {
@@ -143,13 +144,13 @@ const headers = [
       return a - b
     }
   },
-  { title: "Sport Gender", value: "sex" },
-  { title: "Division", value: "division" },
-  { title: "Squat", value: "bestSquat", sortable: true },
-  { title: "Bench", value: "bestBench", sortable: true },
-  { title: "Deadlift", value: "bestDead", sortable: true },
-  { title: "Total", value: "total", sortable: true },
-  { title: "GL", value: "gl", sortable: true },
+  { title: "Sport Gender", value: "sex", align: "end", width: "10%" },
+  { title: "Division", value: "division", align: "end", width: "10%" },
+  { title: "Squat", value: "bestSquat", sortable: true, align: "end", width: "10%" },
+  { title: "Bench", value: "bestBench", sortable: true, align: "end", width: "10%" },
+  { title: "Deadlift", value: "bestDead", sortable: true, align: "end", width: "10%" },
+  { title: "Total", value: "total", sortable: true, align: "end", width: "10%" },
+  { title: "GL", value: "gl", sortable: true, align: "end", width: "10%" },
 ]
 
 useHead({ 

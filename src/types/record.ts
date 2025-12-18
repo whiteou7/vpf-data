@@ -46,6 +46,7 @@ export type DestructuredRecord = {
 export type RecordTableRow = {
   weightClass: number;
   fullName: string,
+  slug: string,
   vpfId: string
   result: number,
   bodyWeight: number;
