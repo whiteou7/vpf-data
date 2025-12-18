@@ -15,7 +15,7 @@ import BaseTable from "./BaseTable.vue"
 <style scoped>
 /* all these just to set a sticky column*/
 
-/* Target the 2nd column of v-data-table */
+/* Target the 1st column of v-data-table */
 ::v-deep(.v-data-table__th:nth-child(1)),
 ::v-deep(.v-data-table__td:nth-child(1)) {
   position: sticky;

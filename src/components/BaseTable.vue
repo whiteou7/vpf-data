@@ -26,7 +26,7 @@
 
     <!-- Links config -->
     <template #item.fullName="{ item }">
-      <NuxtLink v-if="item.slug" :to="`/athlete/${item.slug}`" class="athlete-link">
+      <NuxtLink v-if="item.slug" :to="`/athlete/${item.slug}`" class="athlete-link" style="margin-right: 3px">
         {{ item.fullName }}
       </NuxtLink>
       <a v-else> {{ item.fullName }} </a>
@@ -36,6 +36,7 @@
         size="small"
         variant="plain"
         icon="mdi-instagram"
+        style="margin-bottom: 3px; width: var(--v-icon-btn-width) - 1px;"
         @click="routeInstagram(item.instagramUsername)"
       />
     </template>

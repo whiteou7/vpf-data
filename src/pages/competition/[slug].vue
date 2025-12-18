@@ -13,13 +13,12 @@
       <h2 v-if="!emptyPlacement" class="text-primary">Results</h2>
       <div v-for="sex in ['male', 'female']" :key="sex" >
         <div v-for="division in divisions(sex)" :key="`${sex}-${division}`" class="card bg-surface my-4">
-          <h2 class="ps-2 text-primary">{{ sex === 'male' ? 'Men' : 'Women' }} {{ divisionToText[division] }} Result</h2>
+          <h2 class="ps-2 text-primary sticky-header">{{ sex === 'male' ? 'Men' : 'Women' }} {{ divisionToText[division] }} Result</h2>
         
-          <BaseTable
+          <MeetPlacementTable
             :headers="overallHeaders"
             :items="getOverallResults(sex, division)"
             disable-sort
-            striped="odd"
           />
         </div>
       </div>
@@ -27,35 +26,33 @@
       <!-- Best Lifter Section -->
       <h2 class="text-primary">Best Lifters</h2>
       <div class="card bg-surface my-4">
-        <h2 class="ps-2 text-primary">
+        <h2 class="ps-2 text-primary sticky-header">
           Male Best Lifters
         </h2>
 
-        <BaseTable
+        <MeetPlacementTable
           :headers="bestLiftersHeaders"
           :items="bestLifters.male"
           disable-sort
-          striped="odd"
         />
       </div>
 
       <div class="card bg-surface my-4">
-        <h2 class="ps-2 text-primary">
+        <h2 class="ps-2 text-primary sticky-header">
           Female Best Lifters
         </h2>
 
-        <BaseTable
+        <MeetPlacementTable
           :headers="bestLiftersHeaders"
           :items="bestLifters.female"
           disable-sort
-          striped="odd"
         />
       </div>
 
       <!-- Session Results Section -->
       <h2 class="text-primary">Session View</h2>
       <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface my-4">
-        <h2 class="ps-2 text-primary">
+        <h2 class="ps-2 text-primary sticky-header">
           Session {{ session }}
         </h2>
 
@@ -234,5 +231,12 @@ useHead({
 .card h2 {
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 64px;
+  z-index: 10;
+  background-color: rgb(var(--v-theme-surface)); 
 }
 </style>

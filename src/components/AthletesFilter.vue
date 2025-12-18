@@ -1,5 +1,5 @@
 <template>
-  <div class="no-scrollbar" style="overflow-x:auto; display: flex; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
+  <div class="no-scrollbar" style="overflow-x:auto; overflow-y: hidden; display: flex; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
     <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
       <v-text-field
         v-model="searchText"
