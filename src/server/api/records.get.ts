@@ -149,6 +149,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
         vpfId: topResult.vpfId,
         weightClass: Number(weightClass),
         fullName: topResult.fullName,
+        slug: topResult.slug,
         result: (topResult as any).currentValue,
         bodyWeight: topResult.bodyWeight,
         yearOfBirth: topResult.dob ?? 0,

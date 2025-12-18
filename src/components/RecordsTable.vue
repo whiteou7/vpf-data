@@ -17,12 +17,12 @@ import type { RecordTableRow } from "~/types/record"
 
 // Header config for table
 const headers = ref([
-  { key: "weightClass" },
-  { key: "fullName", title: "Name" },
-  { key: "yearOfBirth", title: "Year Of Birth" },
-  { key: "bodyWeight", title: "Body Weight" },
-  { key: "result", title: "Result" },
-  { key: "date", title: "Date" }
+  { key: "weightClass", width: "15%" },
+  { key: "fullName", title: "Name", width: "25%" },
+  { key: "yearOfBirth", title: "Year Of Birth", align: "end", width: "15%" },
+  { key: "bodyWeight", title: "Body Weight", align: "end", width: "15%" },
+  { key: "result", title: "Result", align: "end", width: "15%" },
+  { key: "date", title: "Date", align: "end", width: "15%" }
 ])
 
 defineProps<{

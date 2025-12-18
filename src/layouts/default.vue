@@ -10,10 +10,10 @@
     >
       <!-- Logo with Image -->
       <v-img
-        src="/logo.jpg"
+        src="/logo.jpeg"
         class="diagonal-blur-image"
-        height="100%"
         cover
+        height="100%"
       />
 
       <v-spacer/>
@@ -199,7 +199,7 @@ const drawer = ref(false)
 const navigationItems = [
   { name: "Rankings", path: "/" },
   { name: "Records", path: "/records" },
-  { name: "Competitions", path: "/meet/all" }
+  { name: "Competitions", path: "/competition/all" }
 ]
 
 // Close drawer when route changes

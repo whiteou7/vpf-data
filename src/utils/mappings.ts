@@ -3,4 +3,5 @@ export const divisionMap: Record<string, string> = {
   jr: "Junior",
   subjr: "Sub-Junior",
   mas1: "Master",
+  guest: "Guest Lifter"
 }

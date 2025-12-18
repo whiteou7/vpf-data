@@ -19,11 +19,14 @@
         </p>
         <p>
           <v-icon size="20" class="mr-1">mdi-email</v-icon>
-          vietnampowerliftingfederation@gmail.com
+          contact@powerliftingvietnam.com
         </p>
         <br>
         <p style="color: gray; font-style: italic;">
         Site maintained by tungproduceslift
+        </p>
+        <p style="color: gray; font-style: italic;">
+        © 2025 Vietnam Powerlifting Federation. All rights reserved.
         </p>
       </v-card-text>
     </v-card>
