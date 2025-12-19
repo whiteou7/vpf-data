@@ -45,7 +45,6 @@ export default defineEventHandler(
         whereClause = db`${whereClause} AND weight_class = ${weightClass}`
       }
 
-      const start = performance.now()
       /* -------------------- query -------------------- */
       const athletesRaw = await db<Athlete[]>`
         SELECT *
@@ -69,8 +68,6 @@ export default defineEventHandler(
         ) sub
         ORDER BY ${sort} DESC;
       `
-      const end = performance.now()
-      console.log(`${end - start} ms`)
 
       // add "#" for pagination / ranking
       const athletes = athletesRaw.map((athlete, index) => ({
