@@ -26,6 +26,7 @@ jobs:
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /var/www/vpf-data
             git pull origin prod
+            cd src
             npm install
             systemctl stop nodeapp
             npm run build
