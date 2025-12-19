@@ -51,7 +51,6 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
       FROM public.meet_result_detailed
       WHERE type='national'
     `
-    console.log(res)
 
     const maleRowGroup: RecordTableRowGroup = {
       subjr: { squat: [], bench: [], deadlift: [], total: [] },

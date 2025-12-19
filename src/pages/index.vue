@@ -100,11 +100,9 @@ watch(
 
 // Make sure that searching is done on the entire data set
 watch(() => [filters.search.value, athletes.value], () => {
-  console.log("triggered")
   if (filters.search.value === "") {
     visibleCount.value = 50
   } else {
-    console.log("debug")
     visibleCount.value = 9999
   }
 })
