@@ -50,13 +50,14 @@
       </div>
 
       <!-- Session Results Section -->
-      <h2 class="text-primary">Session View</h2>
+      <h2 v-if="meetId > 2" class="text-primary">Session View</h2>
       <div v-for="(group, session) in groupedResults" :key="session" class="card bg-surface my-4">
-        <h2 class="ps-2 text-primary sticky-header">
+        <h2 v-if="meetId > 2" class="ps-2 text-primary sticky-header">
           Session {{ session }}
         </h2>
 
-        <MeetResultTable
+        <MeetResultTable 
+          v-if="meetId > 2"
           :headers="headers"
           :items="group"
         />
@@ -77,7 +78,7 @@ const slug = route.params.slug as string
 
 const results = ref<MeetResult[]>([])
 const loading = ref(true)
-
+const meetId = ref()
 const bestLifters = ref()
 
 // Division order for display
@@ -121,16 +122,12 @@ onMounted(async () => {
   const response = await $fetch<APIBody<{ results: MeetResult[], bestLifters: { male: BestLifterInfo, female: BestLifterInfo } }>>(`/api/meets/${slug}`, { ignoreResponseError: true })
   if (response.success) {
     results.value = response.data?.results ?? []
+    meetId.value = response.data?.results[0].meetId
     bestLifters.value = response.data?.bestLifters ?? []
   }
 
   loading.value = false
 })
-
-// Helper function to calculate best lift
-const getBestLift = (lift1: number, lift2: number, lift3: number): number => {
-  return Math.max(0, lift1 || 0, lift2 || 0, lift3 || 0)
-}
 
 // Get overall results for a specific sex and division
 const getOverallResults = (sex: string, division: string) => {
@@ -138,10 +135,7 @@ const getOverallResults = (sex: string, division: string) => {
   
   const withBestLifts = filtered.map(r => ({
     ...r,
-    weightClassDisplay: r.placement == 1 ? "-" + getWeightClassDisplay(r.weightClass, r.sex) : "",
-    bestSquat: getBestLift(r.squat1, r.squat2, r.squat3),
-    bestBench: getBestLift(r.bench1, r.bench2, r.bench3),
-    bestDead: getBestLift(r.dead1, r.dead2, r.dead3)
+    weightClassDisplay: r.placement == 1 ? "-" + getWeightClassDisplay(r.weightClass, r.sex) : ""
   }))
   
   // Filter only top 3 placements and sort by weight class, then placement

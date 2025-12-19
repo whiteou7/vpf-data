@@ -37,4 +37,7 @@ export type MeetResult = {
   dob: number
   hostDate: Date
   placement: number
+  bestSquat: number
+  bestBench: number
+  bestDead: number
 }

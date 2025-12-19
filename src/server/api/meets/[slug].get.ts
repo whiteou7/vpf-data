@@ -50,12 +50,15 @@ export default defineEventHandler(
           squat1::float as squat1,
           squat2::float as squat2,
           squat3::float as squat3,
+          best_squat::float as best_squat,
           bench1::float as bench1,
           bench2::float as bench2,
           bench3::float as bench3,
+          best_bench::float as best_bench,
           dead1::float as dead1,
           dead2::float as dead2,
           dead3::float as dead3,
+          best_dead::float as best_dead,
           session,
           flight,
           full_name,
@@ -82,27 +85,10 @@ export default defineEventHandler(
         }
       }
 
-      const bestOf3 = (a = 0, b = 0, c = 0) => Math.max(0, a, b, c)
-
-      const enriched = results.map(r => {
-        const bestSquat = bestOf3(r.squat1, r.squat2, r.squat3)
-        const bestBench = bestOf3(r.bench1, r.bench2, r.bench3)
-        const bestDead = bestOf3(r.dead1, r.dead2, r.dead3)
-        const total = Math.max(0, r.total ?? 0)
-
-        return {
-          ...r,
-          bestSquat,
-          bestBench,
-          bestDead,
-          total,
-        }
-      })
-
       const groupKey = (r: MeetResult) =>
         `${r.sex}|${r.division}|${r.weightClass}`
 
-      const groupCounts = enriched.reduce<Record<string, number>>(
+      const groupCounts = results.reduce<Record<string, number>>(
         (acc, r) => {
           const key = groupKey(r)
           acc[key] = (acc[key] ?? 0) + 1
@@ -112,7 +98,7 @@ export default defineEventHandler(
       )
 
       const pickBest = (sex: "male" | "female"): BestLifterInfo[] => {
-        return enriched
+        return results
           .filter(r => r.sex === sex)
           .filter(
             r =>
