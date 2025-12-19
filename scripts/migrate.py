@@ -526,6 +526,6 @@ if __name__ == "__main__":
     # Example usage
     DATA_CSV = "data.csv"
     MEET_INFO_CSV = "meet_info.csv"
-    OUTPUT_SQL = "migration.sql"
+    OUTPUT_SQL = "legacy_migration.sql"
     
     generate_sql(DATA_CSV, MEET_INFO_CSV, OUTPUT_SQL)

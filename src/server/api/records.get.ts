@@ -49,7 +49,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
     const res = await db<MeetResult[]>`
       SELECT * 
       FROM public.meet_result_detailed
-      WHERE type='national'
+      WHERE type='national' AND meet_id > 2;
     `
 
     const maleRowGroup: RecordTableRowGroup = {
