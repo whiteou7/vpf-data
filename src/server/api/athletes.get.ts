@@ -1,8 +1,7 @@
 import type { Athlete } from "~/types/athlete"
 import { db } from "../../db"
 import type { APIBody } from "~/types/api"
-import type { MeetType } from "~/types/meet"
-import { performance } from "node:perf_hooks"
+import { Meet, type MeetType } from "~/types/meet"
 
 export default defineEventHandler(
   async (event): Promise<APIBody<{ athletes: Athlete[] }>> => {
@@ -61,7 +60,8 @@ export default defineEventHandler(
             best_dead,
             total,
             gl,
-            instagram_username
+            instagram_username,
+            host_date as date
           FROM meet_result_detailed
           ${whereClause}
           ORDER BY vpf_id, ${sort} DESC
@@ -69,10 +69,15 @@ export default defineEventHandler(
         ORDER BY ${sort} DESC;
       `
 
+      const [latestMeet] = await db<Meet[]>`
+        SELECT host_date FROM meet_info ORDER BY host_date DESC;
+      `
+
       // add "#" for pagination / ranking
       const athletes = athletesRaw.map((athlete, index) => ({
         ...athlete,
-        "#": index + 1
+        rank: index + 1,
+        new: new Date(athlete.date).toISOString().slice(0, 10) === new Date(latestMeet.hostDate).toISOString().slice(0, 10)
       }))
 
       setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")

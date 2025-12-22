@@ -28,7 +28,9 @@ export type Athlete = {
   bestDead: number
   total: number
   gl: number
+  date: string
   instagramUsername: string | null
+  new: boolean
 }
 
 export type Sex = "male" | "female" | null
