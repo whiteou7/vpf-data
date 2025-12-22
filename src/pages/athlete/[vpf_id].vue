@@ -63,7 +63,15 @@ const routeInstagram = () => {
     <div v-else-if="personalInfo">
       <!-- Shared Header -->
       <div class="d-flex align-center">
-        <h1 class="text-primary justify-start pa-2">
+        <h1 
+          class="justify-start pa-2"
+          :class="personalInfo.decorator_1 && personalInfo.decorator_2 ? 'gradient-name' : 'text-primary'"
+          :style="
+            personalInfo.decorator_1 && personalInfo.decorator_2
+              ? { '--c1': personalInfo.decorator_1, '--c2': personalInfo.decorator_2 }
+              : {}
+          "
+        >
           {{ personalInfo.fullName + " (" + ((sex === 'male') ? 'M' : 'F') + ")" }}
         </h1>
         <v-icon-btn
@@ -95,3 +103,12 @@ const routeInstagram = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.gradient-name[style*="--c1"][style*="--c2"] {
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: linear-gradient(to right, var(--c1), var(--c2)) !important;
+}
+</style>

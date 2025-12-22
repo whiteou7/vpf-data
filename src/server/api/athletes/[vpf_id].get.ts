@@ -65,7 +65,10 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       bench_safety_pin,
       bench_foot_block,
       national_id_image_url,
-      instagram_username
+      instagram_username,
+      slug,
+      decorator_1,
+      decorator_2
     FROM 
       public.members
       WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
@@ -84,7 +87,10 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     benchRackPin,
     benchSafetyPin,
     benchFootBlock,
-    instagramUsername
+    instagramUsername,
+    slug,
+    decorator_1,
+    decorator_2
   } = row
 
   const personalInfo: AthletePersonalInfo = {
@@ -98,7 +104,10 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     email,
     nationalIdImageUrl,
     active,
-    instagramUsername
+    instagramUsername,
+    slug,
+    decorator_1,
+    decorator_2
   }
 
   const compSettings: AthleteCompSettings = {
@@ -166,6 +175,9 @@ export default defineEventHandler(async (event): Promise<APIBody<{
         personalInfo: { 
           fullName: privateInfo.personalInfo.fullName,
           instagramUsername: privateInfo.personalInfo.instagramUsername,
+          slug: privateInfo.personalInfo.slug,
+          decorator_1: privateInfo.personalInfo.decorator_1,
+          decorator_2: privateInfo.personalInfo.decorator_2,
         }
       },
       message: "Fetched athlete info"

@@ -61,7 +61,9 @@ export default defineEventHandler(
             total,
             gl,
             instagram_username,
-            host_date as date
+            host_date as date,
+            decorator_1,
+            decorator_2
           FROM meet_result_detailed
           ${whereClause}
           ORDER BY vpf_id, ${sort} DESC
