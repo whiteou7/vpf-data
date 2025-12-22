@@ -164,6 +164,11 @@ const headers = [
 ]
 
 useHead({ 
+  meta: [
+    { property: "og:type", content: "website" },
+    { property: "og: title", content: "VPF Athlete Rankings" },
+    { property: "og:description", content: "VPF Athlete Rankings Table with extensive filtering" },
+  ],
   title: "VPF Athlete Rankings"
 })
 </script>

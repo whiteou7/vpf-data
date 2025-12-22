@@ -16,12 +16,20 @@ const sex = ref<Sex>()
 
 const currentTab = ref<string>(route.path.split("/").at(3) ?? "")
 
+useHead({
+  meta: [
+    { property: "og:type", content: "website" },
+    { property: "og:description", content: "VPF Athlete PB Info & Competition History" },
+  ],
+})
+
 onMounted(async () => {
   await useFetchAthlete().fetch(vpfId)
   const data = useFetchAthlete()
 
   personalInfo.value = data.personalInfo.value
   useHead({ 
+    meta: [{ property: "og:title", content: `${personalInfo.value?.fullName ?? ""}` }],
     title: `${personalInfo.value?.fullName ?? ""}` 
   })
   if (data.compInfo.value && data.compInfo.value.length > 0) {
