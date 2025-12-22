@@ -13,6 +13,7 @@ export type Meet = {
 export type MeetType = "national" | "amateur" | "national_qualifier" | "other"
 
 export type MeetResult = {
+  meetName: string
   slug: string
   meetId: number;
   vpfId: string;

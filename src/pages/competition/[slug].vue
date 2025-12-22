@@ -119,11 +119,20 @@ type BestLifterInfo = {
 
 // Fetch meet result
 onMounted(async () => {
-  const response = await $fetch<APIBody<{ results: MeetResult[], bestLifters: { male: BestLifterInfo, female: BestLifterInfo } }>>(`/api/meets/${slug}`, { ignoreResponseError: true })
+  const response = await $fetch<APIBody<{ name: string, results: MeetResult[], bestLifters: { male: BestLifterInfo, female: BestLifterInfo } }>>(`/api/meets/${slug}`, { ignoreResponseError: true })
   if (response.success) {
     results.value = response.data?.results ?? []
     meetId.value = response.data?.results[0].meetId
     bestLifters.value = response.data?.bestLifters ?? []
+    useHead({ 
+      meta: [
+        { property: "og:type", content: "website" },
+        { property: "og: title", content: response.data.name ?? "VPF Competition Result" },
+        { property: "og:description", content: "VPF Competition Result" },
+      ],
+      title: response.data.name ?? "VPF Competition Result"
+    })
+
   }
 
   loading.value = false
@@ -211,7 +220,10 @@ const headers = [
 ]
 
 useHead({ 
-  title: "VPF Competition Result"
+  meta: [
+    { property: "og:type", content: "website" },
+    { property: "og:description", content: "VPF Competition Result" },
+  ],
 })
 </script>
 

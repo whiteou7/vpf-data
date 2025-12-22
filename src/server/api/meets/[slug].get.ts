@@ -21,6 +21,7 @@ export default defineEventHandler(
     event
   ): Promise<
     APIBody<{
+      name: string
       results: MeetResult[]
       bestLifters: {
         male: BestLifterInfo[]
@@ -42,6 +43,7 @@ export default defineEventHandler(
       const results = await db<MeetResult[]>`
         SELECT 
           meet_id,
+          meet_name,
           vpf_id,
           sex,
           weight_class,
@@ -126,6 +128,7 @@ export default defineEventHandler(
       return {
         success: true,
         data: {
+          name: results[0].meetName,
           results,
           bestLifters: {
             male: pickBest("male"),

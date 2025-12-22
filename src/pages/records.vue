@@ -49,6 +49,11 @@ onMounted(async () => {
 })
 
 useHead({ 
+  meta: [
+    { property: "og:type", content: "website" },
+    { property: "og: title", content: "VPF National Records" },
+    { property: "og:description", content: "VPF National Records across all Weight Classes & Divisions" },
+  ],
   title: "VPF National Records"
 })
 
