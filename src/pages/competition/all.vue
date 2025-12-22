@@ -90,7 +90,7 @@ const headers = [
 useHead({ 
   meta: [
     { property: "og:type", content: "website" },
-    { property: "og: title", content: "VPF All Competitions" },
+    { property: "og:title", content: "VPF All Competitions" },
     { property: "og:description", content: "VPF All Competitions since 2019" },
   ],
   title: "VPF Competitions"

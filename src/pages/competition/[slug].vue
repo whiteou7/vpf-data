@@ -127,7 +127,7 @@ onMounted(async () => {
     useHead({ 
       meta: [
         { property: "og:type", content: "website" },
-        { property: "og: title", content: response.data.name ?? "VPF Competition Result" },
+        { property: "og:title", content: response.data.name ?? "VPF Competition Result" },
         { property: "og:description", content: "VPF Competition Result" },
       ],
       title: response.data.name ?? "VPF Competition Result"
