@@ -58,6 +58,8 @@ export type AthletePersonalInfo = {
   nationalIdImageUrl: string | null
   instagramUsername: string | null
   slug: string
+  decorator_1: string
+  decorator_2: string
 }
 
 export type AthleteCompSettings = {

@@ -25,7 +25,7 @@
     </template>
     <template #item.rank="{ item }">
       <v-tooltip :text="'This result was achieved on ' + new Date(item.date).toLocaleDateString('en-GB').slice(0, 10)">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           {{ item.rank }}<sup v-bind="props" style="font-style: italic;">{{ item.new ? "new" : "" }}</sup>
         </template>
       </v-tooltip>
@@ -34,10 +34,27 @@
 
     <!-- Links config -->
     <template #item.fullName="{ item }">
-      <NuxtLink v-if="item.slug" :to="`/athlete/${item.slug}`" class="athlete-link" style="margin-right: 3px">
+      <NuxtLink
+        v-if="item.slug"
+        :to="`/athlete/${item.slug}`"
+        class="athlete-link gradient-name"
+        style="margin-right: 3px"
+        :style="
+          item.decorator_1 && item.decorator_2
+            ? { '--c1': item.decorator_1, '--c2': item.decorator_2 }
+            : {}
+        "
+      >
         {{ item.fullName }}
       </NuxtLink>
-      <a v-else> {{ item.fullName }} </a>
+      <span
+        v-else
+        :style="
+          item.decorator_1 && item.decorator_2
+            ? { '--c1': item.decorator_1, '--c2': item.decorator_2 }
+            : {}
+        "
+      > {{ item.fullName }} </span>
 
       <v-icon-btn
         v-if="item.instagramUsername"
@@ -192,4 +209,11 @@ const routeInstagram = (username: string) => {
   text-decoration: none;
   color: rgb(var(--v-theme-primary))
 }
+.gradient-name:not(:hover):not(:active)[style*="--c1"][style*="--c2"] {
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: linear-gradient(to right, var(--c1), var(--c2)) !important;
+}
+
 </style>
