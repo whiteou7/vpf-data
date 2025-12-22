@@ -23,6 +23,14 @@
     <template #item.result="{ item }">
       {{ item.result == 0 ? "-" : formatFloat(item.result) }}
     </template>
+    <template #item.rank="{ item }">
+      <v-tooltip :text="'This result was achieved on ' + new Date(item.date).toLocaleDateString('en-GB').slice(0, 10)">
+        <template v-slot:activator="{ props }">
+          {{ item.rank }}<sup v-bind="props" style="font-style: italic;">{{ item.new ? "new" : "" }}</sup>
+        </template>
+      </v-tooltip>
+      
+    </template>
 
     <!-- Links config -->
     <template #item.fullName="{ item }">

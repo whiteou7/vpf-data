@@ -153,7 +153,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
         bodyWeight: topResult.bodyWeight,
         yearOfBirth: topResult.dob ?? 0,
         sex: sex as Sex,
-        date: topResult.hostDate.toISOString().split("T")[0]
+        date: topResult.hostDate.toLocaleDateString("en-GB").slice(0, 10)
       }
 
       // Insert into appropriate group with new nesting structure

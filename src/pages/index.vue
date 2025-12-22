@@ -138,7 +138,7 @@ onBeforeUnmount(() => {
 })
 
 const headers = [
-  { title: "#", value: "#", sortable: true },
+  { title: "#", value: "rank", sortable: true },
   { title: "Name", value: "fullName", width: "15%" },
   { 
     title: "Class", 
