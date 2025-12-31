@@ -45,13 +45,13 @@ def parse_division(age_class_str: str) -> Optional[str]:
         return 'jr'
     elif 'open' in age_class_lower:
         return 'open'
-    elif 'master 1' in age_class_lower or 'mas1' in age_class_lower or 'm1' in age_class_lower:
+    elif 'master 1' in age_class_lower or 'master i' in age_class_lower or 'm1' in age_class_lower:
         return 'mas1'
-    elif 'master 2' in age_class_lower or 'mas2' in age_class_lower or 'm2' in age_class_lower:
+    elif 'master 2' in age_class_lower or 'master ii' in age_class_lower or 'm2' in age_class_lower:
         return 'mas2'
-    elif 'master 3' in age_class_lower or 'mas3' in age_class_lower or 'm3' in age_class_lower:
+    elif 'master 3' in age_class_lower or 'master iii' in age_class_lower or 'm3' in age_class_lower:
         return 'mas3'
-    elif 'master 4' in age_class_lower or 'mas4' in age_class_lower or 'm4' in age_class_lower:
+    elif 'master 4' in age_class_lower or 'master iv' in age_class_lower or 'm4' in age_class_lower:
         return 'mas4'
     elif 'guest' in age_class_lower:
         return 'guest' 
@@ -127,43 +127,37 @@ def load_members(path: str):
 
     return members, by_nid, by_name_dob, by_name_only, vpfs
 
-
-def load_meets(path: str):
-    with open(path, encoding="utf-8") as f:
-        return {r["meet_name"].strip(): int(r["meet_id"]) for r in csv.DictReader(f)}
-
 # ---------------- MAIN ----------------
 def migrate(data_csv, members_csv, meet_csv, out_sql):
     members, by_nid, by_name_dob, by_name_only, vpfs = load_members(members_csv)
 
-    meet_map = load_meets(meet_csv)
-
     new_members = {}
     meet_rows = []
+    meet_id = input("Meet ID : ")
 
     with open(data_csv, encoding="utf-8") as f:
         for row in csv.DictReader(f):
 
             dob = parse_dob_year(row.get("D.O.B"))
             nid = row.get("National ID", "").strip()
-            name_key = (normalize_name(row["Full Name"]), str(dob))
+            name_key = (normalize_name(row["Name"]), str(dob))
 
             vpf_id = None
 
-            name_norm = normalize_name(row["Full Name"])
+            name_norm = normalize_name(row["Name"])
 
             if nid and nid in by_nid:
                 vpf_id = by_nid[nid]
-                logger.info(f"MATCH_NATIONAL_ID | {row['Full Name']} -> {vpf_id}")
+                logger.info(f"MATCH_NATIONAL_ID | {row['Name']} -> {vpf_id}")
 
             elif name_key in by_name_dob:
                 vpf_id = by_name_dob[name_key]
-                logger.info(f"MATCH_NAME_DOB | {row['Full Name']} -> {vpf_id}")
+                logger.info(f"MATCH_NAME_DOB | {row['Name']} -> {vpf_id}")
 
             elif name_norm in by_name_only and len(by_name_only[name_norm]) == 1:
                 vpf_id = by_name_only[name_norm][0]
                 logger.info(
-                    f"MATCH_NAME_ONLY_UNIQUE | {row['Full Name']} -> {vpf_id}"
+                    f"MATCH_NAME_ONLY_UNIQUE | {row['Name']} -> {vpf_id}"
                 )
 
             else:
@@ -177,30 +171,24 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                 vpf_id = temp_id
                 new_members[temp_id] = {
                     "vpf_id": vpf_id,
-                    "full_name": row["Full Name"],
+                    "full_name": row["Name"],
                     "nationality": row.get("Nationality"),
                     "dob": dob,
                     "national_id": nid or None,
                     "address": row.get("Address"),
                     "phone_number": row.get("Phone Number"),
                     "email": row.get("Email Address"),
-                    "slug": slugify(row["Full Name"])
+                    "slug": slugify(row["Name"])
                 }
-                logger.info(f"NEW_MEMBER | {row['Full Name']} -> {temp_id}")
-
-
-            meet_id = 22
-            if not meet_id:
-                logger.warning(f"UNKNOWN_MEET | {row['Meet']}")
-                continue
+                logger.info(f"NEW_MEMBER | {row['Name']} -> {temp_id}")
 
             meet_rows.append({
                 "meet_id": meet_id,
                 "vpf_id": vpf_id,
                 "sex": parse_gender(row["Gender"]),
-                "weight_class": parse_weight_class(row["Weight Class"]),
-                "division": parse_division(row.get("Age Class")),
-                "body_weight": safe_float(row.get("bodyWeight", "")),
+                "weight_class": safe_int(row.get("Weight Class")),
+                "division": parse_division(row.get("Awards Division")),
+                "body_weight": safe_float(row.get("Body Weight (kg)", "")),
                 'squat1': safe_float(row.get('Squat 1', '')),
                 'squat2': safe_float(row.get('Squat 2', '')),
                 'squat3': safe_float(row.get('Squat 3', '')),
@@ -210,14 +198,14 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                 'dead1': safe_float(row.get('Deadlift 1', '')),
                 'dead2': safe_float(row.get('Deadlift 2', '')),
                 'dead3': safe_float(row.get('Deadlift 3', '')),
-                "platform": row.get("platform"),
-                "session": row.get("session"),
-                "flight": row.get("flight"),
-                "lot": safe_int(row.get("lot")),
+                "platform": row.get("Platform"),
+                "session": row.get("Session"),
+                "flight": row.get("Flight"),
+                "lot": safe_int(row.get("Lot")),
                 "placement": safe_int(row.get("Place"))
             })
 
-    with open(out_sql, "w", encoding="utf-8") as f:
+    with open(out_sql, "a", encoding="utf-8") as f:
         f.write("-- NEW MEMBERS\n")
         for m in new_members.values():
             f.write(

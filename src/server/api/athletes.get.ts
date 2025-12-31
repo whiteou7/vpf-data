@@ -1,7 +1,7 @@
 import type { Athlete } from "~/types/athlete"
 import { db } from "../../db"
 import type { APIBody } from "~/types/api"
-import { Meet, type MeetType } from "~/types/meet"
+import type { Meet, MeetType } from "~/types/meet"
 
 export default defineEventHandler(
   async (event): Promise<APIBody<{ athletes: Athlete[] }>> => {
@@ -26,7 +26,7 @@ export default defineEventHandler(
         db`gl`
 
       /* -------------------- WHERE clause -------------------- */
-      let whereClause = db`WHERE vpf_id is not null`
+      let whereClause = db`WHERE vpf_id is not null AND NOT hidden`
 
       if (meetType) {
         whereClause = db`${whereClause} AND type = ${meetType}`

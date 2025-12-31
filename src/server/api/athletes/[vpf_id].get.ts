@@ -28,6 +28,7 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       meet_slug
     FROM meet_result_detailed
     WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
+    AND NOT hidden 
     ORDER BY meet_id DESC;
   `
   const pb = await db<AthletePB[]>`
