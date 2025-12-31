@@ -189,7 +189,7 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                 logger.info(f"NEW_MEMBER | {row['Full Name']} -> {temp_id}")
 
 
-            meet_id = meet_map.get(row["Meet"])
+            meet_id = 22
             if not meet_id:
                 logger.warning(f"UNKNOWN_MEET | {row['Meet']}")
                 continue

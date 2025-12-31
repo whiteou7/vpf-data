@@ -16,6 +16,8 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
       FROM meet_info mi
       JOIN meet_result mr
         ON mi.meet_id = mr.meet_id
+      WHERE
+        NOT mi.hidden 
       GROUP BY
         mi.meet_id,
         mi.meet_name,
@@ -37,6 +39,8 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
       FROM meet_info mi
       JOIN legacy_meet_result lmr
         ON mi.meet_id = lmr.meet_id
+      WHERE
+        NOT mi.hidden 
       GROUP BY
         mi.meet_id,
         mi.meet_name,
