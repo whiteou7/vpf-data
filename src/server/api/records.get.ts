@@ -8,6 +8,13 @@ import type { MeetResult } from "~/types/meet"
 const MALE_WEIGHT_CLASSES = [59, 66, 74, 83, 93, 105, 120, 999] // 999 represents 120+
 const FEMALE_WEIGHT_CLASSES = [47, 52, 57, 63, 69, 76, 84, 999] // 999 represents 84+
 
+function getDivisionFromAge(age: number) {
+  if (age >= 14 && age <= 18) return "subjr"
+  if (age >= 19 && age <= 23) return "jr"
+  if (age >= 40) return "mas"
+  return "open"
+}
+
 function createEmptyRow(weightClass: number, sex: Sex): RecordTableRow {
   return {
     vpfId: "",
@@ -17,7 +24,8 @@ function createEmptyRow(weightClass: number, sex: Sex): RecordTableRow {
     bodyWeight: 0,
     yearOfBirth: 0,
     sex,
-    date: "-"
+    date: "-",
+    slug: ""
   }
 }
 
@@ -68,22 +76,23 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
 
     // Group results by sex, target division (with promotion), weight class, and lift
     type GroupKey = string // Format: "sex-targetDivision-weightClass-lift"
-    const groupedResults = new Map<GroupKey, MeetResult[]>()
+    type GroupResult = MeetResult & { currentLift: string, currentValue: number }
+    const groupedResults = new Map<GroupKey, GroupResult[]>()
 
     res.forEach((row) => {
       const lifts: ("squat" | "bench" | "deadlift" | "total")[] = ["squat", "bench", "deadlift", "total"]
       
-      // Normalize original division
-      let originalDiv: "subjr" | "jr" | "open" | "mas"
-      const divisionValue = row.division === "mas1" ? "mas" : row.division
-      if (divisionValue === "subjr") {
-        originalDiv = "subjr"
-      } else if (divisionValue === "jr") {
-        originalDiv = "jr"
-      } else if (divisionValue === "mas") {
-        originalDiv = "mas"
+      // Get "real" division to count record
+      let originalDiv: "open" | "jr" | "subjr" | "mas"
+      if (row.dob === null) {
+        originalDiv = row.division === "mas1" ? "mas" 
+          : row.division === "mas2" ? "mas" 
+            : row.division === "mas3" ? "mas" 
+              : row.division === "mas4" ? "mas" 
+                : "open"
       } else {
-        originalDiv = "open"
+        const age = row.systemYear - row.dob
+        originalDiv = getDivisionFromAge(age)
       }
       
       for (const lift of lifts) {
@@ -133,8 +142,8 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
       
       // Sort by lift value (desc), then bodyweight (asc) for tie-breaking
       results.sort((a, b) => {
-        const aValue = (a as any).currentValue
-        const bValue = (b as any).currentValue
+        const aValue = (a as GroupResult).currentValue
+        const bValue = (b as GroupResult).currentValue
         if (bValue !== aValue) return bValue - aValue
         return a.bodyWeight - b.bodyWeight
       })
@@ -149,7 +158,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
         weightClass: Number(weightClass),
         fullName: topResult.fullName,
         slug: topResult.slug,
-        result: (topResult as any).currentValue,
+        result: (topResult as GroupResult).currentValue,
         bodyWeight: topResult.bodyWeight,
         yearOfBirth: topResult.dob ?? 0,
         sex: sex as Sex,

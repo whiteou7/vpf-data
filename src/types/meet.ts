@@ -41,4 +41,5 @@ export type MeetResult = {
   bestSquat: number
   bestBench: number
   bestDead: number
+  systemYear: number
 }
