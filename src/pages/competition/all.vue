@@ -4,6 +4,7 @@
     :headers="headers"
     :loading="loading"
     striped="odd"
+    style="max-height: calc(100vh - 100px);"
   >
     <template #top>
       <div style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
@@ -97,5 +98,3 @@ useHead({
 })
 </script>
 
-<style>
-</style>

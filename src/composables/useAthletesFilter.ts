@@ -35,7 +35,10 @@ const divisionOptions = [
   { title: "Open", value: "open" },
   { title: "Junior", value: "jr" },
   { title: "Sub-Junior", value: "subjr" },
-  { title: "Masters", value: "mas1" },
+  { title: "Master I", value: "mas1" },
+  { title: "Master II", value: "mas2" },
+  { title: "Master III", value: "mas3" },
+  { title: "Master IV", value: "mas4" },
 ]
 
 const weightClassOptions = [

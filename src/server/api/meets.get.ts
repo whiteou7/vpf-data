@@ -49,7 +49,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ meets: Meet[]
         mi.media_link,
         mi.meet_slug
 
-      ORDER BY host_date ASC;
+      ORDER BY host_date DESC;
       `
 
     setHeader(event, "Cache-Control", "public, max-age=3600, s-maxage=3600")
