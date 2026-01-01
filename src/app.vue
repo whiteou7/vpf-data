@@ -26,3 +26,9 @@ useHead({
   ]
 })
 </script>
+
+<style>
+.button-container {
+  flex: 1; min-width: 150px; max-width: 200px; height: 45px;
+}
+</style>

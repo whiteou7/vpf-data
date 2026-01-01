@@ -1,6 +1,6 @@
 <template>
   <div class="no-scrollbar" style="overflow-x:auto; overflow-y: hidden; display: flex; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
+    <div class="button-container">
       <v-text-field
         v-model="searchText"
         density="compact"
@@ -11,7 +11,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
+    <div class="button-container">
       <v-select
         v-model="filters.sort.value"
         :items="filters.sortOptions"
@@ -22,7 +22,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
+    <div class="button-container">
       <v-select
         v-model="filters.sexFilter.value"
         :items="filters.sexOptions"
@@ -33,7 +33,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
+    <div class="button-container">
       <v-select
         v-model="filters.divisionFilter.value"
         :items="filters.divisionOptions"
@@ -44,7 +44,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
+    <div class="button-container">
       <v-select
         v-model="filters.weightClassFilter.value"
         :items="filters.weightClassOptions"
@@ -55,7 +55,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 45px;">
+    <div class="button-container">
       <slot name="meetTypeFilter"/>
     </div>
   </div>

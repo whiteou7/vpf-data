@@ -7,7 +7,7 @@ const sort = ref<string>("gl")
 const sexFilter = ref<Sex>(null)
 const divisionFilter = ref<Division | null>()
 const weightClassFilter = ref<{ weight: number | null, sex: Sex }>({ weight: null, sex:null })
-const meetTypeFilter = ref<MeetType | null>(null)
+const meetTypeFilter = ref<MeetType | null>("national")
 
 const sortOptions = [
   { title: "GL Point", value: "gl" },
@@ -19,7 +19,7 @@ const sortOptions = [
 
 const meetTypeOptions = [
   { title: "All", value: null },
-  { title: "National", value: "national" },
+  { title: "National Championship", value: "national" },
   { title: "National Qualifier", value: "national_qualifier" },
   { title: "Amateur", value: "amateur" },
 ]
