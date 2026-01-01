@@ -89,31 +89,27 @@ const displayTitle = computed(() => {
   return `${genderLabel} ${divisionLabel} Records`
 })
 
-onMounted(async () => {
-  const response = await $fetch<
-    APIBody<{ male: RecordTableRowGroup, female: RecordTableRowGroup }>
-  >("/api/records", { ignoreResponseError: true })
-
-  if (!response.success || !response.data) {
-    return
-  }
-
-  // assign directly since structure matches
-  records.value = {
-    male: response.data.male,
-    female: response.data.female
-  }
-
-  loading.value = false
+const { data: response, pending } = await useFetch<
+  APIBody<{ male: RecordTableRowGroup, female: RecordTableRowGroup }>
+>("/api/records", {
+  method: "GET"
 })
 
-useHead({ 
-  meta: [
-    { property: "og:type", content: "website" },
-    { property: "og:title", content: "VPF National Records" },
-    { property: "og:description", content: "VPF National Records across all Weight Classes & Divisions" },
-  ],
-  title: "VPF National Records"
+if (response.value?.success && response.value.data) {
+  // assign directly since structure matches
+  records.value = {
+    male: response.value.data.male,
+    female: response.value.data.female
+  }
+}
+
+loading.value = pending.value
+
+useSeoMeta({
+  title: "VPF National Records",
+  ogType: "website",
+  ogTitle: "VPF National Records",
+  ogDescription: "VPF National Records across all Weight Classes & Divisions"
 })
 
 </script>

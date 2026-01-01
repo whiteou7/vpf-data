@@ -2,7 +2,6 @@
   <v-app>
     <!-- App Bar -->
     <v-app-bar
-      :key="user"
       color="surface"
       dark
       app
@@ -168,12 +167,6 @@
 </template>
 
 <script setup>
-import { useAuth } from "~/composables/useAuth"
-
-// const { isLoggedIn, user, logout } = await useAuth()
-const { user } = await useAuth()
-// const router = useRouter()
-
 const snackbar = ref(false)
 const snackbarText = ref("")
 const snackbarColor = ref("error")

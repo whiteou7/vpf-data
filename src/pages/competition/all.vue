@@ -46,13 +46,14 @@ const cityFilter = ref<string | null>(null)
 const yearFilter = ref<number | null>(null)
 
 // Fetch all meets
-onMounted(async () => {
-  const response = await $fetch<APIBody<{ meets: Meet[] }>>("/api/meets", { ignoreResponseError: true })
-  if (response.success) {
-    meets.value = response.data?.meets ?? []
-  }
-  loading.value = false
+const { data: response, pending } = await useFetch<APIBody<{ meets: Meet[] }>>("/api/meets", {
+  method: "GET"
 })
+
+if (response.value?.success) {
+  meets.value = response.value.data?.meets ?? []
+}
+loading.value = pending.value
 
 // Auto generated items for filter buttons
 const cityOptions = computed<{ title: string, value: string | null }[]>(() => {
@@ -88,13 +89,10 @@ const headers = [
   { title: "Media", value: "mediaLink", sortable: false }
 ]
 
-useHead({ 
-  meta: [
-    { property: "og:type", content: "website" },
-    { property: "og:title", content: "VPF All Competitions" },
-    { property: "og:description", content: "VPF All Competitions since 2019" },
-  ],
-  title: "VPF Competitions"
+useSeoMeta({
+  title: "VPF Competitions",
+  ogType: "website",
+  ogTitle: "VPF All Competitions",
+  ogDescription: "VPF All Competitions since 2019"
 })
 </script>
-
