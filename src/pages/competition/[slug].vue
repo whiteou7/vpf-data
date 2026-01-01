@@ -82,7 +82,7 @@ const meetId = ref()
 const bestLifters = ref()
 
 // Division order for display
-const divisionOrder = ["open", "jr", "subjr", "mas1"]
+const divisionOrder = ["open", "jr", "subjr", "mas1", "mas2", "mas3", "mas4"]
 
 const divisions = (sex: string) => {
   return divisionOrder
@@ -96,7 +96,10 @@ const divisionToText = {
   "open": "Open",
   "jr": "Junior",
   "subjr": "Sub-Junior",
-  "mas1": "Master"
+  "mas1": "Master I",
+  "mas2": "Master II",
+  "mas3": "Master III",
+  "mas4": "Master IV"
 }
 
 const emptyPlacement = computed(() =>

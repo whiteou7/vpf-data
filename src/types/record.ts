@@ -20,25 +20,37 @@ export type DestructuredRecord = {
     subjr: LiftRecord[],
     jr: LiftRecord[],
     open: LiftRecord[],
-    mas: LiftRecord[]
+    mas1: LiftRecord[],
+    mas2: LiftRecord[],
+    mas3: LiftRecord[],
+    mas4: LiftRecord[]
   },
   bench: {
     subjr: LiftRecord[],
     jr: LiftRecord[],
     open: LiftRecord[],
-    mas: LiftRecord[]
+    mas1: LiftRecord[],
+    mas2: LiftRecord[],
+    mas3: LiftRecord[],
+    mas4: LiftRecord[]
   },
   deadlift: {
     subjr: LiftRecord[],
     jr: LiftRecord[],
     open: LiftRecord[],
-    mas: LiftRecord[]
+    mas1: LiftRecord[],
+    mas2: LiftRecord[],
+    mas3: LiftRecord[],
+    mas4: LiftRecord[]
   },
   total: {
     subjr: TotalRecord[],
     jr: TotalRecord[],
     open: TotalRecord[],
-    mas: TotalRecord[]
+    mas1: TotalRecord[],
+    mas2: TotalRecord[],
+    mas3: TotalRecord[],
+    mas4: TotalRecord[]
   }
 }
 
@@ -75,7 +87,25 @@ export type RecordTableRowGroup = {
     deadlift: RecordTableRow[],
     total: RecordTableRow[]
   },
-  mas: {
+  mas1: {
+    squat: RecordTableRow[],
+    bench: RecordTableRow[],
+    deadlift: RecordTableRow[],
+    total: RecordTableRow[]
+  },
+  mas2: {
+    squat: RecordTableRow[],
+    bench: RecordTableRow[],
+    deadlift: RecordTableRow[],
+    total: RecordTableRow[]
+  },
+  mas3: {
+    squat: RecordTableRow[],
+    bench: RecordTableRow[],
+    deadlift: RecordTableRow[],
+    total: RecordTableRow[]
+  },
+  mas4: {
     squat: RecordTableRow[],
     bench: RecordTableRow[],
     deadlift: RecordTableRow[],

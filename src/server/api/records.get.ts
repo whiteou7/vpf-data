@@ -8,10 +8,13 @@ import type { MeetResult } from "~/types/meet"
 const MALE_WEIGHT_CLASSES = [59, 66, 74, 83, 93, 105, 120, 999] // 999 represents 120+
 const FEMALE_WEIGHT_CLASSES = [47, 52, 57, 63, 69, 76, 84, 999] // 999 represents 84+
 
-function getDivisionFromAge(age: number) {
+function getDivisionFromAge(age: number): "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4" {
   if (age >= 14 && age <= 18) return "subjr"
   if (age >= 19 && age <= 23) return "jr"
-  if (age >= 40) return "mas"
+  if (age >= 40 && age <= 49) return "mas1"
+  if (age >= 50 && age <= 59) return "mas2"
+  if (age >= 60 && age <= 69) return "mas3"
+  if (age >= 70) return "mas4"
   return "open"
 }
 
@@ -31,7 +34,7 @@ function createEmptyRow(weightClass: number, sex: Sex): RecordTableRow {
 
 function fillEmptyWeightClasses(group: RecordTableRowGroup, sex: Sex) {
   const weightClasses = sex === "male" ? MALE_WEIGHT_CLASSES : FEMALE_WEIGHT_CLASSES
-  const divisions: Array<"subjr" | "jr" | "open" | "mas"> = ["subjr", "jr", "open", "mas"]
+  const divisions: Array<"subjr" | "jr" | "open" | "mas1" | "mas2" | "mas3" | "mas4"> = ["subjr", "jr", "open", "mas1", "mas2", "mas3", "mas4"]
   const lifts: Array<"squat" | "bench" | "deadlift" | "total"> = ["squat", "bench", "deadlift", "total"]
 
   divisions.forEach(division => {
@@ -64,14 +67,20 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
       subjr: { squat: [], bench: [], deadlift: [], total: [] },
       jr: { squat: [], bench: [], deadlift: [], total: [] },
       open: { squat: [], bench: [], deadlift: [], total: [] },
-      mas: { squat: [], bench: [], deadlift: [], total: [] },
+      mas1: { squat: [], bench: [], deadlift: [], total: [] },
+      mas2: { squat: [], bench: [], deadlift: [], total: [] },
+      mas3: { squat: [], bench: [], deadlift: [], total: [] },
+      mas4: { squat: [], bench: [], deadlift: [], total: [] },
     }
 
     const femaleRowGroup: RecordTableRowGroup = {
       subjr: { squat: [], bench: [], deadlift: [], total: [] },
       jr: { squat: [], bench: [], deadlift: [], total: [] },
       open: { squat: [], bench: [], deadlift: [], total: [] },
-      mas: { squat: [], bench: [], deadlift: [], total: [] },
+      mas1: { squat: [], bench: [], deadlift: [], total: [] },
+      mas2: { squat: [], bench: [], deadlift: [], total: [] },
+      mas3: { squat: [], bench: [], deadlift: [], total: [] },
+      mas4: { squat: [], bench: [], deadlift: [], total: [] },
     }
 
     // Group results by sex, target division (with promotion), weight class, and lift
@@ -83,13 +92,11 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
       const lifts: ("squat" | "bench" | "deadlift" | "total")[] = ["squat", "bench", "deadlift", "total"]
       
       // Get "real" division to count record
-      let originalDiv: "open" | "jr" | "subjr" | "mas"
+      let originalDiv: "open" | "jr" | "subjr" | "mas1" | "mas2" | "mas3" | "mas4"
       if (row.dob === null) {
-        originalDiv = row.division === "mas1" ? "mas" 
-          : row.division === "mas2" ? "mas" 
-            : row.division === "mas3" ? "mas" 
-              : row.division === "mas4" ? "mas" 
-                : "open"
+        originalDiv = (row.division === "mas1" || row.division === "mas2" || row.division === "mas3" || row.division === "mas4") 
+          ? row.division as "mas1" | "mas2" | "mas3" | "mas4"
+          : "open"
       } else {
         const age = row.systemYear - row.dob
         originalDiv = getDivisionFromAge(age)
@@ -109,7 +116,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
         if (value <= 0) continue
 
         // Determine which divisions this result should appear in (with promotion)
-        const targetDivisions: Array<"subjr" | "jr" | "open" | "mas"> = []
+        const targetDivisions: Array<"subjr" | "jr" | "open" | "mas1" | "mas2" | "mas3" | "mas4"> = []
         
         // Add to original division
         targetDivisions.push(originalDiv)
@@ -120,7 +127,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
           targetDivisions.push("open")
         } else if (originalDiv === "jr") {
           targetDivisions.push("open")
-        } else if (originalDiv === "mas") {
+        } else if (originalDiv === "mas1" || originalDiv === "mas2" || originalDiv === "mas3" || originalDiv === "mas4") {
           targetDivisions.push("open")
         }
 
@@ -167,7 +174,7 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
 
       // Insert into appropriate group with new nesting structure
       const group = sex === "male" ? maleRowGroup : femaleRowGroup
-      const divKey = division as "subjr" | "jr" | "open" | "mas"
+      const divKey = division as "subjr" | "jr" | "open" | "mas1" | "mas2" | "mas3" | "mas4"
       const liftKey = lift as "squat" | "bench" | "deadlift" | "total"
       
       // Safety check

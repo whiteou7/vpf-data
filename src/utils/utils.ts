@@ -21,25 +21,37 @@ export function destructureRecords(
       subjr: records.squat.filter(lift => lift.sex === "male" && lift.division === "subjr") ?? [],
       jr: records.squat.filter(lift => lift.sex === "male" && lift.division === "jr") ?? [],
       open: records.squat.filter(lift => lift.sex === "male" && lift.division === "open") ?? [],
-      mas: records.squat.filter(lift => lift.sex === "male" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.squat.filter(lift => lift.sex === "male" && lift.division === "mas1") ?? [],
+      mas2: records.squat.filter(lift => lift.sex === "male" && lift.division === "mas2") ?? [],
+      mas3: records.squat.filter(lift => lift.sex === "male" && lift.division === "mas3") ?? [],
+      mas4: records.squat.filter(lift => lift.sex === "male" && lift.division === "mas4") ?? []
     },
     bench: {
       subjr: records.bench.filter(lift => lift.sex === "male" && lift.division === "subjr") ?? [],
       jr: records.bench.filter(lift => lift.sex === "male" && lift.division === "jr") ?? [],
       open: records.bench.filter(lift => lift.sex === "male" && lift.division === "open") ?? [],
-      mas: records.bench.filter(lift => lift.sex === "male" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.bench.filter(lift => lift.sex === "male" && lift.division === "mas1") ?? [],
+      mas2: records.bench.filter(lift => lift.sex === "male" && lift.division === "mas2") ?? [],
+      mas3: records.bench.filter(lift => lift.sex === "male" && lift.division === "mas3") ?? [],
+      mas4: records.bench.filter(lift => lift.sex === "male" && lift.division === "mas4") ?? []
     },
     deadlift: {
       subjr: records.deadlift.filter(lift => lift.sex === "male" && lift.division === "subjr") ?? [],
       jr: records.deadlift.filter(lift => lift.sex === "male" && lift.division === "jr") ?? [],
       open: records.deadlift.filter(lift => lift.sex === "male" && lift.division === "open") ?? [],
-      mas: records.deadlift.filter(lift => lift.sex === "male" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.deadlift.filter(lift => lift.sex === "male" && lift.division === "mas1") ?? [],
+      mas2: records.deadlift.filter(lift => lift.sex === "male" && lift.division === "mas2") ?? [],
+      mas3: records.deadlift.filter(lift => lift.sex === "male" && lift.division === "mas3") ?? [],
+      mas4: records.deadlift.filter(lift => lift.sex === "male" && lift.division === "mas4") ?? []
     },
     total: {
       subjr: records.total.filter(lift => lift.sex === "male" && lift.division === "subjr") ?? [],
       jr: records.total.filter(lift => lift.sex === "male" && lift.division === "jr") ?? [],
       open: records.total.filter(lift => lift.sex === "male" && lift.division === "open") ?? [],
-      mas: records.total.filter(lift => lift.sex === "male" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.total.filter(lift => lift.sex === "male" && lift.division === "mas1") ?? [],
+      mas2: records.total.filter(lift => lift.sex === "male" && lift.division === "mas2") ?? [],
+      mas3: records.total.filter(lift => lift.sex === "male" && lift.division === "mas3") ?? [],
+      mas4: records.total.filter(lift => lift.sex === "male" && lift.division === "mas4") ?? []
     }
   }
 
@@ -48,25 +60,37 @@ export function destructureRecords(
       subjr: records.squat.filter(lift => lift.sex === "female" && lift.division === "subjr") ?? [],
       jr: records.squat.filter(lift => lift.sex === "female" && lift.division === "jr") ?? [],
       open: records.squat.filter(lift => lift.sex === "female" && lift.division === "open") ?? [],
-      mas: records.squat.filter(lift => lift.sex === "female" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.squat.filter(lift => lift.sex === "female" && lift.division === "mas1") ?? [],
+      mas2: records.squat.filter(lift => lift.sex === "female" && lift.division === "mas2") ?? [],
+      mas3: records.squat.filter(lift => lift.sex === "female" && lift.division === "mas3") ?? [],
+      mas4: records.squat.filter(lift => lift.sex === "female" && lift.division === "mas4") ?? []
     },
     bench: {
       subjr: records.bench.filter(lift => lift.sex === "female" && lift.division === "subjr") ?? [],
       jr: records.bench.filter(lift => lift.sex === "female" && lift.division === "jr") ?? [],
       open: records.bench.filter(lift => lift.sex === "female" && lift.division === "open") ?? [],
-      mas: records.bench.filter(lift => lift.sex === "female" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.bench.filter(lift => lift.sex === "female" && lift.division === "mas1") ?? [],
+      mas2: records.bench.filter(lift => lift.sex === "female" && lift.division === "mas2") ?? [],
+      mas3: records.bench.filter(lift => lift.sex === "female" && lift.division === "mas3") ?? [],
+      mas4: records.bench.filter(lift => lift.sex === "female" && lift.division === "mas4") ?? []
     },
     deadlift: {
       subjr: records.deadlift.filter(lift => lift.sex === "female" && lift.division === "subjr") ?? [],
       jr: records.deadlift.filter(lift => lift.sex === "female" && lift.division === "jr") ?? [],
       open: records.deadlift.filter(lift => lift.sex === "female" && lift.division === "open") ?? [],
-      mas: records.deadlift.filter(lift => lift.sex === "female" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.deadlift.filter(lift => lift.sex === "female" && lift.division === "mas1") ?? [],
+      mas2: records.deadlift.filter(lift => lift.sex === "female" && lift.division === "mas2") ?? [],
+      mas3: records.deadlift.filter(lift => lift.sex === "female" && lift.division === "mas3") ?? [],
+      mas4: records.deadlift.filter(lift => lift.sex === "female" && lift.division === "mas4") ?? []
     },
     total: {
       subjr: records.total.filter(lift => lift.sex === "female" && lift.division === "subjr") ?? [],
       jr: records.total.filter(lift => lift.sex === "female" && lift.division === "jr") ?? [],
       open: records.total.filter(lift => lift.sex === "female" && lift.division === "open") ?? [],
-      mas: records.total.filter(lift => lift.sex === "female" && ["mas1", "mas2", "mas3", "mas4"].includes(lift.division)) ?? []
+      mas1: records.total.filter(lift => lift.sex === "female" && lift.division === "mas1") ?? [],
+      mas2: records.total.filter(lift => lift.sex === "female" && lift.division === "mas2") ?? [],
+      mas3: records.total.filter(lift => lift.sex === "female" && lift.division === "mas3") ?? [],
+      mas4: records.total.filter(lift => lift.sex === "female" && lift.division === "mas4") ?? []
     }
   }
 

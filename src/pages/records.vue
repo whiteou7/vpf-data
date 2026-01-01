@@ -45,7 +45,10 @@ const emptyGroup = (): RecordTableRowGroup => ({
   subjr: { squat: [], bench: [], deadlift: [], total: [] },
   jr:    { squat: [], bench: [], deadlift: [], total: [] },
   open:  { squat: [], bench: [], deadlift: [], total: [] },
-  mas:   { squat: [], bench: [], deadlift: [], total: [] },
+  mas1:  { squat: [], bench: [], deadlift: [], total: [] },
+  mas2:  { squat: [], bench: [], deadlift: [], total: [] },
+  mas3:  { squat: [], bench: [], deadlift: [], total: [] },
+  mas4:  { squat: [], bench: [], deadlift: [], total: [] },
 })
 
 const records = ref<{
@@ -68,7 +71,10 @@ const divisionOptions = [
   { title: "Open", value: "open" },
   { title: "Junior", value: "jr" },
   { title: "Sub-Junior", value: "subjr" },
-  { title: "Master", value: "mas" }
+  { title: "Master I", value: "mas1" },
+  { title: "Master II", value: "mas2" },
+  { title: "Master III", value: "mas3" },
+  { title: "Master IV", value: "mas4" }
 ]
 
 const selectedRecords = computed(() => {

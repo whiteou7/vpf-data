@@ -43,18 +43,60 @@
       <RecordsTable :loading="loading" :items="items.male.subjr.total || []"/>
     </div>
 
-    <!-- MEN – MASTER -->
+    <!-- MEN – MASTER I -->
     <div class="records-column">
-      <h2 class="text-primary">Men Master Records</h2>
+      <h2 class="text-primary">Men Master I Records</h2>
 
       <h4>Squat</h4>
-      <RecordsTable :loading="loading" :items="items.male.mas.squat || []"/>
+      <RecordsTable :loading="loading" :items="items.male.mas1.squat || []"/>
       <h4>Bench Press</h4>
-      <RecordsTable :loading="loading" :items="items.male.mas.bench || []"/>
+      <RecordsTable :loading="loading" :items="items.male.mas1.bench || []"/>
       <h4>Deadlift</h4>
-      <RecordsTable :loading="loading" :items="items.male.mas.deadlift || []"/>
+      <RecordsTable :loading="loading" :items="items.male.mas1.deadlift || []"/>
       <h4>Total</h4>
-      <RecordsTable :loading="loading" :items="items.male.mas.total || []"/>
+      <RecordsTable :loading="loading" :items="items.male.mas1.total || []"/>
+    </div>
+
+    <!-- MEN – MASTER II -->
+    <div class="records-column">
+      <h2 class="text-primary">Men Master II Records</h2>
+
+      <h4>Squat</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas2.squat || []"/>
+      <h4>Bench Press</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas2.bench || []"/>
+      <h4>Deadlift</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas2.deadlift || []"/>
+      <h4>Total</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas2.total || []"/>
+    </div>
+
+    <!-- MEN – MASTER III -->
+    <div class="records-column">
+      <h2 class="text-primary">Men Master III Records</h2>
+
+      <h4>Squat</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas3.squat || []"/>
+      <h4>Bench Press</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas3.bench || []"/>
+      <h4>Deadlift</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas3.deadlift || []"/>
+      <h4>Total</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas3.total || []"/>
+    </div>
+
+    <!-- MEN – MASTER IV -->
+    <div class="records-column">
+      <h2 class="text-primary">Men Master IV Records</h2>
+
+      <h4>Squat</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas4.squat || []"/>
+      <h4>Bench Press</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas4.bench || []"/>
+      <h4>Deadlift</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas4.deadlift || []"/>
+      <h4>Total</h4>
+      <RecordsTable :loading="loading" :items="items.male.mas4.total || []"/>
     </div>
 
     <!-- WOMEN – OPEN -->
@@ -99,18 +141,60 @@
       <RecordsTable :loading="loading" :items="items.female.subjr.total || []"/>
     </div>
 
-    <!-- WOMEN – MASTER -->
+    <!-- WOMEN – MASTER I -->
     <div class="records-column">
-      <h2 class="text-primary">Women Master Records</h2>
+      <h2 class="text-primary">Women Master I Records</h2>
 
       <h4>Squat</h4>
-      <RecordsTable :loading="loading" :items="items.female.mas.squat || []"/>
+      <RecordsTable :loading="loading" :items="items.female.mas1.squat || []"/>
       <h4>Bench Press</h4>
-      <RecordsTable :loading="loading" :items="items.female.mas.bench || []"/>
+      <RecordsTable :loading="loading" :items="items.female.mas1.bench || []"/>
       <h4>Deadlift</h4>
-      <RecordsTable :loading="loading" :items="items.female.mas.deadlift || []"/>
+      <RecordsTable :loading="loading" :items="items.female.mas1.deadlift || []"/>
       <h4>Total</h4>
-      <RecordsTable :loading="loading" :items="items.female.mas.total || []"/>
+      <RecordsTable :loading="loading" :items="items.female.mas1.total || []"/>
+    </div>
+
+    <!-- WOMEN – MASTER II -->
+    <div class="records-column">
+      <h2 class="text-primary">Women Master II Records</h2>
+
+      <h4>Squat</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas2.squat || []"/>
+      <h4>Bench Press</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas2.bench || []"/>
+      <h4>Deadlift</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas2.deadlift || []"/>
+      <h4>Total</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas2.total || []"/>
+    </div>
+
+    <!-- WOMEN – MASTER III -->
+    <div class="records-column">
+      <h2 class="text-primary">Women Master III Records</h2>
+
+      <h4>Squat</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas3.squat || []"/>
+      <h4>Bench Press</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas3.bench || []"/>
+      <h4>Deadlift</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas3.deadlift || []"/>
+      <h4>Total</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas3.total || []"/>
+    </div>
+
+    <!-- WOMEN – MASTER IV -->
+    <div class="records-column">
+      <h2 class="text-primary">Women Master IV Records</h2>
+
+      <h4>Squat</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas4.squat || []"/>
+      <h4>Bench Press</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas4.bench || []"/>
+      <h4>Deadlift</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas4.deadlift || []"/>
+      <h4>Total</h4>
+      <RecordsTable :loading="loading" :items="items.female.mas4.total || []"/>
     </div>
 
   </div>
