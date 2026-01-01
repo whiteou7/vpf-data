@@ -13,7 +13,7 @@
           <v-select
             v-model="filters.meetTypeFilter.value"
             :items="filters.meetTypeOptions"
-            label="Competition Type"
+            label="Competition Category"
             density="compact"
             color="primary"
             variant="solo-inverted"
@@ -109,7 +109,7 @@ watch(() => [filters.search.value, athletes.value], () => {
 
 onMounted(async () => {  
   // Fetch
-  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>("/api/athletes", { ignoreResponseError: true })
+  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>("/api/athletes?type=national", { ignoreResponseError: true })
   if (!response.success) {
     // TODO: Handle error
     return
