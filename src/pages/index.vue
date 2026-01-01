@@ -88,8 +88,10 @@ watch(
 
     const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(
       `/api/athletes?${params.toString()}`,
-      { ignoreResponseError: true }
-    )
+      { 
+        method: "GET"
+      }
+    ).catch(() => ({ success: false } as APIBody<{ athletes: Athlete[] }>))
 
     if (!response.success) return
 
@@ -107,16 +109,20 @@ watch(() => [filters.search.value, athletes.value], () => {
   }
 })
 
-onMounted(async () => {  
-  // Fetch
-  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>("/api/athletes?type=national", { ignoreResponseError: true })
-  if (!response.success) {
-    // TODO: Handle error
-    return
+// Fetch initial data with SSR support
+const { data: initialResponse, pending: initialPending } = await useFetch<APIBody<{ athletes: Athlete[] }>>(
+  "/api/athletes?type=national",
+  {
+    method: "GET"
   }
-  loading.value = false
-  athletes.value = response.data.athletes
+)
 
+if (initialResponse.value?.success) {
+  athletes.value = initialResponse.value.data.athletes
+}
+loading.value = initialPending.value
+
+onMounted(() => {
   // Manually add scroll event to table
   const rootEl = tableRef.value?.$el as HTMLElement
   if (!rootEl) return
@@ -163,12 +169,10 @@ const headers = [
   { title: "GL", value: "gl", sortable: true, align: "end", width: "10%" },
 ]
 
-useHead({ 
-  meta: [
-    { property: "og:type", content: "website" },
-    { property: "og:title", content: "VPF Athlete Rankings" },
-    { property: "og:description", content: "VPF Athlete Rankings Table with extensive filtering" },
-  ],
-  title: "VPF Athlete Rankings"
+useSeoMeta({
+  title: "VPF Athlete Rankings",
+  ogType: "website",
+  ogTitle: "VPF Athlete Rankings",
+  ogDescription: "Powerlifting results tracking page for VPF (Vietnamese Powerlifting Federation)."
 })
 </script>

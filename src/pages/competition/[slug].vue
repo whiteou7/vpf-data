@@ -121,25 +121,26 @@ type BestLifterInfo = {
 }
 
 // Fetch meet result
-onMounted(async () => {
-  const response = await $fetch<APIBody<{ name: string, results: MeetResult[], bestLifters: { male: BestLifterInfo, female: BestLifterInfo } }>>(`/api/meets/${slug}`, { ignoreResponseError: true })
-  if (response.success) {
-    results.value = response.data?.results ?? []
-    meetId.value = response.data?.results[0].meetId
-    bestLifters.value = response.data?.bestLifters ?? []
-    useHead({ 
-      meta: [
-        { property: "og:type", content: "website" },
-        { property: "og:title", content: response.data.name ?? "VPF Competition Result" },
-        { property: "og:description", content: "VPF Competition Result" },
-      ],
-      title: response.data.name ?? "VPF Competition Result"
-    })
-
+const { data: response, pending } = await useFetch<APIBody<{ name: string, results: MeetResult[], bestLifters: { male: BestLifterInfo, female: BestLifterInfo } }>>(
+  `/api/meets/${slug}`,
+  {
+    method: "GET"
   }
+)
 
-  loading.value = false
-})
+if (response.value?.success) {
+  results.value = response.value.data?.results ?? []
+  meetId.value = response.value.data?.results[0]?.meetId
+  bestLifters.value = response.value.data?.bestLifters ?? []
+  useSeoMeta({
+    title: response.value.data?.name ?? "VPF Competition Result",
+    ogType: "website",
+    ogTitle: response.value.data?.name ?? "VPF Competition Result",
+    ogDescription: "VPF Competition Result"
+  })
+}
+
+loading.value = pending.value
 
 // Get overall results for a specific sex and division
 const getOverallResults = (sex: string, division: string) => {
@@ -222,11 +223,9 @@ const headers = [
   { title: "#", value: "placement", sortable: true, align: "end", width: "3%" }
 ]
 
-useHead({ 
-  meta: [
-    { property: "og:type", content: "website" },
-    { property: "og:description", content: "VPF Competition Result" },
-  ],
+useSeoMeta({
+  ogType: "website",
+  ogDescription: "VPF Competition Result"
 })
 </script>
 

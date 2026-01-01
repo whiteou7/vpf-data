@@ -1,62 +1,67 @@
 <script setup lang="ts">
-import type { Sex } from "~/types/athlete"
+import type { Sex, AthletePB, AthleteCompInfo } from "~/types/athlete"
 
 const route = useRoute()
-const router = useRouter()
-
 const vpfId = route.params.vpf_id as string
-const { user } = await useAuth()
-
-const renderButtons = ref<boolean>(false)
-renderButtons.value = vpfId == user.value.vpfId
 
 const loading = ref(true)
 const personalInfo = ref()
 const sex = ref<Sex>()
+const pb = ref<AthletePB[]>()
+const compInfo = ref<AthleteCompInfo[]>()
 
-const currentTab = ref<string>(route.path.split("/").at(3) ?? "")
-
-useHead({
-  meta: [
-    { property: "og:type", content: "website" },
-    { property: "og:description", content: "VPF Athlete PB Info & Competition History" },
-  ],
+useSeoMeta({
+  ogType: "website",
+  ogDescription: "VPF Athlete PB Info & Competition History"
 })
 
-onMounted(async () => {
-  await useFetchAthlete().fetch(vpfId)
-  const data = useFetchAthlete()
+const { data: athleteData, pending } = await useFetch(`/api/athletes/${vpfId}`, {
+  method: "GET"
+})
 
-  personalInfo.value = data.personalInfo.value
-  useHead({ 
-    meta: [{ property: "og:title", content: `${personalInfo.value?.fullName ?? ""}` }],
-    title: `${personalInfo.value?.fullName ?? ""}` 
+if (athleteData.value?.success && athleteData.value.data) {
+  personalInfo.value = athleteData.value.data.personalInfo
+  compInfo.value = athleteData.value.data.compInfo
+  pb.value = athleteData.value.data.pb
+
+  useSeoMeta({
+    title: `${personalInfo.value?.fullName ?? ""}`,
+    ogTitle: `${personalInfo.value?.fullName ?? ""}`
   })
-  if (data.compInfo.value && data.compInfo.value.length > 0) {
-    sex.value = data.compInfo.value[0].sex
+
+  if (compInfo.value && compInfo.value.length > 0) {
+    sex.value = compInfo.value[0].sex
   } else {
     sex.value = undefined
   }
-
-  loading.value = false
-})
-
-function goToTab(tab: "compHistory" | "personalInfo" | "compSettings") {
-  if (tab === "compHistory") {
-    currentTab.value = ""
-    router.push(`/athlete/${vpfId}`)
-  } else if (tab === "personalInfo") {
-    currentTab.value = "personal-info"
-    router.push(`/athlete/${vpfId}/personal-info`)
-  } else if (tab === "compSettings") {
-    currentTab.value = "settings"
-    router.push(`/athlete/${vpfId}/settings`)
-  }
 }
+
+loading.value = pending.value
 
 const routeInstagram = () => {
   window.open(`https://instagram.com/${personalInfo.value.instagramUsername}`)
 }
+
+const pbHeaders = [
+  { title: "Squat PB", value: "squatPb", key: "bestSquat" },
+  { title: "Bench PB", value: "benchPb", key: "bestBench" },
+  { title: "Deadlift PB", value: "deadliftPb", key: "bestDead" },
+  { title: "Total PB", value: "totalPb" },
+  { title: "GL PB", value: "glPb" },
+]
+
+const compInfoHeaders = [
+  { title: "Competition", value: "meetName" },
+  { title: "Weight Class", value: "weightClass" },
+  { title: "Division", value: "division" },
+  { title: "Best Squat", value: "bestSquat", align: "end" },
+  { title: "Best Bench", value: "bestBench", align: "end" },
+  { title: "Best Deadlift", value: "bestDead", align: "end" },
+  { title: "Total", value: "total", align: "end" },
+  { title: "GL", value: "gl", align: "end" },
+  { title: "Body Weight", value: "bodyWeight", align: "end" },
+  { title: "#", value: "placement", align: "end" }
+]
 </script>
 
 <template>
@@ -90,19 +95,24 @@ const routeInstagram = () => {
         />
       </div>
       
-      <!-- Navigation Buttons (only for authorized user) -->
-      <div v-if="renderButtons" class="d-flex flex-column flex-md-row ga-4">
-        <v-btn :color="currentTab == '' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('compHistory')">
-          Competition History
-        </v-btn>
-        <v-btn :color="currentTab == 'personal-info' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('personalInfo')">
-          Personal Info
-        </v-btn>
-        <v-btn :color="currentTab == 'settings' ? 'primary' : 'secondary'" variant="tonal" @click="goToTab('compSettings')">
-          Competition Settings
-        </v-btn>
-      </div>
-      <NuxtPage/>
+      <!-- Athlete PBs -->
+      <h2 class="my-4 text-secondary pa-2">
+        Athlete PBs
+      </h2>
+      <BaseTable
+        :headers="pbHeaders"
+        :items="pb"
+        striped="odd"
+      />
+      <!-- Competition History -->
+      <h2 class="my-4 text-secondary pa-2">
+        Competition History
+      </h2>
+      <BaseTable
+        :headers="compInfoHeaders"
+        :items="compInfo"
+        striped="odd"
+      />
     </div>
     <div v-else>
       <h1 class="mb-4 text-error pa-2">
