@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
+import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 import type { MeetResult } from "~/types/meet"
 

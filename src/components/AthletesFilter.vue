@@ -12,6 +12,10 @@
     </div>
 
     <div class="button-container">
+      <slot name="meetTypeFilter"/>
+    </div>
+
+    <div class="button-container">
       <v-select
         v-model="filters.sort.value"
         :items="filters.sortOptions"
@@ -53,10 +57,6 @@
         color="primary"
         variant="solo-inverted"
       />
-    </div>
-
-    <div class="button-container">
-      <slot name="meetTypeFilter"/>
     </div>
   </div>
 </template>

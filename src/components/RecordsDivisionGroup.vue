@@ -1,6 +1,6 @@
 <template>
   <div class="records-division-group">
-    <h2 class="text-primary division-title">{{ title }}</h2>
+    <h2 class="text-primary division-title sticky-header">{{ title }}</h2>
     
     <div class="records-tables-grid">
       <div class="records-table-item">
@@ -68,7 +68,6 @@ defineProps<{
 .records-tables-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   flex: 1;
   min-height: 0;
 }
@@ -88,6 +87,7 @@ defineProps<{
 .table-wrapper {
   flex: 1;
   min-height: 0;
+  overflow-y: auto;
 }
 
 /* Landscape orientation: 2x2 grid */
@@ -105,7 +105,8 @@ defineProps<{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 0.75rem;
+    column-gap: 0.75rem;
+    row-gap: 0;
     height: 100%;
   }
   
