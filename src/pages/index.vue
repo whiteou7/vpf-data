@@ -17,7 +17,16 @@
             density="compact"
             color="primary"
             variant="solo-inverted"
-          />
+            multiple
+          >
+            <template #selection="{ item, index }">
+              <span v-if="index === 0" class="text-truncate">
+                {{ filters.meetTypeFilter.value.length > 1
+                  ? `${filters.meetTypeFilter.value.length} selected`
+                  : item.title }}
+              </span>
+            </template>
+          </v-select>
         </template>
       </AthletesFilter>
     </template>
@@ -76,8 +85,8 @@ watch(
     if (filters.divisionFilter.value)
       params.set("division", filters.divisionFilter.value)
 
-    if (filters.meetTypeFilter.value)
-      params.set("type", filters.meetTypeFilter.value)
+    if (filters.meetTypeFilter.value.length > 0)
+      params.set("type", filters.meetTypeFilter.value.join(","))
 
     const wc = filters.weightClassFilter.value
     if (wc?.weight != null)
@@ -111,7 +120,7 @@ watch(() => [filters.search.value, athletes.value], () => {
 
 // Fetch initial data with SSR support
 const { data: initialResponse, pending: initialPending } = await useFetch<APIBody<{ athletes: Athlete[] }>>(
-  "/api/athletes?type=national",
+  "/api/athletes?type=national,national_qualifier",
   {
     method: "GET"
   }

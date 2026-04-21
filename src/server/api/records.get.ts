@@ -115,6 +115,11 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
         // Skip invalid lifts
         if (value <= 0) continue
 
+        // For squat/deadlift records, the athlete must have completed the other two lifts.
+        // Bench press records are exempt — they count regardless of the other lifts.
+        if (lift === "squat" && (row.bestBench == 0 || row.bestDead == 0)) continue
+        if (lift === "deadlift" && (row.bestSquat == 0 || row.bestBench == 0)) continue
+
         // Determine which divisions this result should appear in (with promotion)
         const targetDivisions: Array<"subjr" | "jr" | "open" | "mas1" | "mas2" | "mas3" | "mas4"> = []
         
@@ -123,11 +128,21 @@ export default defineEventHandler(async (event): Promise<APIBody<{ male: RecordT
         
         // Apply promotion rules
         if (originalDiv === "subjr") {
-          targetDivisions.push("jr")
-          targetDivisions.push("open")
+          targetDivisions.push("jr", "open")
+
         } else if (originalDiv === "jr") {
           targetDivisions.push("open")
-        } else if (originalDiv === "mas1" || originalDiv === "mas2" || originalDiv === "mas3" || originalDiv === "mas4") {
+
+        } else if (originalDiv === "mas4") {
+          targetDivisions.push("mas3", "mas2", "mas1", "open")
+
+        } else if (originalDiv === "mas3") {
+          targetDivisions.push("mas2", "mas1", "open")
+
+        } else if (originalDiv === "mas2") {
+          targetDivisions.push("mas1", "open")
+
+        } else if (originalDiv === "mas1") {
           targetDivisions.push("open")
         }
 
