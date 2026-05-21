@@ -2,7 +2,8 @@ import csv
 import re
 import logging
 import unicodedata
-from typing import Dict, Optional
+from pathlib import Path
+from typing import Optional
 from collections import defaultdict
 
 # ---------------- LOGGING ----------------
@@ -104,13 +105,11 @@ def load_members(path: str):
     by_name_dob = {}
     by_name_only = defaultdict(list)
     members = {}
-    vpfs = set()
 
     with open(path, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             vpf = r["vpf_id"]
             members[vpf] = r
-            vpfs.add(int(vpf[-5:]))
 
             # National ID index
             nid = r.get("national_id")
@@ -125,85 +124,120 @@ def load_members(path: str):
             # Name-only index (for final fallback)
             by_name_only[name_norm].append(vpf)
 
-    return members, by_nid, by_name_dob, by_name_only, vpfs
+    return members, by_nid, by_name_dob, by_name_only
+
+
+def resolve_data_csvs(data_csv):
+    if isinstance(data_csv, (str, Path)):
+        paths = [Path(data_csv)]
+    else:
+        paths = [Path(path) for path in data_csv]
+
+    data_csvs = []
+    for path in paths:
+        if path.is_dir():
+            data_csvs.extend(
+                sorted(
+                    csv_path
+                    for csv_path in path.iterdir()
+                    if csv_path.is_file()
+                    and csv_path.suffix.lower() == ".csv"
+                    and csv_path.stem.lower().endswith("awards_results")
+                )
+            )
+        else:
+            data_csvs.append(path)
+
+    if not data_csvs:
+        raise FileNotFoundError("No data CSV files ending with awards_results.csv found")
+
+    return data_csvs
+
+
+def format_vpf_id(member_number: str) -> str:
+    member_number = member_number.strip()
+    if member_number.upper().startswith("VPF"):
+        return member_number.upper()
+    return f"VPF{member_number.zfill(6)}"
 
 # ---------------- MAIN ----------------
 def migrate(data_csv, members_csv, meet_csv, out_sql):
-    members, by_nid, by_name_dob, by_name_only, vpfs = load_members(members_csv)
+    members, by_nid, by_name_dob, by_name_only = load_members(members_csv)
+    data_csvs = resolve_data_csvs(data_csv)
 
     new_members = {}
     meet_rows = []
     meet_id = input("Meet ID : ")
 
-    with open(data_csv, encoding="utf-8") as f:
-        for row in csv.DictReader(f):
+    for data_path in data_csvs:
+        logger.info(f"PROCESSING_DATA_CSV | {data_path}")
+        with open(data_path, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
 
-            dob = parse_dob_year(row.get("D.O.B"))
-            nid = row.get("National ID", "").strip()
-            name_key = (normalize_name(row["Name"]), str(dob))
+                dob = parse_dob_year(row.get("Birth Date"))
+                nid = row.get("National ID", "").strip()
+                name_key = (normalize_name(row["Name"]), str(dob))
 
-            vpf_id = None
+                vpf_id = None
 
-            name_norm = normalize_name(row["Name"])
+                name_norm = normalize_name(row["Name"])
 
-            if nid and nid in by_nid:
-                vpf_id = by_nid[nid]
-                logger.info(f"MATCH_NATIONAL_ID | {row['Name']} -> {vpf_id}")
+                if nid and nid in by_nid:
+                    vpf_id = by_nid[nid]
+                    logger.info(f"MATCH_NATIONAL_ID | {row['Name']} -> {vpf_id}")
 
-            elif name_key in by_name_dob:
-                vpf_id = by_name_dob[name_key]
-                logger.info(f"MATCH_NAME_DOB | {row['Name']} -> {vpf_id}")
+                elif name_key in by_name_dob:
+                    vpf_id = by_name_dob[name_key]
+                    logger.info(f"MATCH_NAME_DOB | {row['Name']} -> {vpf_id}")
 
-            elif name_norm in by_name_only and len(by_name_only[name_norm]) == 1:
-                vpf_id = by_name_only[name_norm][0]
-                logger.info(
-                    f"MATCH_NAME_ONLY_UNIQUE | {row['Name']} -> {vpf_id}"
-                )
+                elif name_norm in by_name_only and len(by_name_only[name_norm]) == 1:
+                    vpf_id = by_name_only[name_norm][0]
+                    logger.info(
+                        f"MATCH_NAME_ONLY_UNIQUE | {row['Name']} -> {vpf_id}"
+                    )
 
-            else:
-                def smallest_missing(s: set[int]) -> int:
-                    i = 1
-                    while i in s:
-                        i += 1
-                    return i
-                temp_id = f"VPF{str(smallest_missing(vpfs)).zfill(6)}"
-                vpfs.add(smallest_missing(vpfs))
-                vpf_id = temp_id
-                new_members[temp_id] = {
+                else:
+                    member_number = row.get("Member #", "").strip()
+                    if not member_number:
+                        raise ValueError(f"Missing Member # for new member: {row['Name']}")
+
+                    vpf_id = format_vpf_id(member_number)
+                    if vpf_id not in new_members:
+                        new_members[vpf_id] = {
+                            "vpf_id": vpf_id,
+                            "full_name": row["Name"],
+                            "nationality": row.get("Nationality"),
+                            "dob": dob,
+                            "national_id": nid or None,
+                            "address": row.get("Address"),
+                            "phone_number": row.get("Phone Number"),
+                            "email": row.get("Email Address"),
+                            "slug": slugify(row["Name"])
+                        }
+                    logger.info(f"NEW_MEMBER | {row['Name']} -> {vpf_id}")
+
+                meet_rows.append({
+                    "meet_id": meet_id,
                     "vpf_id": vpf_id,
-                    "full_name": row["Name"],
-                    "nationality": row.get("Nationality"),
-                    "dob": dob,
-                    "national_id": nid or None,
-                    "address": row.get("Address"),
-                    "phone_number": row.get("Phone Number"),
-                    "email": row.get("Email Address"),
-                    "slug": slugify(row["Name"])
-                }
-                logger.info(f"NEW_MEMBER | {row['Name']} -> {temp_id}")
-
-            meet_rows.append({
-                "meet_id": meet_id,
-                "vpf_id": vpf_id,
-                "sex": parse_gender(row["Gender"]),
-                "weight_class": safe_int(row.get("Weight Class")),
-                "division": parse_division(row.get("Awards Division")),
-                "body_weight": safe_float(row.get("Body Weight (kg)", "")),
-                'squat1': safe_float(row.get('Squat 1', '')),
-                'squat2': safe_float(row.get('Squat 2', '')),
-                'squat3': safe_float(row.get('Squat 3', '')),
-                'bench1': safe_float(row.get('Bench 1', '')),
-                'bench2': safe_float(row.get('Bench 2', '')),
-                'bench3': safe_float(row.get('Bench 3', '')),
-                'dead1': safe_float(row.get('Deadlift 1', '')),
-                'dead2': safe_float(row.get('Deadlift 2', '')),
-                'dead3': safe_float(row.get('Deadlift 3', '')),
-                "platform": row.get("Platform"),
-                "session": row.get("Session"),
-                "flight": row.get("Flight"),
-                "lot": safe_int(row.get("Lot")),
-                "placement": safe_int(row.get("Place"))
-            })
+                    "sex": parse_gender(row["Gender"]),
+                    "weight_class": safe_int(row.get("Weight Class")),
+                    "division": parse_division(row.get("Awards Division")),
+                    "body_weight": safe_float(row.get("Body Weight (kg)", "")),
+                    'squat1': safe_float(row.get('Squat 1', '')),
+                    'squat2': safe_float(row.get('Squat 2', '')),
+                    'squat3': safe_float(row.get('Squat 3', '')),
+                    'bench1': safe_float(row.get('Bench 1', '')),
+                    'bench2': safe_float(row.get('Bench 2', '')),
+                    'bench3': safe_float(row.get('Bench 3', '')),
+                    'dead1': safe_float(row.get('Deadlift 1', '')),
+                    'dead2': safe_float(row.get('Deadlift 2', '')),
+                    'dead3': safe_float(row.get('Deadlift 3', '')),
+                    "platform": row.get("Platform"),
+                    "session": row.get("Session"),
+                    "flight": row.get("Flight"),
+                    "lot": safe_int(row.get("Lot")),
+                    "placement": safe_int(row.get("Place"))
+                })
 
     with open(out_sql, "a", encoding="utf-8") as f:
         f.write("-- NEW MEMBERS\n")
@@ -227,8 +261,8 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
 # ---------------- RUN ----------------
 if __name__ == "__main__":
     migrate(
-        "new.csv",
-        "members.csv",
+        ".",
+        "members_rows.csv",
         "meet_info.csv",
         "new_migration.sql"
     )
