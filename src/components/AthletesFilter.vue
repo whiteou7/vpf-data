@@ -1,6 +1,6 @@
 <template>
-  <div style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
-    <div style="flex: 1; min-width: 150px; max-width: 200px; height: 36px;">
+  <div class="no-scrollbar" style="overflow-x:auto; overflow-y: hidden; display: flex; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
+    <div class="button-container">
       <v-text-field
         v-model="searchText"
         density="compact"
@@ -11,18 +11,33 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
+    <div class="button-container">
+      <slot name="meetTypeFilter"/>
+    </div>
+
+    <div class="button-container">
       <v-select
-        v-model="filters.sexFilter.value"
-        :items="filters.sexOptions"
-        label="Sex"
+        v-model="filters.sort.value"
+        :items="filters.sortOptions"
+        label="Sort"
         density="compact"
         color="primary"
         variant="solo-inverted"
       />
     </div>
 
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
+    <div class="button-container">
+      <v-select
+        v-model="filters.sexFilter.value"
+        :items="filters.sexOptions"
+        label="Sport Gender"
+        density="compact"
+        color="primary"
+        variant="solo-inverted"
+      />
+    </div>
+
+    <div class="button-container">
       <v-select
         v-model="filters.divisionFilter.value"
         :items="filters.divisionOptions"
@@ -33,7 +48,7 @@
       />
     </div>
 
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
+    <div class="button-container">
       <v-select
         v-model="filters.weightClassFilter.value"
         :items="filters.weightClassOptions"
@@ -42,10 +57,6 @@
         color="primary"
         variant="solo-inverted"
       />
-    </div>
-
-    <div style="flex: 1; min-width: 75px; max-width: 200px; height: 36px;">
-      <slot name="meetTypeFilter"/>
     </div>
   </div>
 </template>
@@ -62,3 +73,14 @@ const onInput = debounce(() => {
 }, 500)
 
 </script>
+
+<style scoped>
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+</style>

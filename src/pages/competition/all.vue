@@ -4,6 +4,7 @@
     :headers="headers"
     :loading="loading"
     striped="odd"
+    style="max-height: calc(100vh - 100px);"
   >
     <template #top>
       <div style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0 1rem; margin: 0.5rem 0;">
@@ -45,13 +46,14 @@ const cityFilter = ref<string | null>(null)
 const yearFilter = ref<number | null>(null)
 
 // Fetch all meets
-onMounted(async () => {
-  const response = await $fetch<APIBody<{ meets: Meet[] }>>("/api/meets", { ignoreResponseError: true })
-  if (response.success) {
-    meets.value = response.data?.meets ?? []
-  }
-  loading.value = false
+const { data: response, pending } = await useFetch<APIBody<{ meets: Meet[] }>>("/api/meets", {
+  method: "GET"
 })
+
+if (response.value?.success) {
+  meets.value = response.value.data?.meets ?? []
+}
+loading.value = pending.value
 
 // Auto generated items for filter buttons
 const cityOptions = computed<{ title: string, value: string | null }[]>(() => {
@@ -86,7 +88,11 @@ const headers = [
   { title: "Athletes", value: "count" },
   { title: "Media", value: "mediaLink", sortable: false }
 ]
-</script>
 
-<style>
-</style>
+useSeoMeta({
+  title: "VPF Competitions",
+  ogType: "website",
+  ogTitle: "VPF All Competitions",
+  ogDescription: "VPF All Competitions since 2019"
+})
+</script>

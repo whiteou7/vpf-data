@@ -3,10 +3,15 @@ import type { AthletePB, AthleteCompInfo, AthletePersonalInfo, AthleteCompSettin
 import type { APIBody } from "~/types/api"
 import { validateSession } from "~/server/services/validate-session"
 
+function isValidVPF(str: string) {
+  return /^VPF\d{6}$/.test(str)
+}
+
 const fetchCompHistory = async (vpfId: string): Promise<{ 
   compInfo: AthleteCompInfo[], 
   pb: AthletePB[]
 }> => {
+  const isVPF = isValidVPF(vpfId)
   const compInfo = await db<AthleteCompInfo[]>`
     SELECT
       sex,
@@ -22,7 +27,8 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       meet_name,
       meet_slug
     FROM meet_result_detailed
-    WHERE vpf_id = ${vpfId}
+    WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
+    AND NOT hidden 
     ORDER BY meet_id DESC;
   `
   const pb = await db<AthletePB[]>`
@@ -33,7 +39,7 @@ const fetchCompHistory = async (vpfId: string): Promise<{
       MAX(total)::float as total_pb,
       MAX(gl)::float as gl_pb
     FROM meet_result_detailed
-    WHERE vpf_id = ${vpfId}
+    WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
   `
 
   return { compInfo, pb }
@@ -43,6 +49,7 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
   personalInfo: AthletePersonalInfo, 
   compSettings: AthleteCompSettings 
 }> => {
+  const isVPF = isValidVPF(vpfId)
   const [row] = await db<(AthleteCompSettings & AthletePersonalInfo)[]>`
     SELECT 
       vpf_id,
@@ -59,11 +66,13 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
       bench_safety_pin,
       bench_foot_block,
       national_id_image_url,
-      instagram_username
+      instagram_username,
+      slug,
+      decorator_1,
+      decorator_2
     FROM 
       public.members
-    WHERE
-      vpf_id = ${vpfId}
+      WHERE ${isVPF ? db`vpf_id` : db`slug`} = ${vpfId}
   `
   const {
     fullName,
@@ -79,7 +88,10 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     benchRackPin,
     benchSafetyPin,
     benchFootBlock,
-    instagramUsername
+    instagramUsername,
+    slug,
+    decorator_1,
+    decorator_2
   } = row
 
   const personalInfo: AthletePersonalInfo = {
@@ -93,7 +105,10 @@ const fetchPrivateInfo = async (vpfId: string): Promise<{
     email,
     nationalIdImageUrl,
     active,
-    instagramUsername
+    instagramUsername,
+    slug,
+    decorator_1,
+    decorator_2
   }
 
   const compSettings: AthleteCompSettings = {
@@ -161,6 +176,9 @@ export default defineEventHandler(async (event): Promise<APIBody<{
         personalInfo: { 
           fullName: privateInfo.personalInfo.fullName,
           instagramUsername: privateInfo.personalInfo.instagramUsername,
+          slug: privateInfo.personalInfo.slug,
+          decorator_1: privateInfo.personalInfo.decorator_1,
+          decorator_2: privateInfo.personalInfo.decorator_2,
         }
       },
       message: "Fetched athlete info"

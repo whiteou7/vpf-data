@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       "/_nuxt/**": { headers: { "cache-control": "public,max-age=31536000,s-maxage=31536000" } },
     }
   },
+  css: ["~/public/styles.css"],
   runtimeConfig: {
     public: {
       SHOP_URL: process.env.SHOP_URL,
@@ -21,16 +22,23 @@ export default defineNuxtConfig({
     head: {
       meta: [
         { name: "viewport", content: "width=device-width, initial-scale=1.0" }
-      ]
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
     }
   },
-  ssr: false,
+  ssr: true,
   build: {
     transpile: ["vuetify"],
   },
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
-  modules: ["vuetify-nuxt-module", "@nuxt/eslint"],
+  modules: ["vuetify-nuxt-module", "@nuxt/eslint", "@nuxtjs/google-fonts"],
+  googleFonts: {
+    families: {
+      "Noto Sans": [400, 500, 600, 700]
+    },
+    display: "swap"
+  },
   vuetify: {
     moduleOptions: {
       /* module specific options */

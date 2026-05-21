@@ -1,11 +1,11 @@
 <template>
   <AthletesCompTable
     ref="tableRef"
-    :items="filteredAthletes"
+    :items="athletesDisplay"
     :headers="headers"
     :loading="loading"
     :search="filters.search.value"
-    @update:sortBy="handleSort"
+    disable-sort
   >
     <template #top>
       <AthletesFilter>
@@ -13,11 +13,20 @@
           <v-select
             v-model="filters.meetTypeFilter.value"
             :items="filters.meetTypeOptions"
-            label="Meet Type"
+            label="Competition Category"
             density="compact"
             color="primary"
             variant="solo-inverted"
-          />
+            multiple
+          >
+            <template #selection="{ item, index }">
+              <span v-if="index === 0" class="text-truncate">
+                {{ filters.meetTypeFilter.value.length > 1
+                  ? `${filters.meetTypeFilter.value.length} selected`
+                  : item.title }}
+              </span>
+            </template>
+          </v-select>
         </template>
       </AthletesFilter>
     </template>
@@ -49,52 +58,80 @@ function handleScroll(e: Event) {
   }
 }
 
-// Load all item into table if sort, will improve later
-function handleSort(e: Array<{ key: string, order: string}>) {
-  if (e.length) {
-    visibleCount.value = 999
-  } else {
-    visibleCount.value = 50
-  }
-}
-
-// Reset visible count upon filter actions
+// Handle filtering and sorting
+let initialized = false
 watch(
-  () => [filters.sexFilter.value, filters.divisionFilter.value, filters.weightClassFilter.value],
-  () => {
+  () => [
+    filters.sexFilter.value,
+    filters.divisionFilter.value,
+    filters.weightClassFilter.value.weight,
+    filters.weightClassFilter.value.sex,
+    filters.sort.value,
+    filters.meetTypeFilter.value
+  ],
+  async () => {
+    if (!initialized) {
+      initialized = true
+      return
+    }
+    const params = new URLSearchParams()
+
+    params.set("sort", filters.sort.value)
+
+    // optional filters
+    if (filters.sexFilter.value)
+      params.set("sex", filters.sexFilter.value)
+
+    if (filters.divisionFilter.value)
+      params.set("division", filters.divisionFilter.value)
+
+    if (filters.meetTypeFilter.value.length > 0)
+      params.set("type", filters.meetTypeFilter.value.join(","))
+
+    const wc = filters.weightClassFilter.value
+    if (wc?.weight != null)
+      params.set("weightClass", String(wc.weight))
+
+    if (wc?.sex)
+      params.set("weightSex", wc.sex)
+
+    const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(
+      `/api/athletes?${params.toString()}`,
+      { 
+        method: "GET"
+      }
+    ).catch(() => ({ success: false } as APIBody<{ athletes: Athlete[] }>))
+
+    if (!response.success) return
+
+    athletes.value = response.data.athletes
     visibleCount.value = 50
   }
 )
 
 // Make sure that searching is done on the entire data set
-watch(filters.search, () => {
+watch(() => [filters.search.value, athletes.value], () => {
   if (filters.search.value === "") {
     visibleCount.value = 50
   } else {
-    visibleCount.value = 999
+    visibleCount.value = 9999
   }
 })
 
-// Fetch from server for meet type filter
-watch(filters.meetTypeFilter, async () => {
-  const type = filters.meetTypeFilter.value
-  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>(`/api/athletes?type=${type == null ? "all" : type}`, { ignoreResponseError: true })
-  if (!response.success) {
-    return
+// Fetch initial data with SSR support
+const { data: initialResponse, pending: initialPending } = await useFetch<APIBody<{ athletes: Athlete[] }>>(
+  "/api/athletes?type=national,national_qualifier",
+  {
+    method: "GET"
   }
-  athletes.value = response.data.athletes
-})
+)
 
-onMounted(async () => {  
-  // Fetch
-  const response = await $fetch<APIBody<{ athletes: Athlete[] }>>("/api/athletes", { ignoreResponseError: true })
-  if (!response.success) {
-    // TODO: Handle error
-    return
-  }
-  loading.value = false
-  athletes.value = response.data.athletes
+if (initialResponse.value?.success) {
+  athletes.value = initialResponse.value.data.athletes
+}
+loading.value = initialPending.value
 
+onMounted(() => {
   // Manually add scroll event to table
   const rootEl = tableRef.value?.$el as HTMLElement
   if (!rootEl) return
@@ -105,6 +142,9 @@ onMounted(async () => {
   }
 })
 
+// pagnitation
+const athletesDisplay = computed(() => athletes.value.slice(0, visibleCount.value))
+
 // Remove event
 onBeforeUnmount(() => {
   const rootEl = tableRef.value?.$el as HTMLElement
@@ -112,26 +152,13 @@ onBeforeUnmount(() => {
   wrapper?.removeEventListener("scroll", handleScroll)
 })
 
-// Computed filtering logic
-const filteredAthletes = computed(() => {
-  const result = athletes.value.filter(athlete => {
-    const matchesSex = filters.sexFilter.value ? athlete.sex === filters.sexFilter.value : true
-    const matchesDivision = filters.divisionFilter.value ? athlete.division === filters.divisionFilter.value : true
-    const matchesWeightClass = filters.weightClassFilter.value.weight
-      ? athlete.weightClass === filters.weightClassFilter.value.weight && athlete.sex === filters.weightClassFilter.value.sex
-      : true
-    return matchesSex && matchesDivision && matchesWeightClass
-  })
-
-  return result.slice(0, visibleCount.value) // only show up to visibleCount
-})
-
 const headers = [
-  { title: "#", value: "#", sortable: true },
-  { title: "Name", value: "fullName" },
+  { title: "#", value: "rank", sortable: true },
+  { title: "Name", value: "fullName", width: "15%" },
   { 
     title: "Class", 
     value: "weightClass", 
+    align: "end", width: "10%",
     sortable: true,
     // Custom sort function to handle the 999 value properly
     sort: (a: number, b: number): number => {
@@ -142,12 +169,19 @@ const headers = [
       return a - b
     }
   },
-  { title: "Sex", value: "sex" },
-  { title: "Division", value: "division" },
-  { title: "Squat", value: "bestSquat", sortable: true },
-  { title: "Bench", value: "bestBench", sortable: true },
-  { title: "Deadlift", value: "bestDead", sortable: true },
-  { title: "Total", value: "total", sortable: true },
-  { title: "GL", value: "gl", sortable: true },
+  { title: "Sport Gender", value: "sex", align: "end", width: "10%" },
+  { title: "Division", value: "division", align: "end", width: "10%" },
+  { title: "Squat", value: "bestSquat", sortable: true, align: "end", width: "10%" },
+  { title: "Bench", value: "bestBench", sortable: true, align: "end", width: "10%" },
+  { title: "Deadlift", value: "bestDead", sortable: true, align: "end", width: "10%" },
+  { title: "Total", value: "total", sortable: true, align: "end", width: "10%" },
+  { title: "GL", value: "gl", sortable: true, align: "end", width: "10%" },
 ]
+
+useSeoMeta({
+  title: "VPF Athlete Rankings",
+  ogType: "website",
+  ogTitle: "VPF Athlete Rankings",
+  ogDescription: "Powerlifting results tracking page for VPF (Vietnamese Powerlifting Federation)."
+})
 </script>

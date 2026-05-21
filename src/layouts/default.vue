@@ -2,7 +2,6 @@
   <v-app>
     <!-- App Bar -->
     <v-app-bar
-      :key="user"
       color="surface"
       dark
       app
@@ -10,9 +9,9 @@
     >
       <!-- Logo with Image -->
       <v-img
-        src="/logo.jpg"
-        cover
+        src="/logo.jpeg"
         class="diagonal-blur-image"
+        cover
         height="100%"
       />
 
@@ -47,7 +46,17 @@
           </v-btn>
         </template>
 
+        <v-btn
+          text
+          color="secondary"
+          class="mx-1"
+          @click="showContact = true"
+        >
+          Contact
+        </v-btn>
+
         <!-- Rendered depending on logged in state -->
+        <!-- Disable in current prod
         <ClientOnly>
           <template v-if="!isLoggedIn">
             <v-btn to="/login" text color="secondary" class="mx-1">
@@ -63,7 +72,8 @@
             </v-btn>
           </template>
         </ClientOnly>
-      </div>
+        -->
+      </div>    
 
       <!-- Mobile Menu Button -->
       <v-app-bar-nav-icon
@@ -108,6 +118,7 @@
           </v-list-item>
         </template>
         <!-- Rendered depending on logged in state -->
+        <!-- Disable in current prod
         <ClientOnly>
           <template v-if="!isLoggedIn">
             <v-list-item to="/login" @click="drawer = false">
@@ -123,11 +134,21 @@
             </v-list-item>
           </template>
         </ClientOnly>
+      -->
+        <v-list-item
+          @click="showContact = true"
+        >
+        <v-list-item-title class="text-secondary">Contact</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <!-- Main Content -->
     <v-main>
+       <v-dialog v-model="showContact" max-width="500">
+        <ContactCard />
+      </v-dialog>
+
       <div style="width: 95%" class="mx-auto py-5">
         <slot />
       </div>
@@ -146,15 +167,12 @@
 </template>
 
 <script setup>
-import { useAuth } from "~/composables/useAuth"
-
-const { isLoggedIn, user, logout } = await useAuth()
-const router = useRouter()
-
 const snackbar = ref(false)
 const snackbarText = ref("")
 const snackbarColor = ref("error")
+const showContact = ref(false)
 
+/*
 const handleLogout = async () => {
   const { success, message } = await logout()
   if (!success) {
@@ -165,21 +183,16 @@ const handleLogout = async () => {
     router.push("/login")
   }
 }
+  */
 
 // Mobile drawer state
 const drawer = ref(false)
-
-// Get public runtime config
-const config = useRuntimeConfig()
-const SHOP_URL = config.public.SHOP_URL
 
 // Navigation items
 const navigationItems = [
   { name: "Rankings", path: "/" },
   { name: "Records", path: "/records" },
-  { name: "Meets", path: "/meet/all" },
-  { name: "Shop", path: SHOP_URL, external: true },
-  { name: "Contact", path: "/contact" }
+  { name: "Competitions", path: "/competition/all" }
 ]
 
 // Close drawer when route changes

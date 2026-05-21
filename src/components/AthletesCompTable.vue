@@ -1,18 +1,25 @@
 <script setup lang="ts">
 import BaseTable from "./BaseTable.vue"
 
-const height = ref(window.innerHeight - 200)
+const height = ref(800) // Default height for SSR
 
 const updateHeight = () => {
-  height.value = window.innerHeight - 200
+  if (process.client) {
+    height.value = window.innerHeight - 200
+  }
 }
 
 onMounted(() => {
-  window.addEventListener("resize", updateHeight)
+  if (process.client) {
+    updateHeight()
+    window.addEventListener("resize", updateHeight)
+  }
 })
 
 onUnmounted(() => {
-  window.removeEventListener("resize", updateHeight)
+  if (process.client) {
+    window.removeEventListener("resize", updateHeight)
+  }
 })
 
 </script>
@@ -36,7 +43,7 @@ onUnmounted(() => {
   position: sticky;
   left: 0;
   z-index: 1 !important;
-  min-width: 100px;
+  min-width: 150px;
 }
 
 :deep(.v-table__wrapper > table > thead > tr > th) {
