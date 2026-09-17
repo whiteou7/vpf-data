@@ -160,6 +160,12 @@ def format_vpf_id(member_number: str) -> str:
         return member_number.upper()
     return f"VPF{member_number.zfill(6)}"
 
+def clean_full_name(name: str) -> str:
+    if not name:
+        return ""
+    # Remove any non-letter characters from the beginning
+    return re.sub(r"^[^A-Za-zÀ-ỹà-ỹ]+", "", name).strip()
+
 # ---------------- MAIN ----------------
 def migrate(data_csv, members_csv, meet_csv, out_sql):
     members, by_nid, by_name_dob, by_name_only = load_members(members_csv)
@@ -176,6 +182,7 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
 
                 dob = parse_dob_year(row.get("Birth Date"))
                 nid = row.get("National ID", "").strip()
+                row["Name"] = clean_full_name(row["Name"])
                 name_key = (normalize_name(row["Name"]), str(dob))
 
                 vpf_id = None
