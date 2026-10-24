@@ -6,6 +6,10 @@ if (!process.env.DATABASE_URL) {
 }
 const db = postgres(process.env.DATABASE_URL, {
   prepare: false,
+  // recycle connections so ones silently dropped by the Supabase pooler don't hang the pool
+  idle_timeout: 20,
+  max_lifetime: 60 * 30,
+  connect_timeout: 10,
   transform: {
     column: (col) => {
       // convert snake_case to camelCase
