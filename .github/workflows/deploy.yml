@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - prod
+      - main
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
           ssh -p ${{ secrets.SSH_PORT }} \
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /var/www/vpf-data
-            git pull origin prod
+            git pull origin main
             cd src
             npm install
             systemctl stop nodeapp
