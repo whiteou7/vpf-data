@@ -272,7 +272,13 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                     vpf_id = by_name_dob[name_key]
                     logger.info(f"MATCH_NAME_DOB | {row['Name']} -> {vpf_id}")
 
-                elif name_norm in by_name_only and len(by_name_only[name_norm]) == 1:
+                elif (
+                    name_norm in by_name_only
+                    and len(by_name_only[name_norm]) == 1
+                    # accents are stripped (Hùng == Hưng), so a known, different birth year means a different person
+                    and (not dob or not members[by_name_only[name_norm][0]].get("dob")
+                         or str(members[by_name_only[name_norm][0]]["dob"]) == str(dob))
+                ):
                     vpf_id = by_name_only[name_norm][0]
                     logger.info(
                         f"MATCH_NAME_ONLY_UNIQUE | {row['Name']} -> {vpf_id}"
@@ -341,6 +347,12 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                     "lot": safe_int(row.get("Lot")),
                     "placement": safe_int(row.get("Place"))
                 })
+
+    seen = set()
+    for r in meet_rows:
+        if r["vpf_id"] in seen:
+            raise ValueError(f"Two result rows map to {r['vpf_id']} (meet_result PK clash); check the matching log")
+        seen.add(r["vpf_id"])
 
     with open(out_sql, "a", encoding="utf-8") as f:
         if shift_log:

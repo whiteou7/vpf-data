@@ -2,3 +2,5 @@ src/pages/test.vue
 
 *.csv
 *.sql
+
+__pycache__
