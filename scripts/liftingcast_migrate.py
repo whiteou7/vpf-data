@@ -1,4 +1,5 @@
 import csv
+import random
 import re
 import logging
 import unicodedata
@@ -31,15 +32,29 @@ def slugify(text: str) -> str:
     text = re.sub(r"[-\s]+", "-", text)
     return text.strip("-")
 
+def unique_slug(name: str, dob_year: Optional[int], used: set) -> str:
+    """name -> name-05 (birth year) -> name-05N.. (random digit) until unused; marks it used."""
+    base = slugify(name)
+    yy = f"{dob_year % 100:02d}" if dob_year else ""
+    candidates = [base] + ([f"{base}-{yy}"] if yy else [])
+    suffix = yy
+    while True:
+        candidates += [f"{base}-{suffix}{d}" for d in random.sample(range(10), 10)]
+        for c in candidates:
+            if c not in used:
+                used.add(c)
+                return c
+        candidates = []
+        suffix += str(random.randint(0, 9))  # all 10 digits taken, grow the suffix
+
 # ---------------- PARSERS ----------------
 def parse_division(age_class_str: str) -> Optional[str]:
     """Extract division from format like 'Hạng Open - Open Division'"""
     if not age_class_str:
         return None
-    
+
     age_class_lower = age_class_str.lower()
-    
-    # Map Vietnamese/English names to enum values
+
     if 'subjr' in age_class_lower or 'sub-jr' in age_class_lower or 'sub jr' in age_class_lower or 'sub-junior' in age_class_lower:
         return 'subjr'
     elif 'junior' in age_class_lower or ' jr' in age_class_lower:
@@ -55,8 +70,8 @@ def parse_division(age_class_str: str) -> Optional[str]:
     elif 'master 4' in age_class_lower or 'master iv' in age_class_lower or 'm4' in age_class_lower:
         return 'mas4'
     elif 'guest' in age_class_lower:
-        return 'guest' 
-    
+        return 'guest'
+
     logger.warning(f"Could not parse division: {age_class_str}")
     return None
 
@@ -111,17 +126,14 @@ def load_members(path: str):
             vpf = r["vpf_id"]
             members[vpf] = r
 
-            # National ID index
             nid = r.get("national_id")
             if nid:
                 by_nid[nid] = vpf
 
-            # Name + DOB index
             name_norm = normalize_name(r["full_name"])
             dob = str(r.get("dob")) if r.get("dob") else None
             by_name_dob[(name_norm, dob)] = vpf
 
-            # Name-only index (for final fallback)
             by_name_only[name_norm].append(vpf)
 
     return members, by_nid, by_name_dob, by_name_only
@@ -163,16 +175,80 @@ def format_vpf_id(member_number: str) -> str:
 def clean_full_name(name: str) -> str:
     if not name:
         return ""
-    # Remove any non-letter characters from the beginning
     return re.sub(r"^[^A-Za-zÀ-ỹà-ỹ]+", "", name).strip()
+
+# ---------------- VPF ID CONFLICT HANDLING ----------------
+def _vpf_numeric_part(vpf_id: str) -> Optional[int]:
+    m = re.match(r"VPF(\d+)$", vpf_id.upper())
+    return int(m.group(1)) if m else None
+
+def next_free_vpf_id(used_ids: set) -> str:
+    """
+    Find the smallest unused VPFxxxxxx id (6-digit zero-padded),
+    starting just above the current highest numeric id in use.
+    """
+    numeric_ids = [n for n in (_vpf_numeric_part(v) for v in used_ids) if n is not None]
+    candidate_num = (max(numeric_ids) + 1) if numeric_ids else 1
+    candidate = f"VPF{str(candidate_num).zfill(6)}"
+    while candidate in used_ids:
+        candidate_num += 1
+        candidate = f"VPF{str(candidate_num).zfill(6)}"
+    return candidate
+
+
+def shift_existing_member(old_vpf_id, members, by_nid, by_name_dob, by_name_only,
+                           meet_rows, used_ids, shift_log):
+    """
+    Move an existing member off `old_vpf_id` onto a freshly-allocated id,
+    freeing `old_vpf_id` up for the incoming new member. Updates every
+    in-memory index plus any meet_rows already queued in this run that
+    reference the old id, and records the change for SQL emission.
+    """
+    new_vpf_id = next_free_vpf_id(used_ids)
+    used_ids.add(new_vpf_id)
+
+    rec = members.pop(old_vpf_id)
+    rec["vpf_id"] = new_vpf_id
+    members[new_vpf_id] = rec
+
+    for nid, vpf in list(by_nid.items()):
+        if vpf == old_vpf_id:
+            by_nid[nid] = new_vpf_id
+
+    for key, vpf in list(by_name_dob.items()):
+        if vpf == old_vpf_id:
+            by_name_dob[key] = new_vpf_id
+
+    for name_norm, vpf_list in by_name_only.items():
+        by_name_only[name_norm] = [new_vpf_id if v == old_vpf_id else v for v in vpf_list]
+
+    updated_rows = 0
+    for row in meet_rows:
+        if row["vpf_id"] == old_vpf_id:
+            row["vpf_id"] = new_vpf_id
+            updated_rows += 1
+
+    shift_log.append({"old_vpf_id": old_vpf_id, "new_vpf_id": new_vpf_id})
+
+    logger.warning(
+        f"VPF_ID_CONFLICT_SHIFTED | existing member '{rec.get('full_name')}' "
+        f"{old_vpf_id} -> {new_vpf_id} ({updated_rows} queued meet_result row(s) updated)"
+    )
+    return new_vpf_id
+
 
 # ---------------- MAIN ----------------
 def migrate(data_csv, members_csv, meet_csv, out_sql):
     members, by_nid, by_name_dob, by_name_only = load_members(members_csv)
     data_csvs = resolve_data_csvs(data_csv)
 
+    # Every vpf_id currently in play: existing members to start with.
+    used_vpf_ids = set(members.keys())
+    used_slugs = {m["slug"] for m in members.values() if m.get("slug")}
+
     new_members = {}
     meet_rows = []
+    shift_log = []  # existing members whose vpf_id we had to move
     meet_id = input("Meet ID : ")
 
     for data_path in data_csvs:
@@ -186,7 +262,6 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                 name_key = (normalize_name(row["Name"]), str(dob))
 
                 vpf_id = None
-
                 name_norm = normalize_name(row["Name"])
 
                 if nid and nid in by_nid:
@@ -208,7 +283,28 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                     if not member_number:
                         raise ValueError(f"Missing Member # for new member: {row['Name']}")
 
-                    vpf_id = format_vpf_id(member_number)
+                    candidate_vpf_id = format_vpf_id(member_number)
+
+                    if candidate_vpf_id in new_members:
+                        # Same new member appearing again in this run (e.g. multiple
+                        # rows) — not a conflict, just reuse their id.
+                        vpf_id = candidate_vpf_id
+
+                    elif candidate_vpf_id in members:
+                        # The Member #-derived id collides with a DIFFERENT person
+                        # already on file. Bump that existing member to a fresh
+                        # id so the new member can have the one they were assigned.
+                        shift_existing_member(
+                            candidate_vpf_id, members, by_nid, by_name_dob,
+                            by_name_only, meet_rows, used_vpf_ids, shift_log
+                        )
+                        vpf_id = candidate_vpf_id
+
+                    else:
+                        vpf_id = candidate_vpf_id
+
+                    used_vpf_ids.add(vpf_id)
+
                     if vpf_id not in new_members:
                         new_members[vpf_id] = {
                             "vpf_id": vpf_id,
@@ -219,7 +315,7 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                             "address": row.get("Address"),
                             "phone_number": row.get("Phone Number"),
                             "email": row.get("Email Address"),
-                            "slug": slugify(row["Name"])
+                            "slug": unique_slug(row["Name"], dob, used_slugs)
                         }
                     logger.info(f"NEW_MEMBER | {row['Name']} -> {vpf_id}")
 
@@ -247,6 +343,23 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
                 })
 
     with open(out_sql, "a", encoding="utf-8") as f:
+        if shift_log:
+            f.write("-- EXISTING MEMBERS SHIFTED TO FREE UP CONFLICTING VPF IDS\n")
+            f.write("-- NOTE: if members.vpf_id is referenced by meet_result.vpf_id\n")
+            f.write("-- without ON UPDATE CASCADE, the explicit meet_result UPDATE\n")
+            f.write("-- below covers *historical* rows; rows inserted by this same\n")
+            f.write("-- migration already carry the corrected id in-memory.\n")
+            for s in shift_log:
+                f.write(
+                    f"UPDATE members SET vpf_id = {sql(s['new_vpf_id'])} "
+                    f"WHERE vpf_id = {sql(s['old_vpf_id'])};\n"
+                )
+                f.write(
+                    f"UPDATE meet_result SET vpf_id = {sql(s['new_vpf_id'])} "
+                    f"WHERE vpf_id = {sql(s['old_vpf_id'])};\n"
+                )
+            f.write("\n")
+
         f.write("-- NEW MEMBERS\n")
         for m in new_members.values():
             f.write(
@@ -264,6 +377,8 @@ def migrate(data_csv, members_csv, meet_csv, out_sql):
             )
 
     logger.info("MIGRATION_COMPLETE")
+    if shift_log:
+        logger.info(f"VPF_ID_SHIFTS | {len(shift_log)} existing member(s) reassigned to avoid conflicts")
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":

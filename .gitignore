@@ -1,1 +1,4 @@
 src/pages/test.vue
+
+*.csv
+*.sql
